@@ -57,6 +57,7 @@
 #'   theme_insper(base_size = 14)
 #' }
 #'
+#' @family themes
 #' @seealso \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}
 #' @importFrom ggplot2 element_blank element_line element_rect element_text unit theme theme_minimal rel margin %+replace%
 #' @export

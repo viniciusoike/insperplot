@@ -4,10 +4,11 @@
 #'
 #' @param ... Character names of colors. If none provided, returns all colors.
 #' @return Named character vector of hex codes
+#' @family colors
 #' @export
 #' @examples
 #' insper_col()
-#' insper_col("red1", "blue1")
+#' insper_col("reds1", "teals1")
 insper_col <- function(...) {
   cols <- c(
 
@@ -57,6 +58,7 @@ insper_col <- function(...) {
 #'
 #' @param palette Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals")
 #' @return A ggplot2 object showing the color palette
+#' @family colors
 #' @export
 #' @examples
 #' show_insper_palette()

@@ -5,6 +5,7 @@
 #' @param reverse Logical indicating whether to reverse palette
 #' @param ... Additional arguments passed to ggplot2 scale functions
 #' @return ggplot2 scale object
+#' @family scales
 #' @importFrom ggplot2 discrete_scale scale_fill_gradientn
 #' @importFrom scales manual_pal
 #' @export

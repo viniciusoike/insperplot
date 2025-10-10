@@ -73,3 +73,10 @@ insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
 }
 
 }
+\seealso{
+Other plots: 
+\code{\link{insper_boxplot}()},
+\code{\link{insper_scatterplot}()},
+\code{\link{insper_timeseries}()}
+}
+\concept{plots}

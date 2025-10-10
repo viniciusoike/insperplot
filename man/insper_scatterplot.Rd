@@ -38,3 +38,10 @@ ggplot object
 \description{
 Scatter plots with regression lines and confidence intervals
 }
+\seealso{
+Other plots: 
+\code{\link{insper_barplot}()},
+\code{\link{insper_boxplot}()},
+\code{\link{insper_timeseries}()}
+}
+\concept{plots}

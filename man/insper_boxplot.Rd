@@ -35,3 +35,10 @@ ggplot object
 \description{
 Box plots with statistical annotations
 }
+\seealso{
+Other plots: 
+\code{\link{insper_barplot}()},
+\code{\link{insper_scatterplot}()},
+\code{\link{insper_timeseries}()}
+}
+\concept{plots}

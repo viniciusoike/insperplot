@@ -25,3 +25,9 @@ Get Insper Color Palette
 insper_pal("main")
 insper_pal("reds", n = 5)
 }
+\seealso{
+Other colors: 
+\code{\link{insper_col}()},
+\code{\link{show_insper_palette}()}
+}
+\concept{colors}

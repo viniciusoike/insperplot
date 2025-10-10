@@ -19,3 +19,9 @@ Display the Insper color palette visually
 show_insper_palette()
 show_insper_palette("reds")
 }
+\seealso{
+Other colors: 
+\code{\link{insper_col}()},
+\code{\link{insper_pal}()}
+}
+\concept{colors}

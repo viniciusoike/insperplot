@@ -5,6 +5,7 @@
 #' @param type Type of palette: "discrete" or "continuous"
 #' @param reverse Logical indicating whether to reverse palette
 #' @return Vector of hex color codes
+#' @family colors
 #' @export
 #' @examples
 #' insper_pal("main")

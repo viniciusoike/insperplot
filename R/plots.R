@@ -35,6 +35,7 @@
 #' insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
 #' }
 #'
+#' @family plots
 #' @importFrom ggplot2 aes geom_col
 #' @export
 insper_barplot <- function(
@@ -158,6 +159,7 @@ insper_barplot <- function(
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
 #' @return ggplot object
+#' @family plots
 #' @export
 insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
                                title = NULL, subtitle = NULL, caption = NULL) {
@@ -203,6 +205,7 @@ insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
 #' @return ggplot object
+#' @family plots
 #' @export
 insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
                               subtitle = NULL, caption = NULL) {
@@ -244,6 +247,7 @@ insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
 #' @return ggplot object
+#' @family plots
 #' @export
 insper_boxplot <- function(data, x, y, fill = NULL, title = NULL,
                            subtitle = NULL, caption = NULL) {

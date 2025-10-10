@@ -17,5 +17,11 @@ Extract hex codes from the Insper color palette
 }
 \examples{
 insper_col()
-insper_col("red1", "blue1")
+insper_col("reds1", "teals1")
 }
+\seealso{
+Other colors: 
+\code{\link{insper_pal}()},
+\code{\link{show_insper_palette}()}
+}
+\concept{colors}

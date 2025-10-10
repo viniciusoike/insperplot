@@ -35,3 +35,10 @@ ggplot object
 \description{
 Time series plots optimized for economic/business data
 }
+\seealso{
+Other plots: 
+\code{\link{insper_barplot}()},
+\code{\link{insper_boxplot}()},
+\code{\link{insper_scatterplot}()}
+}
+\concept{plots}
