@@ -1,7 +1,7 @@
 Package: insperplot
 Type: Package
 Title: Insper Themed ggplot2 Extensions
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
     person(
       "Vinicius", "Reginatto",
@@ -21,8 +21,10 @@ Depends:
     R (>= 4.1.0)
 Imports:
     cli,
+    dplyr (>= 1.1.0),
     ggplot2 (>= 3.4.0),
     lubridate,
+    rlang (>= 1.0.0),
     scales (>= 1.2.0)
 Suggests:
     systemfonts,

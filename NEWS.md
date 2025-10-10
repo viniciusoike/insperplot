@@ -1,3 +1,84 @@
+# insperplot 0.5.0
+
+## Enhanced Plotting Functions
+
+### Modernization of Existing Functions
+
+All plot functions have been modernized with:
+* **Modern rlang patterns**: Replaced `is.null(substitute())` with `rlang::quo_is_null(rlang::enquo())`
+* **CLI error messages**: User-friendly error messages with `cli::cli_abort()` replacing basic `stop()`
+* **Consistent API**: All functions now use `data` parameter (previously `.dat` in `insper_barplot()`)
+* **Enhanced parameters**: Added configurable options for size, alpha, colors, and visual elements
+
+### Plot Function Improvements
+
+**`insper_barplot()`**:
+* **BREAKING**: Renamed `group` parameter to `fill_var` for clarity
+* **BREAKING**: Changed `.dat` parameter to `data` for consistency
+* Fixed fill/group logic bug where single-color and grouped fills conflicted
+* Added `label_formatter` parameter for custom text label formatting
+* Improved dodge width calculation for better grouped bar spacing
+
+**`insper_scatterplot()`**:
+* Added `smooth_method` parameter ("lm", "loess", "gam", "glm")
+* Added `point_size` and `point_alpha` parameters for point customization
+* Improved color aesthetic handling with proper rlang checks
+
+**`insper_timeseries()`**:
+* Added `line_width` parameter for customizable line thickness
+* Added `add_points` parameter to overlay points on lines
+* Improved Date/POSIXct axis handling
+* Better support for grouped time series
+
+**`insper_boxplot()`**:
+* Added `add_jitter` parameter (default TRUE) to control jittered points
+* Added `add_notch` parameter for notched boxplots
+* Added `flip` parameter (default TRUE) to control orientation
+* Added `box_alpha` parameter for transparency control
+
+**`insper_heatmap()`**:
+* Improved auto-detection of melted vs matrix data
+* Added `value_color` and `value_size` parameters for text customization
+* Better handling of matrices without row/column names
+* Enhanced validation with helpful error messages
+
+### New Plot Functions
+
+* **`insper_lollipop()`**: Lollipop charts for ranked categorical data
+  - Supports horizontal/vertical orientation
+  - Optional sorting by value
+  - Color aesthetic support
+
+* **`insper_area()`**: Area charts for time series
+  - Single and grouped areas
+  - Stacked area support
+  - Optional line overlay
+
+* **`insper_violin()`**: Violin plots for distribution visualization
+  - Optional boxplot overlay
+  - Optional jittered points
+  - Horizontal/vertical orientation
+
+### Testing
+
+* Updated all existing tests to use new API (`fill_var` instead of `group`)
+* Added 15 new tests for new plot functions
+* All 146+ tests passing
+* Maintained >80% code coverage
+
+### Code Quality
+
+* Added `dplyr` and `rlang` to Imports for modern tidyverse patterns
+* All functions use consistent parameter documentation with `<[data-masked]>` tags
+* Improved examples in all function documentation
+* **R CMD check: 0 errors ✔ | 0 warnings ✔ | 0 notes ✔**
+
+### Breaking Changes
+
+* `insper_barplot()`: Parameter `group` renamed to `fill_var` for clarity
+* `insper_barplot()`: Parameter `.dat` renamed to `data` for consistency with other functions
+* Migration: Replace `insper_barplot(..., group = var)` with `insper_barplot(..., fill_var = var)`
+
 # insperplot 0.4.0
 
 ## Visual Identity Enhancement

@@ -9,19 +9,25 @@ insper_timeseries(
   x,
   y,
   group = NULL,
+  line_width = 1.2,
+  add_points = FALSE,
   title = NULL,
   subtitle = NULL,
   caption = NULL
 )
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{A data frame containing the data to plot}
 
-\item{x}{Time variable}
+\item{x}{<[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)}
 
-\item{y}{Value variable}
+\item{y}{<[`data-masked`][ggplot2::aes_eval]> Value variable}
 
-\item{group}{Grouping variable}
+\item{group}{<[`data-masked`][ggplot2::aes_eval]> Grouping variable for multiple lines (optional)}
+
+\item{line_width}{Numeric. Width of lines. Default is 1.2}
+
+\item{add_points}{Logical. If TRUE, adds points to lines. Default is FALSE}
 
 \item{title}{Plot title}
 
@@ -30,17 +36,42 @@ insper_timeseries(
 \item{caption}{Plot caption}
 }
 \value{
-ggplot object
+A ggplot2 object
 }
 \description{
-Time series plots optimized for economic/business data
+Create time series plots optimized for economic/business data using Insper's
+visual identity. Automatically handles Date and POSIXct x-axis variables.
+}
+\examples{
+\dontrun{
+# Simple time series
+df <- data.frame(time = 1:10, value = rnorm(10))
+insper_timeseries(df, x = time, y = value)
+
+# Grouped time series
+df <- data.frame(
+  time = rep(1:10, 2),
+  value = rnorm(20),
+  group = rep(c("A", "B"), each = 10)
+)
+insper_timeseries(df, x = time, y = value, group = group)
+
+# With date axis
+df$date <- as.Date("2020-01-01") + df$time
+insper_timeseries(df, x = date, y = value)
+}
+
 }
 \seealso{
 \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
 
 Other plots: 
+\code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},
-\code{\link{insper_scatterplot}()}
+\code{\link{insper_heatmap}()},
+\code{\link{insper_lollipop}()},
+\code{\link{insper_scatterplot}()},
+\code{\link{insper_violin}()}
 }
 \concept{plots}

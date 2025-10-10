@@ -9,19 +9,31 @@ insper_boxplot(
   x,
   y,
   fill = NULL,
+  add_jitter = TRUE,
+  add_notch = FALSE,
+  flip = TRUE,
+  box_alpha = 0.7,
   title = NULL,
   subtitle = NULL,
   caption = NULL
 )
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{A data frame containing the data to plot}
 
-\item{x}{Variable for x-axis}
+\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)}
 
-\item{y}{Variable for y-axis}
+\item{y}{<[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)}
 
-\item{fill}{Variable for fill aesthetic}
+\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
+
+\item{add_jitter}{Logical. If TRUE, adds jittered points. Default is TRUE}
+
+\item{add_notch}{Logical. If TRUE, creates notched boxplot. Default is FALSE}
+
+\item{flip}{Logical. If TRUE, creates horizontal boxplot. Default is TRUE}
+
+\item{box_alpha}{Numeric. Transparency of boxes (0-1). Default is 0.7}
 
 \item{title}{Plot title}
 
@@ -30,17 +42,39 @@ insper_boxplot(
 \item{caption}{Plot caption}
 }
 \value{
-ggplot object
+A ggplot2 object
 }
 \description{
-Box plots with statistical annotations
+Create box plots with optional jittered points and statistical annotations
+using Insper's visual identity.
+}
+\examples{
+\dontrun{
+# Simple boxplot
+insper_boxplot(mtcars, x = factor(cyl), y = mpg)
+
+# With fill aesthetic
+insper_boxplot(mtcars, x = factor(cyl), y = mpg, fill = factor(cyl))
+
+# Notched boxplot without jitter
+insper_boxplot(mtcars, x = factor(cyl), y = mpg,
+               add_notch = TRUE, add_jitter = FALSE)
+
+# Vertical boxplot
+insper_boxplot(mtcars, x = factor(cyl), y = mpg, flip = FALSE)
+}
+
 }
 \seealso{
 \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
 
 Other plots: 
+\code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
+\code{\link{insper_heatmap}()},
+\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
-\code{\link{insper_timeseries}()}
+\code{\link{insper_timeseries}()},
+\code{\link{insper_violin}()}
 }
 \concept{plots}

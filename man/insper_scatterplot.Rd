@@ -10,21 +10,30 @@ insper_scatterplot(
   y,
   color = NULL,
   add_smooth = TRUE,
+  smooth_method = "lm",
+  point_size = 2,
+  point_alpha = 0.7,
   title = NULL,
   subtitle = NULL,
   caption = NULL
 )
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{A data frame containing the data to plot}
 
-\item{x}{Variable for x-axis}
+\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis}
 
-\item{y}{Variable for y-axis}
+\item{y}{<[`data-masked`][ggplot2::aes_eval]> Variable for y-axis}
 
-\item{color}{Variable for color aesthetic}
+\item{color}{<[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)}
 
-\item{add_smooth}{Add smooth regression line}
+\item{add_smooth}{Logical. If TRUE, adds a regression line. Default is TRUE}
+
+\item{smooth_method}{Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"}
+
+\item{point_size}{Numeric. Size of points. Default is 2}
+
+\item{point_alpha}{Numeric. Transparency of points (0-1). Default is 0.7}
 
 \item{title}{Plot title}
 
@@ -33,17 +42,38 @@ insper_scatterplot(
 \item{caption}{Plot caption}
 }
 \value{
-ggplot object
+A ggplot2 object
 }
 \description{
-Scatter plots with regression lines and confidence intervals
+Create scatter plots with regression lines and confidence intervals using
+Insper's visual identity.
+}
+\examples{
+\dontrun{
+# Simple scatter plot
+insper_scatterplot(mtcars, x = wt, y = mpg)
+
+# Colored by variable
+insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
+
+# Without smooth line
+insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = FALSE)
+
+# With loess smoothing
+insper_scatterplot(mtcars, x = wt, y = mpg, smooth_method = "loess")
+}
+
 }
 \seealso{
 \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
 
 Other plots: 
+\code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},
-\code{\link{insper_timeseries}()}
+\code{\link{insper_heatmap}()},
+\code{\link{insper_lollipop}()},
+\code{\link{insper_timeseries}()},
+\code{\link{insper_violin}()}
 }
 \concept{plots}

@@ -4,11 +4,13 @@
 #' visual identity. It supports grouped bars, text labels, coordinate flipping,
 #' and automatic ordering.
 #'
-#' @param .dat A data frame containing the data to plot
-#' @param x Column name for x-axis (categorical variable)
-#' @param y Column name for y-axis (numeric variable)
-#' @param fill Column name for fill aesthetic or color for bars. Default is insper_col("reds1")
-#' @param group Column name for grouping variable (creates grouped/stacked bars)
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Column name for x-axis (categorical variable)
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Column name for y-axis (numeric variable)
+#' @param fill_var <[`data-masked`][ggplot2::aes_eval]> Column name for fill aesthetic (creates grouped/stacked bars).
+#'   If NULL, uses single_color for all bars.
+#' @param single_color Character. Hex color code for bars when not using fill_var.
+#'   Default is Insper red.
 #' @param position Position adjustment for bars. Options: "dodge", "stack",
 #'   "fill", "identity". Default is "dodge"
 #' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE
@@ -18,7 +20,7 @@
 #'   Default is "categorical"
 #' @param text_size Numeric. Size of text labels. Default is 4
 #' @param text_color Character. Color of text labels. Default is "black"
-#' @param single_color Character. Color for single bars when no grouping. Currently unused.
+#' @param label_formatter Function. Formatter for text labels. Default is scales::comma
 #' @param ... Additional arguments passed to scale_fill_insper()
 #'
 #' @return A ggplot2 object
@@ -29,10 +31,15 @@
 #' insper_barplot(mtcars, x = cyl, y = mpg)
 #'
 #' # Grouped bar plot
-#' insper_barplot(mtcars, x = cyl, y = mpg, group = gear)
+#' insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
 #'
 #' # Horizontal bars with text labels
 #' insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
+#'
+#' # Custom color and label formatting
+#' insper_barplot(mtcars, x = cyl, y = mpg,
+#'                single_color = insper_col("teals1"),
+#'                label_formatter = format_num_br)
 #' }
 #'
 #' @family plots
@@ -40,11 +47,11 @@
 #' @importFrom ggplot2 aes geom_col
 #' @export
 insper_barplot <- function(
-    .dat,
+    data,
     x,
     y,
-    fill = insper_col("reds1"),
-    group = NULL,
+    fill_var = NULL,
+    single_color = insper_col("reds1"),
     position = "dodge",
     zero = TRUE,
     text = FALSE,
@@ -52,35 +59,37 @@ insper_barplot <- function(
     palette = "categorical",
     text_size = 4,
     text_color = "black",
-    single_color = NULL,
+    label_formatter = scales::comma,
     ...) {
 
-  # Input validation
-  if (!is.data.frame(.dat)) {
-    stop("'.dat' must be a data frame")
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}",
+      "i" = "Convert your data to a data frame with {.fn as.data.frame}"
+    ))
   }
 
   if (!position %in% c("dodge", "stack", "fill", "identity")) {
-    stop("'position' must be one of: 'dodge', 'stack', 'fill', 'identity'")
+    cli::cli_abort(c(
+      "{.arg position} must be one of: {.val dodge}, {.val stack}, {.val fill}, or {.val identity}",
+      "x" = "You supplied: {.val {position}}"
+    ))
   }
 
-  # Initialize plot
-  p <- ggplot2::ggplot()
+  # Check if fill_var was provided using rlang
+  has_fill <- !rlang::quo_is_null(rlang::enquo(fill_var))
 
-  if (missing(group)) {
-    p <- p +
-      geom_col(
-        data = .dat,
-        aes(x = {{ x }}, y = {{ y }}),
-        fill = fill
-      )
+  # Initialize plot
+  if (!has_fill) {
+    # Single color bars
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+      ggplot2::geom_col(fill = single_color)
   } else {
-    p <- p +
-      geom_col(
-        data = .dat,
-        aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }}),
-        position = position
-      ) +
+    # Grouped bars with fill aesthetic
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill_var }})) +
+      ggplot2::geom_col(position = position) +
       scale_fill_insper(palette = palette, ...)
   }
 
@@ -94,12 +103,11 @@ insper_barplot <- function(
     text_vjust <- if (flip) 0.5 else -0.5
     text_hjust <- if (flip) -0.1 else 0.5
 
-    if (missing(group) && missing(fill)) {
+    if (!has_fill) {
       # Simple text labels
       p <- p +
         ggplot2::geom_text(
-          data = .dat,
-          ggplot2::aes(x = {{ x }}, y = {{ y }}, label = scales::comma({{ y }}, accuracy = 0.1)),
+          ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
           vjust = text_vjust,
           hjust = text_hjust,
           size = text_size,
@@ -107,16 +115,10 @@ insper_barplot <- function(
         )
     } else {
       # Grouped text labels
-      dodge_width <- if (position == "dodge") 0.8 else 0
+      dodge_width <- if (position == "dodge") 0.9 else 0
       p <- p +
         ggplot2::geom_text(
-          data = .dat,
-          ggplot2::aes(
-            x = {{ x }},
-            y = {{ y }},
-            label = scales::comma({{ y }}, accuracy = 0.1),
-            group = {{ if (!missing(group)) group else fill }}
-          ),
+          ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
           position = ggplot2::position_dodge(width = dodge_width),
           vjust = text_vjust,
           hjust = text_hjust,
@@ -149,35 +151,81 @@ insper_barplot <- function(
 
 #' Insper Scatter Plot
 #'
-#' Scatter plots with regression lines and confidence intervals
+#' Create scatter plots with regression lines and confidence intervals using
+#' Insper's visual identity.
 #'
-#' @param data Data frame
-#' @param x Variable for x-axis
-#' @param y Variable for y-axis
-#' @param color Variable for color aesthetic
-#' @param add_smooth Add smooth regression line
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis
+#' @param color <[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)
+#' @param add_smooth Logical. If TRUE, adds a regression line. Default is TRUE
+#' @param smooth_method Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"
+#' @param point_size Numeric. Size of points. Default is 2
+#' @param point_alpha Numeric. Transparency of points (0-1). Default is 0.7
 #' @param title Plot title
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
-#' @return ggplot object
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple scatter plot
+#' insper_scatterplot(mtcars, x = wt, y = mpg)
+#'
+#' # Colored by variable
+#' insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
+#'
+#' # Without smooth line
+#' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = FALSE)
+#'
+#' # With loess smoothing
+#' insper_scatterplot(mtcars, x = wt, y = mpg, smooth_method = "loess")
+#' }
+#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
 #' @export
-insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
+insper_scatterplot <- function(data, x, y, color = NULL,
+                               add_smooth = TRUE,
+                               smooth_method = "lm",
+                               point_size = 2,
+                               point_alpha = 0.7,
                                title = NULL, subtitle = NULL, caption = NULL) {
 
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}))
-
-  if (!is.null(substitute(color))) {
-    p <- p + ggplot2::geom_point(ggplot2::aes(color = {{color}}), size = 2, alpha = 0.7)
-    p <- p + scale_color_insper()
-  } else {
-    p <- p + ggplot2::geom_point(color = insper_col("teals1"), size = 2, alpha = 0.7)
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
   }
 
+  if (!smooth_method %in% c("lm", "loess", "gam", "glm")) {
+    cli::cli_abort(c(
+      "{.arg smooth_method} must be one of: {.val lm}, {.val loess}, {.val gam}, or {.val glm}",
+      "x" = "You supplied: {.val {smooth_method}}"
+    ))
+  }
+
+  # Check if color was provided using rlang
+  has_color <- !rlang::quo_is_null(rlang::enquo(color))
+
+  # Initialize plot
+  if (!has_color) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}})) +
+      ggplot2::geom_point(color = insper_col("teals1"),
+                          size = point_size,
+                          alpha = point_alpha)
+  } else {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, color = {{color}})) +
+      ggplot2::geom_point(size = point_size, alpha = point_alpha) +
+      scale_color_insper()
+  }
+
+  # Add smooth line if requested
   if (add_smooth) {
     p <- p + ggplot2::geom_smooth(
-      method = "lm",
+      method = smooth_method,
       color = insper_col("oranges1"),
       fill = insper_col("oranges1"),
       alpha = 0.2
@@ -197,30 +245,76 @@ insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
 
 #' Insper Time Series Plot
 #'
-#' Time series plots optimized for economic/business data
+#' Create time series plots optimized for economic/business data using Insper's
+#' visual identity. Automatically handles Date and POSIXct x-axis variables.
 #'
-#' @param data Data frame
-#' @param x Time variable
-#' @param y Value variable
-#' @param group Grouping variable
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Value variable
+#' @param group <[`data-masked`][ggplot2::aes_eval]> Grouping variable for multiple lines (optional)
+#' @param line_width Numeric. Width of lines. Default is 1.2
+#' @param add_points Logical. If TRUE, adds points to lines. Default is FALSE
 #' @param title Plot title
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
-#' @return ggplot object
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple time series
+#' df <- data.frame(time = 1:10, value = rnorm(10))
+#' insper_timeseries(df, x = time, y = value)
+#'
+#' # Grouped time series
+#' df <- data.frame(
+#'   time = rep(1:10, 2),
+#'   value = rnorm(20),
+#'   group = rep(c("A", "B"), each = 10)
+#' )
+#' insper_timeseries(df, x = time, y = value, group = group)
+#'
+#' # With date axis
+#' df$date <- as.Date("2020-01-01") + df$time
+#' insper_timeseries(df, x = date, y = value)
+#' }
+#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
 #' @export
-insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
-                              subtitle = NULL, caption = NULL) {
+insper_timeseries <- function(data, x, y, group = NULL,
+                              line_width = 1.2,
+                              add_points = FALSE,
+                              title = NULL,
+                              subtitle = NULL,
+                              caption = NULL) {
 
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}))
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
 
-  if (!is.null(substitute(group))) {
-    p <- p +
-      ggplot2::geom_line(ggplot2::aes(color = {{group}}), linewidth = 1.2) +
-      scale_color_insper()
+  # Check if group was provided using rlang
+  has_group <- !rlang::quo_is_null(rlang::enquo(group))
+
+  # Initialize plot
+  if (!has_group) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}})) +
+      ggplot2::geom_line(color = insper_col("teals1"), linewidth = line_width)
+
+    if (add_points) {
+      p <- p + ggplot2::geom_point(color = insper_col("teals1"), size = 2)
+    }
   } else {
-    p <- p + ggplot2::geom_line(color = insper_col("teals1"), linewidth = 1.2)
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, color = {{group}})) +
+      ggplot2::geom_line(linewidth = line_width) +
+      scale_color_insper()
+
+    if (add_points) {
+      p <- p + ggplot2::geom_point(size = 2)
+    }
   }
 
   p <- p +
@@ -230,7 +324,6 @@ insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
       subtitle = subtitle,
       caption = caption
     ) +
-    ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
     ggplot2::theme(
       panel.grid.minor.x = ggplot2::element_blank()
     )
@@ -240,72 +333,181 @@ insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
 
 #' Insper Box Plot
 #'
-#' Box plots with statistical annotations
+#' Create box plots with optional jittered points and statistical annotations
+#' using Insper's visual identity.
 #'
-#' @param data Data frame
-#' @param x Variable for x-axis
-#' @param y Variable for y-axis
-#' @param fill Variable for fill aesthetic
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
+#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param add_jitter Logical. If TRUE, adds jittered points. Default is TRUE
+#' @param add_notch Logical. If TRUE, creates notched boxplot. Default is FALSE
+#' @param flip Logical. If TRUE, creates horizontal boxplot. Default is TRUE
+#' @param box_alpha Numeric. Transparency of boxes (0-1). Default is 0.7
 #' @param title Plot title
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
-#' @return ggplot object
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple boxplot
+#' insper_boxplot(mtcars, x = factor(cyl), y = mpg)
+#'
+#' # With fill aesthetic
+#' insper_boxplot(mtcars, x = factor(cyl), y = mpg, fill = factor(cyl))
+#'
+#' # Notched boxplot without jitter
+#' insper_boxplot(mtcars, x = factor(cyl), y = mpg,
+#'                add_notch = TRUE, add_jitter = FALSE)
+#'
+#' # Vertical boxplot
+#' insper_boxplot(mtcars, x = factor(cyl), y = mpg, flip = FALSE)
+#' }
+#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
 #' @export
-insper_boxplot <- function(data, x, y, fill = NULL, title = NULL,
-                           subtitle = NULL, caption = NULL) {
+insper_boxplot <- function(data, x, y, fill = NULL,
+                           add_jitter = TRUE,
+                           add_notch = FALSE,
+                           flip = TRUE,
+                           box_alpha = 0.7,
+                           title = NULL,
+                           subtitle = NULL,
+                           caption = NULL) {
 
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}))
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
 
-  if (!is.null(substitute(fill))) {
-    p <- p +
-      ggplot2::geom_boxplot(ggplot2::aes(fill = {{fill}}), alpha = 0.7) +
-      scale_fill_insper()
+  # Check if fill was provided using rlang
+  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+
+  # Initialize plot
+  if (!has_fill) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}})) +
+      ggplot2::geom_boxplot(fill = insper_col("teals2"),
+                            alpha = box_alpha,
+                            notch = add_notch)
   } else {
-    p <- p + ggplot2::geom_boxplot(fill = insper_col("teals2"), alpha = 0.7)
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill}})) +
+      ggplot2::geom_boxplot(alpha = box_alpha, notch = add_notch) +
+      scale_fill_insper()
+  }
+
+  # Add jittered points if requested
+  if (add_jitter) {
+    p <- p + ggplot2::geom_jitter(width = 0.2, alpha = 0.5,
+                                   color = insper_col("gray_med"))
   }
 
   p <- p +
-    ggplot2::geom_jitter(width = 0.2, alpha = 0.5, color = insper_col("gray_med")) +
     theme_insper() +
     ggplot2::labs(
       title = title,
       subtitle = subtitle,
       caption = caption
-    ) +
-    ggplot2::coord_flip()
+    )
+
+  # Apply coordinate flip if requested
+  if (flip) {
+    p <- p + ggplot2::coord_flip()
+  }
 
   return(p)
 }
 
 #' Insper Heatmap
 #'
-#' Correlation matrices and heatmaps
+#' Create correlation matrices and heatmaps using Insper's visual identity.
+#' Automatically detects whether data is a matrix or pre-melted long format.
 #'
-#' @param data Data frame or correlation matrix
+#' @param data Data frame (melted with Var1, Var2, value columns) or
+#'   correlation matrix
 #' @param title Plot title
 #' @param subtitle Plot subtitle
 #' @param caption Plot caption
-#' @param show_values Show correlation values on tiles
-#' @return ggplot object
+#' @param show_values Logical. If TRUE, displays values on tiles. Default is TRUE
+#' @param value_color Character. Color for value text. Default is "white"
+#' @param value_size Numeric. Size of value text. Default is 3
+#' @param palette Character. Palette name for fill scale. Default is "diverging_insper"
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # From correlation matrix
+#' cor_mat <- cor(mtcars[, 1:4])
+#' insper_heatmap(cor_mat)
+#'
+#' # Hide values
+#' insper_heatmap(cor_mat, show_values = FALSE)
+#'
+#' # Custom palette
+#' insper_heatmap(cor_mat, palette = "diverging_red_teal")
+#'
+#' # From melted data frame
+#' melted <- data.frame(
+#'   Var1 = rep(c("A", "B", "C"), each = 3),
+#'   Var2 = rep(c("X", "Y", "Z"), 3),
+#'   value = runif(9, -1, 1)
+#' )
+#' insper_heatmap(melted)
+#' }
+#'
+#' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
 #' @export
-insper_heatmap <- function(data, title = NULL, subtitle = NULL,
-                           caption = NULL, show_values = TRUE) {
+insper_heatmap <- function(data,
+                           title = NULL,
+                           subtitle = NULL,
+                           caption = NULL,
+                           show_values = TRUE,
+                           value_color = "white",
+                           value_size = 3,
+                           palette = "diverging_insper") {
 
-  # If data is not already melted, assume it''s a correlation matrix
-  if (!("Var1" %in% names(data) && "Var2" %in% names(data) && "value" %in% names(data))) {
-    # Convert correlation matrix to long format
-    cor_matrix <- as.matrix(data)
-    melted_data <- expand.grid(Var1 = rownames(cor_matrix), Var2 = colnames(cor_matrix))
-    melted_data$value <- as.vector(cor_matrix)
+  # Input validation with cli
+  if (!is.data.frame(data) && !is.matrix(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame or matrix",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
+
+  # Check if data is already in melted format
+  is_melted <- is.data.frame(data) &&
+    all(c("Var1", "Var2", "value") %in% names(data))
+
+  if (!is_melted) {
+    # Convert matrix/data frame to long format
+    if (!is.matrix(data)) {
+      if (!all(sapply(data, is.numeric))) {
+        cli::cli_abort(c(
+          "{.arg data} must contain only numeric columns when not pre-melted",
+          "i" = "Or provide data in melted format with columns: Var1, Var2, value"
+        ))
+      }
+      data <- as.matrix(data)
+    }
+
+    melted_data <- expand.grid(
+      Var1 = rownames(data) %||% seq_len(nrow(data)),
+      Var2 = colnames(data) %||% seq_len(ncol(data))
+    )
+    melted_data$value <- as.vector(data)
   } else {
     melted_data <- data
   }
 
+  # Create plot
   p <- ggplot2::ggplot(melted_data, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
     ggplot2::geom_tile(color = "white", linewidth = 0.5) +
-    scale_fill_insper(palette = "diverging_insper", discrete = FALSE) +
+    scale_fill_insper(palette = palette, discrete = FALSE) +
     theme_insper() +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
@@ -316,15 +518,306 @@ insper_heatmap <- function(data, title = NULL, subtitle = NULL,
       title = title,
       subtitle = subtitle,
       caption = caption,
-      fill = "Correlation"
+      fill = "Value"
     )
 
+  # Add value labels if requested
   if (show_values) {
     p <- p + ggplot2::geom_text(
       ggplot2::aes(label = round(value, 2)),
-      color = "white",
-      size = 3
+      color = value_color,
+      size = value_size
     )
+  }
+
+  return(p)
+}
+#' Insper Lollipop Plot
+#'
+#' Create lollipop charts (combination of geom_segment and geom_point) using
+#' Insper's visual identity. Ideal for displaying ranked categorical data.
+#'
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
+#' @param color <[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)
+#' @param horizontal Logical. If TRUE, creates horizontal lollipops. Default is FALSE
+#' @param sorted Logical. If TRUE, sorts by y value. Default is FALSE
+#' @param point_size Numeric. Size of points. Default is 4
+#' @param line_width Numeric. Width of segments. Default is 1
+#' @param title Plot title
+#' @param subtitle Plot subtitle
+#' @param caption Plot caption
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple lollipop plot
+#' df <- data.frame(category = letters[1:10], value = runif(10, 0, 100))
+#' insper_lollipop(df, x = category, y = value)
+#'
+#' # Horizontal and sorted
+#' insper_lollipop(df, x = category, y = value,
+#'                 horizontal = TRUE, sorted = TRUE)
+#'
+#' # With color aesthetic
+#' df$group <- rep(c("A", "B"), 5)
+#' insper_lollipop(df, x = category, y = value, color = group)
+#' }
+#'
+#' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+#' @export
+insper_lollipop <- function(data, x, y, color = NULL,
+                            horizontal = FALSE,
+                            sorted = FALSE,
+                            point_size = 4,
+                            line_width = 1,
+                            title = NULL,
+                            subtitle = NULL,
+                            caption = NULL) {
+
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
+
+  # Check if color was provided using rlang
+  has_color <- !rlang::quo_is_null(rlang::enquo(color))
+
+  # Sort if requested
+  if (sorted) {
+    data <- data |>
+      dplyr::arrange({{ y }})
+  }
+
+  # Initialize plot
+  if (!has_color) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}})) +
+      ggplot2::geom_segment(
+        ggplot2::aes(xend = {{x}}, yend = 0),
+        color = insper_col("teals1"),
+        linewidth = line_width
+      ) +
+      ggplot2::geom_point(
+        color = insper_col("reds1"),
+        size = point_size
+      )
+  } else {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, color = {{color}})) +
+      ggplot2::geom_segment(
+        ggplot2::aes(xend = {{x}}, yend = 0),
+        linewidth = line_width
+      ) +
+      ggplot2::geom_point(size = point_size) +
+      scale_color_insper()
+  }
+
+  # Apply horizontal orientation if requested
+  if (horizontal) {
+    p <- p + ggplot2::coord_flip()
+  }
+
+  p <- p +
+    theme_insper() +
+    ggplot2::labs(
+      title = title,
+      subtitle = subtitle,
+      caption = caption
+    )
+
+  return(p)
+}
+
+#' Insper Area Plot
+#'
+#' Create area charts for time series data using Insper's visual identity.
+#' Supports both single and grouped/stacked areas.
+#'
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Value variable
+#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param stacked Logical. If TRUE and fill is provided, creates stacked areas.
+#'   Default is FALSE
+#' @param area_alpha Numeric. Transparency of areas (0-1). Default is 0.6
+#' @param add_line Logical. If TRUE, adds line on top of area. Default is TRUE
+#' @param title Plot title
+#' @param subtitle Plot subtitle
+#' @param caption Plot caption
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple area plot
+#' df <- data.frame(time = 1:50, value = cumsum(rnorm(50)))
+#' insper_area(df, x = time, y = value)
+#'
+#' # Grouped areas
+#' df <- data.frame(
+#'   time = rep(1:50, 3),
+#'   value = c(cumsum(rnorm(50)), cumsum(rnorm(50)), cumsum(rnorm(50))),
+#'   group = rep(c("A", "B", "C"), each = 50)
+#' )
+#' insper_area(df, x = time, y = value, fill = group)
+#'
+#' # Stacked areas
+#' insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
+#' }
+#'
+#' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}, \code{\link{insper_timeseries}}
+#' @export
+insper_area <- function(data, x, y, fill = NULL,
+                        stacked = FALSE,
+                        area_alpha = 0.6,
+                        add_line = TRUE,
+                        title = NULL,
+                        subtitle = NULL,
+                        caption = NULL) {
+
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
+
+  # Check if fill was provided using rlang
+  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+
+  # Determine position
+  position <- if (stacked && has_fill) "stack" else "identity"
+
+  # Initialize plot
+  if (!has_fill) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}})) +
+      ggplot2::geom_area(fill = insper_col("teals1"), alpha = area_alpha)
+
+    if (add_line) {
+      p <- p + ggplot2::geom_line(color = insper_col("teals3"), linewidth = 1)
+    }
+  } else {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill}})) +
+      ggplot2::geom_area(alpha = area_alpha, position = position) +
+      scale_fill_insper()
+
+    if (add_line) {
+      p <- p + ggplot2::geom_line(
+        ggplot2::aes(color = {{fill}}),
+        linewidth = 0.8,
+        position = position
+      ) +
+        scale_color_insper()
+    }
+  }
+
+  p <- p +
+    theme_insper() +
+    ggplot2::labs(
+      title = title,
+      subtitle = subtitle,
+      caption = caption
+    ) +
+    ggplot2::theme(
+      panel.grid.minor.x = ggplot2::element_blank()
+    )
+
+  return(p)
+}
+
+#' Insper Violin Plot
+#'
+#' Create violin plots to visualize distributions using Insper's visual identity.
+#' Optionally overlay boxplots and/or jittered points.
+#'
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
+#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
+#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param show_boxplot Logical. If TRUE, overlays a boxplot. Default is TRUE
+#' @param show_points Logical. If TRUE, adds jittered points. Default is FALSE
+#' @param violin_alpha Numeric. Transparency of violins (0-1). Default is 0.7
+#' @param flip Logical. If TRUE, creates horizontal violins. Default is TRUE
+#' @param title Plot title
+#' @param subtitle Plot subtitle
+#' @param caption Plot caption
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple violin plot
+#' insper_violin(mtcars, x = factor(cyl), y = mpg)
+#'
+#' # With fill aesthetic and points
+#' insper_violin(mtcars, x = factor(cyl), y = mpg,
+#'               fill = factor(cyl), show_points = TRUE)
+#'
+#' # Vertical violin without boxplot
+#' insper_violin(mtcars, x = factor(cyl), y = mpg,
+#'               show_boxplot = FALSE, flip = FALSE)
+#' }
+#'
+#' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}, \code{\link{insper_boxplot}}
+#' @export
+insper_violin <- function(data, x, y, fill = NULL,
+                          show_boxplot = TRUE,
+                          show_points = FALSE,
+                          violin_alpha = 0.7,
+                          flip = TRUE,
+                          title = NULL,
+                          subtitle = NULL,
+                          caption = NULL) {
+
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
+
+  # Check if fill was provided using rlang
+  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+
+  # Initialize plot
+  if (!has_fill) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}})) +
+      ggplot2::geom_violin(fill = insper_col("teals2"), alpha = violin_alpha)
+  } else {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill}})) +
+      ggplot2::geom_violin(alpha = violin_alpha) +
+      scale_fill_insper()
+  }
+
+  # Add boxplot if requested
+  if (show_boxplot) {
+    p <- p + ggplot2::geom_boxplot(width = 0.2, alpha = 0.5,
+                                    outlier.shape = NA)
+  }
+
+  # Add jittered points if requested
+  if (show_points) {
+    p <- p + ggplot2::geom_jitter(width = 0.1, alpha = 0.5,
+                                   color = insper_col("gray_med"))
+  }
+
+  p <- p +
+    theme_insper() +
+    ggplot2::labs(
+      title = title,
+      subtitle = subtitle,
+      caption = caption
+    )
+
+  # Apply coordinate flip if requested
+  if (flip) {
+    p <- p + ggplot2::coord_flip()
   }
 
   return(p)

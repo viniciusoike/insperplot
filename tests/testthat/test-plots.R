@@ -12,9 +12,9 @@ test_that("insper_barplot validates data frame input", {
 
 test_that("insper_barplot validates position parameter", {
   df <- data.frame(x = c("A", "B"), y = c(1, 2), grp = c("X", "Y"))
-  expect_no_error(insper_barplot(df, x = x, y = y, group = grp, position = "dodge"))
-  expect_no_error(insper_barplot(df, x = x, y = y, group = grp, position = "stack"))
-  expect_error(insper_barplot(df, x = x, y = y, group = grp, position = "invalid"))
+  expect_no_error(insper_barplot(df, x = x, y = y, fill_var = grp, position = "dodge"))
+  expect_no_error(insper_barplot(df, x = x, y = y, fill_var = grp, position = "stack"))
+  expect_error(insper_barplot(df, x = x, y = y, fill_var = grp, position = "invalid"))
 })
 
 test_that("insper_barplot handles grouped bars", {
@@ -24,7 +24,7 @@ test_that("insper_barplot handles grouped bars", {
     y = c(1, 2, 3, 4),
     grp = rep(c("X", "Y"), 2)
   )
-  p <- insper_barplot(df, x = x, y = y, group = grp)
+  p <- insper_barplot(df, x = x, y = y, fill_var = grp)
   expect_s3_class(p, "ggplot")
 })
 
@@ -135,5 +135,81 @@ test_that("plot functions accept title/subtitle/caption", {
     mtcars, x = factor(cyl), y = mpg,
     caption = "Test"
   )
+  expect_s3_class(p3, "ggplot")
+})
+
+# Tests for new plot functions
+
+test_that("insper_lollipop creates plot", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(category = letters[1:5], value = 1:5)
+  p <- insper_lollipop(df, x = category, y = value)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_lollipop handles color aesthetic", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(category = letters[1:5], value = 1:5, grp = rep(c("A", "B"), length.out = 5))
+  p <- insper_lollipop(df, x = category, y = value, color = grp)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_lollipop horizontal and sorted parameters work", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(category = letters[1:5], value = c(3, 1, 4, 2, 5))
+  p1 <- insper_lollipop(df, x = category, y = value, horizontal = TRUE)
+  p2 <- insper_lollipop(df, x = category, y = value, sorted = TRUE)
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_area creates plot", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_area(df, x = time, y = value)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_area handles fill aesthetic", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:20, 2),
+    value = cumsum(rnorm(40)),
+    group = rep(c("A", "B"), each = 20)
+  )
+  p <- insper_area(df, x = time, y = value, fill = group)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_area stacked parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:10, 2),
+    value = abs(rnorm(20)),
+    group = rep(c("A", "B"), each = 10)
+  )
+  p <- insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_violin creates plot", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_violin(mtcars, x = factor(cyl), y = mpg)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_violin handles fill aesthetic", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_violin(mtcars, x = factor(cyl), y = mpg, fill = factor(cyl))
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_violin optional features work", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_violin(mtcars, x = factor(cyl), y = mpg, show_boxplot = FALSE)
+  p2 <- insper_violin(mtcars, x = factor(cyl), y = mpg, show_points = TRUE)
+  p3 <- insper_violin(mtcars, x = factor(cyl), y = mpg, flip = FALSE)
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
   expect_s3_class(p3, "ggplot")
 })

@@ -9,11 +9,15 @@ insper_heatmap(
   title = NULL,
   subtitle = NULL,
   caption = NULL,
-  show_values = TRUE
+  show_values = TRUE,
+  value_color = "white",
+  value_size = 3,
+  palette = "diverging_insper"
 )
 }
 \arguments{
-\item{data}{Data frame or correlation matrix}
+\item{data}{Data frame (melted with Var1, Var2, value columns) or
+correlation matrix}
 
 \item{title}{Plot title}
 
@@ -21,11 +25,53 @@ insper_heatmap(
 
 \item{caption}{Plot caption}
 
-\item{show_values}{Show correlation values on tiles}
+\item{show_values}{Logical. If TRUE, displays values on tiles. Default is TRUE}
+
+\item{value_color}{Character. Color for value text. Default is "white"}
+
+\item{value_size}{Numeric. Size of value text. Default is 3}
+
+\item{palette}{Character. Palette name for fill scale. Default is "diverging_insper"}
 }
 \value{
-ggplot object
+A ggplot2 object
 }
 \description{
-Correlation matrices and heatmaps
+Create correlation matrices and heatmaps using Insper's visual identity.
+Automatically detects whether data is a matrix or pre-melted long format.
 }
+\examples{
+\dontrun{
+# From correlation matrix
+cor_mat <- cor(mtcars[, 1:4])
+insper_heatmap(cor_mat)
+
+# Hide values
+insper_heatmap(cor_mat, show_values = FALSE)
+
+# Custom palette
+insper_heatmap(cor_mat, palette = "diverging_red_teal")
+
+# From melted data frame
+melted <- data.frame(
+  Var1 = rep(c("A", "B", "C"), each = 3),
+  Var2 = rep(c("X", "Y", "Z"), 3),
+  value = runif(9, -1, 1)
+)
+insper_heatmap(melted)
+}
+
+}
+\seealso{
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+
+Other plots: 
+\code{\link{insper_area}()},
+\code{\link{insper_barplot}()},
+\code{\link{insper_boxplot}()},
+\code{\link{insper_lollipop}()},
+\code{\link{insper_scatterplot}()},
+\code{\link{insper_timeseries}()},
+\code{\link{insper_violin}()}
+}
+\concept{plots}

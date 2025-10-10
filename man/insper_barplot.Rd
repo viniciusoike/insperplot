@@ -5,11 +5,11 @@
 \title{Create a Bar Plot with Insper Styling}
 \usage{
 insper_barplot(
-  .dat,
+  data,
   x,
   y,
-  fill = insper_col("reds1"),
-  group = NULL,
+  fill_var = NULL,
+  single_color = insper_col("reds1"),
   position = "dodge",
   zero = TRUE,
   text = FALSE,
@@ -17,20 +17,22 @@ insper_barplot(
   palette = "categorical",
   text_size = 4,
   text_color = "black",
-  single_color = NULL,
+  label_formatter = scales::comma,
   ...
 )
 }
 \arguments{
-\item{.dat}{A data frame containing the data to plot}
+\item{data}{A data frame containing the data to plot}
 
-\item{x}{Column name for x-axis (categorical variable)}
+\item{x}{<[`data-masked`][ggplot2::aes_eval]> Column name for x-axis (categorical variable)}
 
-\item{y}{Column name for y-axis (numeric variable)}
+\item{y}{<[`data-masked`][ggplot2::aes_eval]> Column name for y-axis (numeric variable)}
 
-\item{fill}{Column name for fill aesthetic or color for bars. Default is insper_col("reds1")}
+\item{fill_var}{<[`data-masked`][ggplot2::aes_eval]> Column name for fill aesthetic (creates grouped/stacked bars).
+If NULL, uses single_color for all bars.}
 
-\item{group}{Column name for grouping variable (creates grouped/stacked bars)}
+\item{single_color}{Character. Hex color code for bars when not using fill_var.
+Default is Insper red.}
 
 \item{position}{Position adjustment for bars. Options: "dodge", "stack",
 "fill", "identity". Default is "dodge"}
@@ -48,7 +50,7 @@ Default is "categorical"}
 
 \item{text_color}{Character. Color of text labels. Default is "black"}
 
-\item{single_color}{Character. Color for single bars when no grouping. Currently unused.}
+\item{label_formatter}{Function. Formatter for text labels. Default is scales::comma}
 
 \item{...}{Additional arguments passed to scale_fill_insper()}
 }
@@ -66,10 +68,15 @@ and automatic ordering.
 insper_barplot(mtcars, x = cyl, y = mpg)
 
 # Grouped bar plot
-insper_barplot(mtcars, x = cyl, y = mpg, group = gear)
+insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
 
 # Horizontal bars with text labels
 insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
+
+# Custom color and label formatting
+insper_barplot(mtcars, x = cyl, y = mpg,
+               single_color = insper_col("teals1"),
+               label_formatter = format_num_br)
 }
 
 }
@@ -77,8 +84,12 @@ insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
 \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
 
 Other plots: 
+\code{\link{insper_area}()},
 \code{\link{insper_boxplot}()},
+\code{\link{insper_heatmap}()},
+\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
-\code{\link{insper_timeseries}()}
+\code{\link{insper_timeseries}()},
+\code{\link{insper_violin}()}
 }
 \concept{plots}
