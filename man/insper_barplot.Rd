@@ -74,6 +74,8 @@ insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
 
 }
 \seealso{
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+
 Other plots: 
 \code{\link{insper_boxplot}()},
 \code{\link{insper_scatterplot}()},

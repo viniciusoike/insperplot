@@ -20,6 +20,8 @@ show_insper_palette()
 show_insper_palette("reds")
 }
 \seealso{
+\code{\link{insper_col}}, \code{\link{insper_pal}}
+
 Other colors: 
 \code{\link{insper_col}()},
 \code{\link{insper_pal}()}

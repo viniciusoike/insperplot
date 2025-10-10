@@ -21,3 +21,11 @@ Formatted caption string
 \description{
 Standardized caption formatting with institutional attribution
 }
+\seealso{
+Other utilities: 
+\code{\link{format_brl}()},
+\code{\link{format_num_br}()},
+\code{\link{format_percent_br}()},
+\code{\link{save_insper_plot}()}
+}
+\concept{utilities}

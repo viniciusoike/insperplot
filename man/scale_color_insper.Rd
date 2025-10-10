@@ -33,4 +33,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl))) +
   geom_point() +
   scale_color_insper()
 }
+\seealso{
+\code{\link{insper_pal}}, \code{\link{theme_insper}}
+}
 \concept{scales}

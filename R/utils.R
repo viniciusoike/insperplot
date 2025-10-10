@@ -5,6 +5,7 @@
 #' @param ... Character names of colors. If none provided, returns all colors.
 #' @return Named character vector of hex codes
 #' @family colors
+#' @seealso \code{\link{insper_pal}}, \code{\link{show_insper_palette}}
 #' @export
 #' @examples
 #' insper_col()
@@ -59,6 +60,7 @@ insper_col <- function(...) {
 #' @param palette Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals")
 #' @return A ggplot2 object showing the color palette
 #' @family colors
+#' @seealso \code{\link{insper_col}}, \code{\link{insper_pal}}
 #' @export
 #' @examples
 #' show_insper_palette()
@@ -120,6 +122,8 @@ show_insper_palette <- function(palette = "all") {
 #' @param height Plot height in inches
 #' @param dpi Resolution
 #' @param ... Additional arguments passed to ggsave
+#' @family utilities
+#' @seealso \code{\link[ggplot2]{ggsave}}
 #' @export
 save_insper_plot <- function(plot, filename, width = height * 1.618, height = 6, dpi = 300, ...) {
 
@@ -145,6 +149,7 @@ save_insper_plot <- function(plot, filename, width = height * 1.618, height = 6,
 #' @param date Date of analysis
 #' @param lang Language for labels ("pt" for Portuguese, "en" for English). Default is "pt"
 #' @return Formatted caption string
+#' @family utilities
 #' @importFrom lubridate month
 #' @export
 insper_caption <- function(text = NULL, source = NULL, date = NULL, lang = "pt") {
@@ -178,6 +183,7 @@ insper_caption <- function(text = NULL, source = NULL, date = NULL, lang = "pt")
 #' @param x Numeric vector
 #' @param symbol Include R$ symbol
 #' @return Formatted character vector
+#' @family utilities
 #' @export
 format_brl <- function(x, symbol = TRUE) {
 
@@ -197,6 +203,7 @@ format_brl <- function(x, symbol = TRUE) {
 #' @param x Numeric vector (proportion, not percentage)
 #' @param digits Number of decimal places
 #' @return Formatted character vector
+#' @family utilities
 #' @export
 format_percent_br <- function(x, digits = 1) {
 
@@ -206,17 +213,22 @@ format_percent_br <- function(x, digits = 1) {
 }
 
 
-#' Format Brazilian Percentage
+#' Format Brazilian Numbers
 #'
-#' Format numbers as Brazilian-style percentages
+#' Format numbers in Brazilian style with decimal comma and thousand separator
 #'
-#' @param x Numeric vector (proportion, not percentage)
+#' @param x Numeric vector
 #' @param digits Number of decimal places
 #' @return Formatted character vector
+#' @family utilities
 #' @export
 format_num_br <- function(x, digits = NULL) {
 
-  formatted <- scales::comma(x, accuracy = 10^(-digits), big.mark = ".", decimal.mark = ",")
+  if (is.null(digits)) {
+    formatted <- scales::comma(x, big.mark = ".", decimal.mark = ",")
+  } else {
+    formatted <- scales::comma(x, accuracy = 10^(-digits), big.mark = ".", decimal.mark = ",")
+  }
 
   return(formatted)
 }

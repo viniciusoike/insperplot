@@ -36,6 +36,8 @@ ggplot object
 Box plots with statistical annotations
 }
 \seealso{
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+
 Other plots: 
 \code{\link{insper_barplot}()},
 \code{\link{insper_scatterplot}()},

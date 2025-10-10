@@ -6,6 +6,7 @@
 #' @param ... Additional arguments passed to ggplot2 scale functions
 #' @return ggplot2 scale object
 #' @family scales
+#' @seealso \code{\link{insper_pal}}, \code{\link{theme_insper}}
 #' @importFrom ggplot2 discrete_scale scale_fill_gradientn
 #' @importFrom scales manual_pal
 #' @export
@@ -18,8 +19,8 @@ scale_color_insper <- function(palette = "main", discrete = TRUE, reverse = FALS
 
   if (discrete) {
     ggplot2::discrete_scale(
-      "colour", "insper",
-      scales::manual_pal(insper_pal(palette, reverse = reverse)),
+      aesthetics = "colour",
+      palette = scales::manual_pal(insper_pal(palette, reverse = reverse)),
       ...
     )
   } else {
@@ -40,11 +41,11 @@ scale_fill_insper <- function(palette = "main", discrete = TRUE, reverse = FALSE
 
   if (discrete) {
     ggplot2::discrete_scale(
-      "fill", "insper",
-      scales::manual_pal(insper_pal(palette, reverse = reverse)),
+      aesthetics = "fill",
+      palette = scales::manual_pal(insper_pal(palette, reverse = reverse)),
       ...
     )
-  } else {
+  } else{
     ggplot2::scale_fill_gradientn(
       colours = insper_pal(palette, type = "continuous", reverse = reverse),
       ...

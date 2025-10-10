@@ -36,6 +36,8 @@ ggplot object
 Time series plots optimized for economic/business data
 }
 \seealso{
+\code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+
 Other plots: 
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},

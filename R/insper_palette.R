@@ -6,6 +6,7 @@
 #' @param reverse Logical indicating whether to reverse palette
 #' @return Vector of hex color codes
 #' @family colors
+#' @seealso \code{\link{insper_col}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper}}, \code{\link{scale_fill_insper}}
 #' @export
 #' @examples
 #' insper_pal("main")

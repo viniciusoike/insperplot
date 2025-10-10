@@ -17,3 +17,11 @@ Formatted character vector
 \description{
 Format numbers as Brazilian Real currency
 }
+\seealso{
+Other utilities: 
+\code{\link{format_num_br}()},
+\code{\link{format_percent_br}()},
+\code{\link{insper_caption}()},
+\code{\link{save_insper_plot}()}
+}
+\concept{utilities}

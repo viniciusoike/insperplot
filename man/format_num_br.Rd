@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{format_num_br}
 \alias{format_num_br}
-\title{Format Brazilian Percentage}
+\title{Format Brazilian Numbers}
 \usage{
 format_num_br(x, digits = NULL)
 }
 \arguments{
-\item{x}{Numeric vector (proportion, not percentage)}
+\item{x}{Numeric vector}
 
 \item{digits}{Number of decimal places}
 }
@@ -15,5 +15,13 @@ format_num_br(x, digits = NULL)
 Formatted character vector
 }
 \description{
-Format numbers as Brazilian-style percentages
+Format numbers in Brazilian style with decimal comma and thousand separator
 }
+\seealso{
+Other utilities: 
+\code{\link{format_brl}()},
+\code{\link{format_percent_br}()},
+\code{\link{insper_caption}()},
+\code{\link{save_insper_plot}()}
+}
+\concept{utilities}

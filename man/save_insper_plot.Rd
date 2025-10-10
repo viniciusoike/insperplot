@@ -29,3 +29,13 @@ save_insper_plot(
 \description{
 Enhanced ggsave with institutional defaults
 }
+\seealso{
+\code{\link[ggplot2]{ggsave}}
+
+Other utilities: 
+\code{\link{format_brl}()},
+\code{\link{format_num_br}()},
+\code{\link{format_percent_br}()},
+\code{\link{insper_caption}()}
+}
+\concept{utilities}

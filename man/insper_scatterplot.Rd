@@ -39,6 +39,8 @@ ggplot object
 Scatter plots with regression lines and confidence intervals
 }
 \seealso{
+\code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+
 Other plots: 
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},

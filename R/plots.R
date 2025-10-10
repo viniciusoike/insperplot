@@ -36,6 +36,7 @@
 #' }
 #'
 #' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
 #' @importFrom ggplot2 aes geom_col
 #' @export
 insper_barplot <- function(
@@ -160,6 +161,7 @@ insper_barplot <- function(
 #' @param caption Plot caption
 #' @return ggplot object
 #' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
 #' @export
 insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
                                title = NULL, subtitle = NULL, caption = NULL) {
@@ -206,6 +208,7 @@ insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
 #' @param caption Plot caption
 #' @return ggplot object
 #' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
 #' @export
 insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
                               subtitle = NULL, caption = NULL) {
@@ -214,10 +217,10 @@ insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
 
   if (!is.null(substitute(group))) {
     p <- p +
-      ggplot2::geom_line(ggplot2::aes(color = {{group}}), size = 1.2) +
+      ggplot2::geom_line(ggplot2::aes(color = {{group}}), linewidth = 1.2) +
       scale_color_insper()
   } else {
-    p <- p + ggplot2::geom_line(color = insper_colors$primary["insper_blue"], size = 1.2)
+    p <- p + ggplot2::geom_line(color = insper_colors$primary["insper_blue"], linewidth = 1.2)
   }
 
   p <- p +
@@ -248,6 +251,7 @@ insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
 #' @param caption Plot caption
 #' @return ggplot object
 #' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
 #' @export
 insper_boxplot <- function(data, x, y, fill = NULL, title = NULL,
                            subtitle = NULL, caption = NULL) {
@@ -300,8 +304,8 @@ insper_heatmap <- function(data, title = NULL, subtitle = NULL,
   }
 
   p <- ggplot2::ggplot(melted_data, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
-    ggplot2::geom_tile(color = "white", size = 0.5) +
-    scale_fill_insper(palette = "diverging", discrete = FALSE) +
+    ggplot2::geom_tile(color = "white", linewidth = 0.5) +
+    scale_fill_insper(palette = "diverging_insper", discrete = FALSE) +
     theme_insper() +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
