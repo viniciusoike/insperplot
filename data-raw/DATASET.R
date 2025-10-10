@@ -2,35 +2,38 @@
 
 #' Insper Color Palettes
 #'
-#' Complete collection of Insper color palettes for different use cases
+#' Complete collection of Insper color palettes for different use cases.
+#' Based on Insper's visual identity guidelines.
+#'
+#' Primary brand color: #E4002B (Insper Red)
 insper_colors <- list(
 
-  # Main palette - Primary Insper colors
-  main = c("#C4161C", "#F15A22", "#FAA61A", "#009491", "#3CBFAE", "#414042"),
+  # ========== MAIN PALETTE ==========
+  # Primary Insper brand colors
+  main = c("#E4002B", "#F15A22", "#FAA61A", "#009491", "#3CBFAE", "#414042"),
 
-  # Sequential palettes - Single color gradients
-  reds = c("#F69679", "#E80724", "#C4161C"),
-  oranges = c("#FAA61A", "#F58220", "#F15A22"),
-  teals = c("#3CBFAE", "#27A5A2", "#009491"),
-  grays = c("#E6E7E8", "#BCBEC0", "#414042"),
+  # ========== SEQUENTIAL PALETTES ==========
+  # Single-hue gradients for ordered/continuous data
+  reds_seq = c("#FEE5E7", "#FCA5A8", "#E4002B", "#A50020", "#6B0015"),
+  oranges_seq = c("#FEF1E5", "#FAA61A", "#F58220", "#F15A22", "#B83E16"),
+  teals_seq = c("#E5F7F7", "#3CBFAE", "#27A5A2", "#009491", "#006763"),
+  grays_seq = c("#F5F5F5", "#E6E7E8", "#BCBEC0", "#414042", "#1A1A1A"),
 
-  # Sequential Blues (for continuous data)
-  sequential = c(
-    "#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1",
-    "#6BAED6", "#4292C6", "#2171B5", "#08519C", "#08306B"
+  # ========== DIVERGING PALETTES ==========
+  # For data with meaningful center (negative/neutral/positive)
+  diverging_red_teal = c("#E4002B", "#FCA5A8", "#FFFFFF", "#7DD4D2", "#009491"),
+  diverging_red_teal_extended = c(
+    "#6B0015", "#A50020", "#E4002B", "#FCA5A8", "#FEE5E7",
+    "#FFFFFF",
+    "#E5F7F7", "#7DD4D2", "#009491", "#006763", "#003D3B"
   ),
+  diverging_insper = c("#009491", "#3CBFAE", "#E6E7E8", "#FCA5A8", "#E4002B"),
 
-  # Diverging palettes (for data with meaningful center)
-  diverging_insper = c("#009491", "#3CBFAE", "#E6E7E8", "#F69679", "#C4161C"),
-  diverging_extended = c(
-    "#8E0152", "#C51B7D", "#DE77AE", "#F1B6DA",
-    "#FDE0EF", "#E6F5D0", "#B8E186", "#7FBC41",
-    "#4D9221", "#276419"
-  ),
-
-  # Qualitative palettes - Multi-category data
-  bright = c("#E80724", "#F15A22", "#FAA61A", "#009491", "#EE2A5D"),
-  contrast = c("#C4161C", "#009491", "#F58220", "#A62B4D", "#414042"),
+  # ========== QUALITATIVE PALETTES ==========
+  # Distinct colors for categorical data (unordered)
+  qualitative_main = c("#E4002B", "#F15A22", "#FAA61A", "#009491", "#3CBFAE", "#414042"),
+  qualitative_bright = c("#E4002B", "#F15A22", "#FAA61A", "#009491", "#EE2A5D", "#9B59B6"),
+  qualitative_contrast = c("#E4002B", "#009491", "#F58220", "#A62B4D", "#414042", "#3CBFAE"),
 
   # Categorical Palette (8 colors for multi-category data)
   categorical = c(

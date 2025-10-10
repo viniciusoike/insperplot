@@ -25,9 +25,9 @@ test_that("scale_colour_insper is alias for scale_color_insper", {
 })
 
 test_that("scales accept different palettes", {
-  expect_no_error(scale_color_insper(palette = "reds"))
+  expect_no_error(scale_color_insper(palette = "reds_seq"))
   expect_no_error(scale_color_insper(palette = "main"))
-  expect_no_error(scale_fill_insper(palette = "bright"))
+  expect_no_error(scale_fill_insper(palette = "qualitative_bright"))
   expect_no_error(scale_fill_insper(palette = "categorical"))
 })
 
@@ -58,12 +58,12 @@ test_that("scales work with different palette types", {
   # Discrete color scale
   p1 <- ggplot2::ggplot(mtcars, ggplot2::aes(x = wt, y = mpg, color = factor(cyl))) +
     ggplot2::geom_point() +
-    scale_color_insper(palette = "reds", discrete = TRUE)
+    scale_color_insper(palette = "reds_seq", discrete = TRUE)
   expect_s3_class(p1, "ggplot")
 
   # Continuous color scale
   p2 <- ggplot2::ggplot(mtcars, ggplot2::aes(x = wt, y = mpg, color = mpg)) +
     ggplot2::geom_point() +
-    scale_color_insper(palette = "reds", discrete = FALSE)
+    scale_color_insper(palette = "reds_seq", discrete = FALSE)
   expect_s3_class(p2, "ggplot")
 })

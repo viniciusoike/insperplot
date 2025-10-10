@@ -19,6 +19,7 @@ Format numbers as Brazilian Real currency
 }
 \seealso{
 Other utilities: 
+\code{\link{check_insper_fonts}()},
 \code{\link{format_num_br}()},
 \code{\link{format_percent_br}()},
 \code{\link{insper_caption}()},

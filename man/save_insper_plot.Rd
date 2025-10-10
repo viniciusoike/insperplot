@@ -33,6 +33,7 @@ Enhanced ggsave with institutional defaults
 \code{\link[ggplot2]{ggsave}}
 
 Other utilities: 
+\code{\link{check_insper_fonts}()},
 \code{\link{format_brl}()},
 \code{\link{format_num_br}()},
 \code{\link{format_percent_br}()},

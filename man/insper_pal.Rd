@@ -23,13 +23,16 @@ Get Insper Color Palette
 }
 \examples{
 insper_pal("main")
-insper_pal("reds", n = 5)
+insper_pal("reds_seq", n = 5)
 }
 \seealso{
 \code{\link{insper_col}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper}}, \code{\link{scale_fill_insper}}
 
 Other colors: 
+\code{\link{get_insper_colors}()},
 \code{\link{insper_col}()},
-\code{\link{show_insper_palette}()}
+\code{\link{list_palettes}()},
+\code{\link{show_insper_palette}()},
+\code{\link{show_palette_types}()}
 }
 \concept{colors}

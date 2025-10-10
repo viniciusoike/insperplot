@@ -7,9 +7,11 @@
 #' @param base_size Numeric. Base font size for all text elements in points.
 #'   Default is 12. All other text sizes are calculated relative to this value.
 #' @param font_title Character. Font family to use for plot titles and subtitles.
-#'   Default is "DIN Alternate". Must be a font available in the system.
+#'   Default is "EB Garamond" (serif). For best results, install "EB Garamond"
+#'   from Google Fonts. Falls back to system serif if unavailable.
 #' @param font_text Character. Font family to use for all other text elements
-#'   (axis labels, legend text, etc.). Default is "DIN Alternate".
+#'   (axis labels, legend text, etc.). Default is "Barlow" (sans-serif).
+#'   Falls back to "sans" if unavailable.
 #' @param grid Logical. Whether to display major grid lines. If TRUE, shows
 #'   dashed grid lines in light gray. If FALSE, removes all grid lines.
 #'   Default is TRUE.
@@ -63,8 +65,8 @@
 #' @export
 theme_insper <- function(
     base_size = 12,
-    font_title = "DIN Alternate",
-    font_text = "DIN Alternate",
+    font_title = "EB Garamond",
+    font_text = "Barlow",
     grid = TRUE,
     border = "none",
     ...) {

@@ -23,6 +23,7 @@ Standardized caption formatting with institutional attribution
 }
 \seealso{
 Other utilities: 
+\code{\link{check_insper_fonts}()},
 \code{\link{format_brl}()},
 \code{\link{format_num_br}()},
 \code{\link{format_percent_br}()},

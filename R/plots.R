@@ -172,14 +172,14 @@ insper_scatterplot <- function(data, x, y, color = NULL, add_smooth = TRUE,
     p <- p + ggplot2::geom_point(ggplot2::aes(color = {{color}}), size = 2, alpha = 0.7)
     p <- p + scale_color_insper()
   } else {
-    p <- p + ggplot2::geom_point(color = insper_colors$primary["insper_blue"], size = 2, alpha = 0.7)
+    p <- p + ggplot2::geom_point(color = insper_col("teals1"), size = 2, alpha = 0.7)
   }
 
   if (add_smooth) {
     p <- p + ggplot2::geom_smooth(
       method = "lm",
-      color = insper_colors$accent["orange"],
-      fill = insper_colors$accent["orange"],
+      color = insper_col("oranges1"),
+      fill = insper_col("oranges1"),
       alpha = 0.2
     )
   }
@@ -220,7 +220,7 @@ insper_timeseries <- function(data, x, y, group = NULL, title = NULL,
       ggplot2::geom_line(ggplot2::aes(color = {{group}}), linewidth = 1.2) +
       scale_color_insper()
   } else {
-    p <- p + ggplot2::geom_line(color = insper_colors$primary["insper_blue"], linewidth = 1.2)
+    p <- p + ggplot2::geom_line(color = insper_col("teals1"), linewidth = 1.2)
   }
 
   p <- p +
@@ -263,11 +263,11 @@ insper_boxplot <- function(data, x, y, fill = NULL, title = NULL,
       ggplot2::geom_boxplot(ggplot2::aes(fill = {{fill}}), alpha = 0.7) +
       scale_fill_insper()
   } else {
-    p <- p + ggplot2::geom_boxplot(fill = insper_colors$primary["insper_light_blue"], alpha = 0.7)
+    p <- p + ggplot2::geom_boxplot(fill = insper_col("teals2"), alpha = 0.7)
   }
 
   p <- p +
-    ggplot2::geom_jitter(width = 0.2, alpha = 0.5, color = insper_colors$primary["insper_gray"]) +
+    ggplot2::geom_jitter(width = 0.2, alpha = 0.5, color = insper_col("gray_med")) +
     theme_insper() +
     ggplot2::labs(
       title = title,

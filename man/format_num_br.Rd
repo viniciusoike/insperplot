@@ -19,6 +19,7 @@ Format numbers in Brazilian style with decimal comma and thousand separator
 }
 \seealso{
 Other utilities: 
+\code{\link{check_insper_fonts}()},
 \code{\link{format_brl}()},
 \code{\link{format_percent_br}()},
 \code{\link{insper_caption}()},

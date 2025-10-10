@@ -24,10 +24,10 @@ insper_col <- function(...) {
     `gray_med` = "#BCBEC0",
     `gray_light` = "#E6E7E8",
 
-    # Reds
-    `reds1` = "#C4161C",
-    `reds2` = "#E80724",
-    `reds3` = "#F69679",
+    # Reds - Updated to match Insper's primary red (#E4002B)
+    `reds1` = "#E4002B",  # Primary Insper Red
+    `reds2` = "#FCA5A8",  # Light red
+    `reds3` = "#A50020",  # Dark red
 
     # Oranges
     `oranges1` = "#F15A22",
@@ -69,13 +69,21 @@ show_insper_palette <- function(palette = "all") {
   cols <- insper_col()
 
   if (palette != "all") {
+    # Support both old color group names and new palette names
     pattern <- switch(palette,
                       "grays" = "gray",
+                      "grays_seq" = "gray",
                       "reds" = "red",
+                      "reds_seq" = "red",
                       "oranges" = "orange",
+                      "oranges_seq" = "orange",
                       "magentas" = "magenta",
                       "teals" = "teal",
-                      stop("Invalid palette. Choose: all, grays, reds, oranges, magentas, teals")
+                      "teals_seq" = "teal",
+                      "qualitative_main" = "^(reds1|oranges1|teals1|gray_meddark)",
+                      "qualitative_bright" = "^(reds1|oranges1|teals1|magentas)",
+                      "qualitative_contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)",
+                      stop("Invalid palette. Choose: all, grays, reds, oranges, magentas, teals, or palette names like reds_seq, qualitative_main, etc.")
     )
     cols <- cols[grepl(pattern, names(cols))]
 
@@ -231,4 +239,86 @@ format_num_br <- function(x, digits = NULL) {
   }
 
   return(formatted)
+}
+
+#' Check and Install Insper Fonts
+#'
+#' Checks if recommended Insper fonts are installed and provides installation
+#' instructions if they're missing. Insper plots work best with EB Garamond
+#' (serif, for titles) and Barlow (sans-serif, for body text).
+#'
+#' @param verbose Logical. If TRUE, prints detailed information about font status.
+#'   Default is TRUE.
+#' @return Invisibly returns a named logical vector indicating which fonts are available.
+#'
+#' @details
+#' The recommended fonts are free Google Fonts:
+#' \itemize{
+#'   \item **EB Garamond**: Classical serif font similar to Insper's brand typography
+#'   \item **Barlow**: Modern sans-serif font, free alternative to DIN
+#' }
+#'
+#' To install these fonts:
+#' \enumerate{
+#'   \item Visit Google Fonts: \url{https://fonts.google.com}
+#'   \item Search for "EB Garamond" and "Barlow"
+#'   \item Download and install on your system
+#'   \item Restart R/RStudio after installation
+#' }
+#'
+#' If fonts are unavailable, plots will fall back to system defaults.
+#'
+#' @family utilities
+#' @export
+#' @examples
+#' # Check font availability
+#' check_insper_fonts()
+check_insper_fonts <- function(verbose = TRUE) {
+
+  # Get list of available fonts (platform-specific)
+  available_fonts <- try(systemfonts::system_fonts()$family, silent = TRUE)
+
+  if (inherits(available_fonts, "try-error")) {
+    if (verbose) {
+      cli::cli_alert_warning("Could not detect system fonts. Install {.pkg systemfonts} for font checking.")
+    }
+    return(invisible(c("EB Garamond" = FALSE, "Barlow" = FALSE)))
+  }
+
+  # Check for recommended fonts
+  has_garamond <- any(grepl("EB Garamond|Garamond", available_fonts, ignore.case = TRUE))
+  has_barlow <- any(grepl("Barlow", available_fonts, ignore.case = TRUE))
+
+  font_status <- c("EB Garamond" = has_garamond, "Barlow" = has_barlow)
+
+  if (verbose) {
+    cli::cli_h2("Insper Font Status")
+
+    if (has_garamond) {
+      cli::cli_alert_success("EB Garamond (serif) is installed")
+    } else {
+      cli::cli_alert_danger("EB Garamond (serif) not found")
+    }
+
+    if (has_barlow) {
+      cli::cli_alert_success("Barlow (sans-serif) is installed")
+    } else {
+      cli::cli_alert_danger("Barlow (sans-serif) not found")
+    }
+
+    if (!has_garamond || !has_barlow) {
+      cli::cli_h3("Installation Instructions")
+      cli::cli_ol(c(
+        "Visit {.url https://fonts.google.com}",
+        "Search for missing fonts: {.strong EB Garamond} and/or {.strong Barlow}",
+        "Download and install fonts on your system",
+        "Restart R/RStudio"
+      ))
+      cli::cli_alert_info("Plots will use system fallback fonts until these are installed")
+    } else {
+      cli::cli_alert_success("All recommended fonts are installed!")
+    }
+  }
+
+  invisible(font_status)
 }

@@ -23,7 +23,10 @@ insper_col("reds1", "teals1")
 \code{\link{insper_pal}}, \code{\link{show_insper_palette}}
 
 Other colors: 
+\code{\link{get_insper_colors}()},
 \code{\link{insper_pal}()},
-\code{\link{show_insper_palette}()}
+\code{\link{list_palettes}()},
+\code{\link{show_insper_palette}()},
+\code{\link{show_palette_types}()}
 }
 \concept{colors}

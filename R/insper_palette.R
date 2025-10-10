@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' insper_pal("main")
-#' insper_pal("reds", n = 5)
+#' insper_pal("reds_seq", n = 5)
 insper_pal <- function(palette = "primary", n = NULL, type = "discrete", reverse = FALSE) {
 
   if (!palette %in% names(insper_colors)) {
