@@ -54,11 +54,13 @@
 #' The package includes several pre-defined palettes:
 #' \itemize{
 #'   \item **main** - Primary Insper colors
-#'   \item **reds, oranges, teals, grays** - Sequential single-color gradients
-#'   \item **diverging_insper** - Diverging palette for data with a meaningful center
-#'   \item **bright, contrast** - Qualitative palettes for categorical data
+#'   \item **reds_seq, oranges_seq, teals_seq, grays_seq** - Sequential single-color gradients
+#'   \item **diverging_insper, diverging_red_teal** - Diverging palettes for data with a meaningful center
+#'   \item **qualitative_main, qualitative_bright, qualitative_contrast** - Qualitative palettes for categorical data
 #'   \item **categorical** - 8-color palette for multi-category data
 #' }
+#'
+#' Use \code{\link{list_palettes}()} to see all available palettes with detailed information.
 #'
 #' @section Getting Started:
 #' \preformatted{
@@ -74,7 +76,7 @@
 #' # Use Insper color palettes
 #' ggplot(mtcars, aes(x = factor(cyl), fill = factor(cyl))) +
 #'   geom_bar() +
-#'   scale_fill_insper(palette = "reds") +
+#'   scale_fill_insper(palette = "reds_seq") +
 #'   theme_insper()
 #' }
 #'
