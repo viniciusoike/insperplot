@@ -1,0 +1,32 @@
+Package: insperplot
+Type: Package
+Title: Insper Themed ggplot2 Extensions
+Version: 0.2.0
+Authors@R: c(
+    person(
+      "Vinicius", "Reginatto",
+      email = "vinicius.reginatto@example.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: Extends ggplot2 with Insper Instituto de Ensino e Pesquisa visual
+    identity, providing custom themes, color palettes, and specialized plotting
+    functions for academic and institutional use. This is an unofficial package
+    created by an Insper employee, not an official Insper product.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1.0)
+Imports:
+    cli,
+    ggplot2 (>= 3.4.0),
+    lubridate,
+    scales (>= 1.2.0)
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+URL: https://github.com/viniciusreginatto/insperplot
+BugReports: https://github.com/viniciusreginatto/insperplot/issues
