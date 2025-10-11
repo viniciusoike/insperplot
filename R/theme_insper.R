@@ -7,8 +7,8 @@
 #' @param base_size Numeric. Base font size for all text elements in points.
 #'   Default is 12. All other text sizes are calculated relative to this value.
 #' @param font_title Character. Font family to use for plot titles and subtitles.
-#'   Default is "EB Garamond" (serif). For best results, install "EB Garamond"
-#'   from Google Fonts. Falls back to system serif if unavailable.
+#'   Default is "EB Garamond" (serif). The theme automatically detects font
+#'   availability and falls back to "serif" if unavailable.
 #' @param font_text Character. Font family to use for all other text elements
 #'   (axis labels, legend text, etc.). Default is "Barlow" (sans-serif).
 #'   Falls back to "sans" if unavailable.
@@ -36,6 +36,23 @@
 #'   \item Consistent spacing and typography hierarchy
 #' }
 #'
+#' **Font Setup:**
+#'
+#' The theme uses two custom fonts by default:
+#' \itemize{
+#'   \item EB Garamond (serif) for titles
+#'   \item Barlow (sans-serif) for body text
+#' }
+#'
+#' To use these fonts, you have two options:
+#' \enumerate{
+#'   \item Install fonts locally - see \code{\link{check_insper_fonts}()}
+#'   \item Load fonts remotely - use \code{\link{import_insper_fonts}()}
+#' }
+#'
+#' If fonts are unavailable, the theme automatically falls back to system
+#' defaults ("serif" and "sans") without errors.
+#'
 #' The function validates input parameters and will throw an error if invalid
 #' values are provided for \code{grid} or \code{border} arguments.
 #'
@@ -60,7 +77,7 @@
 #' }
 #'
 #' @family themes
-#' @seealso \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}
+#' @seealso \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{import_insper_fonts}}, \code{\link{check_insper_fonts}}
 #' @importFrom ggplot2 element_blank element_line element_rect element_text unit theme theme_minimal rel margin %+replace%
 #' @export
 theme_insper <- function(
@@ -82,6 +99,11 @@ theme_insper <- function(
   if (!any(border %in% valid_border)) {
     cli::cli_abort("Argument `border` must be one of 'none', 'half', or 'closed'.")
   }
+
+  # Font detection and fallback ----
+  # Detect if custom fonts are available, fall back to system defaults if not
+  font_title <- detect_font(font_title, fallback = "serif")
+  font_text <- detect_font(font_text, fallback = "sans")
 
   # Base theme configuration ----
   # Define the core theme elements that apply regardless of options
@@ -173,4 +195,49 @@ theme_insper <- function(
   # The %+replace% operator replaces matching elements rather than adding to them
   theme_minimal(base_size = base_size, ...) %+replace%
     theme_base
+}
+
+
+# Helper Functions --------------------------------------------------------
+
+#' Detect Font Availability with Fallback
+#'
+#' Internal helper function to detect if a font is available and provide
+#' fallback if not. Checks both loaded fonts (via showtext) and system fonts.
+#'
+#' @param font_name Character. Name of font to check
+#' @param fallback Character. Fallback font if requested font unavailable
+#'
+#' @return Character. Either the requested font (if available) or fallback
+#' @keywords internal
+#' @noRd
+detect_font <- function(font_name, fallback = "sans") {
+
+  # First check if fonts loaded via import_insper_fonts()
+  fonts_imported <- isTRUE(getOption("insperplot.fonts_loaded", FALSE))
+
+  # If fonts imported via showtext, use the requested font
+  if (fonts_imported) {
+    return(font_name)
+  }
+
+  # Otherwise check if font is installed locally (requires systemfonts)
+  has_systemfonts <- requireNamespace("systemfonts", quietly = TRUE)
+
+  if (has_systemfonts) {
+    tryCatch({
+      available_fonts <- systemfonts::system_fonts()$family
+      font_available <- any(grepl(font_name, available_fonts, ignore.case = TRUE))
+
+      if (font_available) {
+        return(font_name)
+      }
+    }, error = function(e) {
+      # If error checking fonts, use fallback silently
+      return(fallback)
+    })
+  }
+
+  # If font not found, use fallback
+  return(fallback)
 }

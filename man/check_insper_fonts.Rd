@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{check_insper_fonts}
 \alias{check_insper_fonts}
-\title{Check and Install Insper Fonts}
+\title{Check Insper Font Availability}
 \usage{
 check_insper_fonts(verbose = TRUE)
 }
@@ -14,36 +14,49 @@ Default is TRUE.}
 Invisibly returns a named logical vector indicating which fonts are available.
 }
 \description{
-Checks if recommended Insper fonts are installed and provides installation
-instructions if they're missing. Insper plots work best with EB Garamond
-(serif, for titles) and Barlow (sans-serif, for body text).
+Checks if recommended Insper fonts are available (either installed locally
+or loaded via \code{\link{import_insper_fonts}}) and provides setup
+instructions if they're missing.
 }
 \details{
 The recommended fonts are free Google Fonts:
 \itemize{
-  \item **EB Garamond**: Classical serif font similar to Insper's brand typography
-  \item **Barlow**: Modern sans-serif font, free alternative to DIN
+  \item **EB Garamond**: Classical serif font for titles
+  \item **Barlow**: Modern sans-serif font for body text
 }
 
-To install these fonts:
+**Two ways to use these fonts:**
+
+**Option A - Local Installation (permanent, recommended for development):**
 \enumerate{
-  \item Visit Google Fonts: \url{https://fonts.google.com}
+  \item Visit \url{https://fonts.google.com}
   \item Search for "EB Garamond" and "Barlow"
-  \item Download and install on your system
-  \item Restart R/RStudio after installation
+  \item Download and install fonts on your system
+  \item Restart R/RStudio
 }
 
-If fonts are unavailable, plots will fall back to system defaults.
+**Option B - Remote Loading (per-session, recommended for scripts/reproducibility):**
+\enumerate{
+  \item Install showtext: \code{install.packages(c("showtext", "sysfonts"))}
+  \item Load fonts: \code{import_insper_fonts()}
+  \item Fonts available for current R session
+}
+
+If fonts are unavailable, plots automatically fall back to system defaults
+(serif/sans).
 }
 \examples{
 # Check font availability
 check_insper_fonts()
 }
 \seealso{
+\code{\link{import_insper_fonts}}
+
 Other utilities: 
 \code{\link{format_brl}()},
 \code{\link{format_num_br}()},
 \code{\link{format_percent_br}()},
+\code{\link{import_insper_fonts}()},
 \code{\link{insper_caption}()},
 \code{\link{save_insper_plot}()}
 }

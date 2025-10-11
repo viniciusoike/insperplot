@@ -18,8 +18,8 @@ theme_insper(
 Default is 12. All other text sizes are calculated relative to this value.}
 
 \item{font_title}{Character. Font family to use for plot titles and subtitles.
-Default is "EB Garamond" (serif). For best results, install "EB Garamond"
-from Google Fonts. Falls back to system serif if unavailable.}
+Default is "EB Garamond" (serif). The theme automatically detects font
+availability and falls back to "serif" if unavailable.}
 
 \item{font_text}{Character. Font family to use for all other text elements
 (axis labels, legend text, etc.). Default is "Barlow" (sans-serif).
@@ -57,6 +57,23 @@ The theme applies Insper's visual identity through:
   \item Consistent spacing and typography hierarchy
 }
 
+**Font Setup:**
+
+The theme uses two custom fonts by default:
+\itemize{
+  \item EB Garamond (serif) for titles
+  \item Barlow (sans-serif) for body text
+}
+
+To use these fonts, you have two options:
+\enumerate{
+  \item Install fonts locally - see \code{\link{check_insper_fonts}()}
+  \item Load fonts remotely - use \code{\link{import_insper_fonts}()}
+}
+
+If fonts are unavailable, the theme automatically falls back to system
+defaults ("serif" and "sans") without errors.
+
 The function validates input parameters and will throw an error if invalid
 values are provided for \code{grid} or \code{border} arguments.
 }
@@ -82,6 +99,6 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 }
 \seealso{
-\code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}
+\code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{import_insper_fonts}}, \code{\link{check_insper_fonts}}
 }
 \concept{themes}
