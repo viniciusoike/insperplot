@@ -1,0 +1,98 @@
+url: https://viniciusreginatto.github.io/insperplot/
+template:
+  bootstrap: 5
+  bootswatch: flatly
+  theme: arrow-light
+  bslib:
+    primary: "#E4002B"
+    secondary: "#009491"
+    base_font: {google: "Barlow"}
+    heading_font: {google: "EB Garamond"}
+
+home:
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+      - text: Getting Started
+        href: articles/getting-started.html
+    news:
+      text: News
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/viniciusreginatto/insperplot
+
+reference:
+- title: Themes
+  desc: Apply Insper's visual identity to ggplot2 plots
+  contents:
+  - theme_insper
+  - check_insper_fonts
+
+- title: Colors and Palettes
+  desc: Access Insper brand colors and palettes
+  contents:
+  - insper_col
+  - insper_pal
+  - show_insper_palette
+  - list_palettes
+  - get_insper_colors
+
+- title: ggplot2 Scales
+  desc: Insper color scales for ggplot2
+  contents:
+  - starts_with("scale_")
+
+- title: Plot Functions
+  desc: Pre-configured plotting functions with Insper theme
+  contents:
+  - insper_barplot
+  - insper_scatterplot
+  - insper_timeseries
+  - insper_area
+  - insper_lollipop
+  - insper_boxplot
+  - insper_violin
+  - insper_heatmap
+
+- title: Utilities
+  desc: Helper functions for formatting and saving plots
+  contents:
+  - save_insper_plot
+  - insper_caption
+  - format_brl
+  - format_percent_br
+  - format_num_br
+
+- title: Data
+  desc: Internal package data
+  contents:
+  - has_keyword("datasets")
+
+figures:
+  dev: ragg::agg_png
+  dpi: 96
+  dev.args: []
+  fig.ext: png
+  fig.width: 9
+  fig.height: 5.5
+  fig.retina: 2
+  bg: white
+
+authors:
+  Vinicius Reginatto:
+    href: https://github.com/viniciusreginatto
