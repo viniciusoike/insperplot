@@ -10,15 +10,22 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-**insperplot** extends ggplot2 with [Insper Instituto de Ensino e Pesquisa](https://www.insper.edu.br/) visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
+**insperplot** extends ggplot2 with [Insper Instituto de Ensino e
+Pesquisa](https://www.insper.edu.br/) visual identity, providing custom
+themes, color palettes, and specialized plotting functions for academic
+and institutional use.
 
 ## ⚠️ Disclaimer
 
-**This is an unofficial package created by an Insper employee, not an official Insper product.** This package is developed independently and is not endorsed, supported, or maintained by Insper Instituto de Ensino e Pesquisa. For official Insper communications and materials, please refer to [Insper’s official website](https://www.insper.edu.br/).
+**This is an unofficial package created by an Insper employee, not an
+official Insper product.** This package is developed independently and
+is not endorsed, supported, or maintained by Insper Instituto de Ensino
+e Pesquisa. For official Insper communications and materials, please
+refer to [Insper’s official website](https://www.insper.edu.br/).
 
 ## Installation
 
-You can install the development version of insperplot from GitHub.
+You can install the development version of insperplot from GitHub:
 
 ``` r
 # install.packages("pak")
@@ -56,46 +63,58 @@ show_insper_palette()
 ## Features
 
 - **Custom Themes**: Professional ggplot2 themes reflecting Insper’s
-  visual identity.
+  visual identity
 - **Color Palettes**: Carefully curated color schemes for various data
-  visualization needs.
+  visualization needs
 - **Specialized Plots**: Pre-configured plotting functions for common
-  chart types.
+  chart types
 - **Brazilian Formatting**: Built-in formatters for Brazilian currency,
-  percentages, and numbers.
+  percentages, and numbers
 - **Export Utilities**: Helper functions for saving publication-ready
-  plots.
+  plots
 
 ## Main Functions
 
-- `theme_insper()`: Apply Insper’s visual identity to ggplot2 plots.
-- `insper_col()`: Extract Insper brand colors.
-- `insper_pal()`: Get color palettes.
-- `scale_*_insper()`: Insper color scales for ggplot2.
-- `show_insper_palette()`: Visualize available color palettes.
+- `theme_insper()`: Apply Insper’s visual identity to ggplot2 plots
+- `insper_col()`: Extract Insper brand colors
+- `insper_pal()`: Get color palettes
+- `scale_*_insper()`: Insper color scales for ggplot2
+- `show_insper_palette()`: Visualize available color palettes
 
 ## Color Palettes
 
 insperplot includes several pre-defined palettes:
 
-- **main**: Primary Insper colors.
+- **main**: Primary Insper colors
 - **reds_seq**, **oranges_seq**, **teals_seq**, **grays_seq**:
-  Sequential single-color gradients.
+  Sequential single-color gradients
 - **diverging_insper**, **diverging_red_teal**: Diverging palettes for
-  data with a meaningful center.
+  data with a meaningful center
 - **qualitative_main**, **qualitative_bright**,
-  **qualitative_contrast**: Qualitative palettes for categorical data.
-- **categorical**: 8-color palette for multi-category data.
+  **qualitative_contrast**: Qualitative palettes for categorical data
+- **categorical**: 8-color palette for multi-category data
 
-Use `list_palettes()` to see all available palettes with detailed information.
+Use `list_palettes()` to see all available palettes with detailed
+information.
 
 ## Documentation
 
-For detailed documentation and examples, visit the [package website](https://viniciusreginatto.github.io/insperplot/).
+For detailed documentation and examples, visit the [package
+website](https://viniciusreginatto.github.io/insperplot/).
+
+## Development
+
+insperplot follows modern R development best practices:
+
+- Native pipe operator (`|>`) throughout
+- Modern tidyverse patterns (dplyr 1.1+)
+- Comprehensive documentation with roxygen2
+- Continuous integration with GitHub Actions
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+for guidelines.
 
 ## License
 
