@@ -112,4 +112,5 @@
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
 #'   geom_point(color = insper_col("reds1")) +
 #'   theme_insper()
+#' @name insperplot-package
 NULL

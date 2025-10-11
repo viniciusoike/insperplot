@@ -28,6 +28,9 @@ Imports:
     scales (>= 1.2.0)
 Suggests:
     systemfonts,
+    showtext,
+    sysfonts,
+    tidyr,
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
