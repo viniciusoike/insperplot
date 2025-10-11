@@ -60,3 +60,4 @@ data-raw/*.csv
 # Development files
 dev/
 scratch/
+inst/doc

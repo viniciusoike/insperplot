@@ -1,3 +1,39 @@
+# insperplot 0.6.0
+
+## Comprehensive Documentation with Vignettes
+
+### New Vignette: Getting Started
+
+* **`vignettes/getting-started.Rmd`**: Comprehensive introduction to insperplot featuring:
+  - Installation instructions and font setup guide
+  - Real-world São Paulo Metro Line-4 ridership data (2018-2020)
+  - Complete showcase of all 8 plotting functions with practical examples
+  - Brazilian number formatting demonstrations
+  - Publication-ready plot saving guidelines
+  - Modern R conventions throughout (native pipe `|>`, `linewidth`, `.by` grouping)
+
+### Example Data
+
+* Added **São Paulo Metro Line-4 dataset** (`inst/extdata/metro_sp_line_4_stations.csv`):
+  - Monthly ridership data from 9 stations (2018-2020)
+  - Captures dramatic COVID-19 pandemic impact on public transportation
+  - Perfect for demonstrating time series, comparisons, and distribution analyses
+  - All vignette examples use this cohesive, real-world Brazilian dataset
+
+### Package Infrastructure
+
+* Configured `VignetteBuilder: knitr` in DESCRIPTION
+* Added `knitr` and `rmarkdown` to Suggests
+* Vignettes integrate seamlessly with pkgdown documentation site
+* **R CMD check: 0 errors ✔ | 0 warnings ✔ | 0 notes ✔**
+
+### Documentation Improvements
+
+* All 8 plot functions demonstrated with professional, publication-ready examples
+* Consistent narrative arc showing pandemic impact through multiple visualization types
+* Modern ggplot2 conventions and tidyverse patterns throughout
+* Brazilian context (Portuguese labels, local formatting) showcased naturally
+
 # insperplot 0.5.0
 
 ## Enhanced Plotting Functions

@@ -1,0 +1,428 @@
+---
+title: "Getting Started with insperplot"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with insperplot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 9,
+  fig.height = 6,
+  dpi = 150,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+## Introduction
+
+**insperplot** extends ggplot2 with Insper Instituto de Ensino e Pesquisa's visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
+
+This vignette demonstrates all the main features of insperplot using real-world Brazilian data: São Paulo Metro Line-4 ridership during the COVID-19 pandemic.
+
+### Installation
+
+```{r eval=FALSE}
+# Install from GitHub
+pak::pak("viniciusreginatto/insperplot")
+```
+
+```{r setup}
+library(insperplot)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+```
+
+## Font Setup (Optional but Recommended)
+
+insperplot uses **EB Garamond** (serif, for titles) and **Barlow** (sans-serif, for body text). While optional, installing these fonts significantly enhances plot aesthetics.
+
+```{r eval=FALSE}
+# Check if recommended fonts are installed
+check_insper_fonts()
+```
+
+**Installation instructions:**
+
+1. Visit [Google Fonts](https://fonts.google.com)
+2. Download "EB Garamond" and "Barlow"
+3. Install on your system
+4. Restart R/RStudio
+
+If fonts are unavailable, plots will use system defaults (still looks good!).
+
+## The Dataset: São Paulo Metro Line-4
+
+We'll use ridership data from Line-4 (Yellow Line) of São Paulo's metro system, covering 2018-2020. This dataset captures the dramatic impact of COVID-19 lockdowns on public transportation.
+
+```{r load-data}
+# Load the metro dataset
+metro_file <- system.file(
+  "extdata", "metro_sp_line_4_stations.csv",
+  package = "insperplot",
+  mustWork = FALSE
+)
+
+# If not in package, load from data-raw (development)
+if (metro_file == "") {
+  metro_file <- "../data-raw/metro_sp_line_4_stations.csv"
+}
+
+metro <- read.csv(metro_file) |>
+  mutate(date = as.Date(date))
+
+# Preview the data
+head(metro, 10)
+```
+
+The dataset contains:
+- **date**: Month of observation
+- **year**: Year (2018-2020)
+- **name_station**: Station name (9 stations on Line-4)
+- **value**: Ridership in thousands of passengers
+
+## Basic Usage: theme_insper()
+
+The foundation of insperplot is `theme_insper()`, which applies Insper's visual identity to any ggplot:
+
+```{r basic-theme}
+# Standard ggplot2
+ggplot(metro |> filter(name_station == "Paulista"),
+       aes(x = date, y = value)) +
+  geom_line() +
+  labs(title = "Without insperplot theme")
+
+# With theme_insper()
+ggplot(metro |> filter(name_station == "Paulista"),
+       aes(x = date, y = value)) +
+  geom_line(color = insper_col("teals1"), linewidth = 1.2) +
+  theme_insper() +
+  labs(
+    title = "Estação Paulista - Linha 4",
+    subtitle = "Demanda mensal de passageiros (milhares)",
+    x = "Mês", y = "Passageiros (mil)",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+Notice the clean typography, subtle grid, and professional appearance!
+
+## Working with Colors
+
+### Extracting Colors
+
+Use `insper_col()` to access Insper's brand colors:
+
+```{r colors}
+# Get primary Insper red
+insper_col("reds1")
+
+# Get multiple colors
+insper_col("reds1", "teals1", "oranges1")
+
+# View all available colors
+head(insper_col(), 10)
+```
+
+### Visualizing Palettes
+
+```{r palette-viz, fig.height=4}
+# Show all colors
+show_insper_palette()
+
+# Show specific color families
+show_insper_palette("reds_seq")
+show_insper_palette("teals_seq")
+```
+
+### Discovering Palettes
+
+```{r palette-discovery}
+# List all palettes with metadata
+list_palettes()
+
+# Interactive palette explorer
+get_insper_colors("qualitative_main")
+```
+
+## Plot Gallery: All 8 Functions
+
+Now let's demonstrate each plotting function with the metro dataset.
+
+### 1. Bar Plot: Monthly Ridership Comparison
+
+Compare ridership across stations for a specific period using `insper_barplot()`:
+
+```{r barplot}
+# Compare average 2020 ridership by station
+metro |>
+  filter(year == 2020) |>
+  summarise(avg_ridership = mean(value), .by = name_station) |>
+  insper_barplot(
+    x = name_station,
+    y = avg_ridership,
+    fill_var = name_station,
+    text = TRUE,
+    flip = TRUE
+  ) +
+  labs(
+    title = "Demanda Média por Estação em 2020",
+    subtitle = "Durante a pandemia de COVID-19",
+    caption = "Fonte: CCR Metrô"
+  )
+```
+
+### 2. Time Series: Station Trends Over Time
+
+Track ridership trends with `insper_timeseries()`:
+
+```{r timeseries}
+# Compare 4 major stations over time
+metro |>
+  filter(name_station %in% c("Paulista", "Faria Lima", "Pinheiros", "República")) |>
+  insper_timeseries(
+    x = date,
+    y = value,
+    group = name_station,
+    add_points = FALSE,
+    title = "Evolução da Demanda - Principais Estações",
+    subtitle = "Linha 4-Amarela do Metrô de São Paulo (2018-2020)",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+Notice the dramatic drop in March 2020 when lockdowns began!
+
+### 3. Area Chart: Total Line Ridership
+
+Visualize cumulative trends with `insper_area()`:
+
+```{r area}
+# Total ridership across all stations
+metro |>
+  summarise(total = sum(value), .by = date) |>
+  insper_area(
+    x = date,
+    y = total,
+    area_alpha = 0.5,
+    add_line = TRUE,
+    title = "Demanda Total da Linha 4-Amarela",
+    subtitle = "Soma de todas as estações (milhares de passageiros/mês)",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+### 4. Lollipop Plot: Station Rankings
+
+Create elegant rankings with `insper_lollipop()`:
+
+```{r lollipop}
+# Compare pre-pandemic (2019) vs pandemic (2020) average ridership
+metro |>
+  filter(year %in% c(2019, 2020)) |>
+  summarise(avg = mean(value), .by = c(name_station, year)) |>
+  pivot_wider(names_from = year, values_from = avg, names_prefix = "y") |>
+  mutate(
+    pct_change = ((y2020 - y2019) / y2019) * 100,
+    station_ordered = reorder(name_station, y2019)
+  ) |>
+  insper_lollipop(
+    x = station_ordered,
+    y = y2019,
+    horizontal = TRUE,
+    sorted = FALSE,
+    title = "Impacto da Pandemia por Estação",
+    subtitle = "Demanda média mensal em 2019 (pré-pandemia)",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+### 5. Scatter Plot: Station Correlation
+
+Explore relationships between stations with `insper_scatterplot()`:
+
+```{r scatterplot}
+# Compare Paulista vs Pinheiros ridership
+paulista <- metro |>
+  filter(name_station == "Paulista") |>
+  select(date, paulista = value)
+
+pinheiros <- metro |>
+  filter(name_station == "Pinheiros") |>
+  select(date, pinheiros = value)
+
+inner_join(paulista, pinheiros, by = "date") |>
+  insper_scatterplot(
+    x = paulista,
+    y = pinheiros,
+    color = as.numeric(format(date, "%Y")),
+    add_smooth = TRUE,
+    title = "Correlação: Paulista vs Pinheiros",
+    subtitle = "Demanda mensal (milhares), colorido por ano",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+Strong correlation between these major stations!
+
+### 6. Box Plot: Distribution Analysis
+
+Compare distributions across categories with `insper_boxplot()`:
+
+```{r boxplot}
+# Distribution of ridership by station
+metro |>
+  insper_boxplot(
+    x = name_station,
+    y = value,
+    fill = name_station,
+    add_jitter = FALSE,
+    flip = TRUE,
+    title = "Distribuição de Demanda por Estação",
+    subtitle = "Período: 2018-2020 (36 meses)",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+### 7. Violin Plot: Pre/Post Pandemic Comparison
+
+Visualize density distributions with `insper_violin()`:
+
+```{r violin}
+# Compare ridership distributions before and during pandemic
+metro |>
+  mutate(
+    period = if_else(date < as.Date("2020-03-01"),
+                     "Pré-Pandemia (2018-2020/02)",
+                     "Pandemia (2020/03-2020/12)")
+  ) |>
+  insper_violin(
+    x = period,
+    y = value,
+    fill = period,
+    show_boxplot = TRUE,
+    show_points = FALSE,
+    flip = FALSE,
+    title = "Impacto da COVID-19 na Demanda do Metrô",
+    subtitle = "Distribuição de passageiros por estação/mês",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+The violin plot clearly shows the dramatic shift in ridership patterns!
+
+### 8. Heatmap: Temporal Patterns
+
+Discover patterns across two dimensions with `insper_heatmap()`:
+
+```{r heatmap}
+# Station × Month heatmap for 2019-2020
+heatmap_data <- metro |>
+  filter(year >= 2019) |>
+  mutate(month = format(date, "%Y-%m")) |>
+  select(name_station, month, value) |>
+  rename(Var1 = month, Var2 = name_station)
+
+insper_heatmap(
+  heatmap_data,
+  show_values = FALSE,
+  title = "Padrão de Demanda: Estação × Mês",
+  subtitle = "2019-2020: Linha 4-Amarela",
+  caption = "Fonte: CCR Metrô | Insper"
+) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The heatmap reveals the synchronized drop across all stations in March 2020.
+
+## Brazilian Number Formatting
+
+insperplot includes helpers for Brazilian locale formatting:
+
+```{r formatting}
+# Format large numbers in Brazilian style
+large_numbers <- c(1234.56, 1234567.89, 0.1234)
+
+# Note: format_br_number() is internal, but you can use scales package
+library(scales)
+
+# For axis labels in plots
+ggplot(metro |> filter(name_station == "Paulista"),
+       aes(x = date, y = value)) +
+  geom_line(color = insper_col("teals1"), linewidth = 1.2) +
+  scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",")) +
+  theme_insper() +
+  labs(
+    title = "Formatação Brasileira de Números",
+    subtitle = "Usando scales::label_number() com padrão brasileiro",
+    x = "Mês", y = "Passageiros (mil)",
+    caption = "Fonte: CCR Metrô | Insper"
+  )
+```
+
+## Saving Plots
+
+Save plots in publication-ready formats:
+
+```{r saving, eval=FALSE}
+# Create a plot
+p <- metro |>
+  filter(name_station == "Paulista") |>
+  insper_timeseries(
+    x = date,
+    y = value,
+    title = "Estação Paulista - Linha 4"
+  )
+
+# Save as PNG (high resolution)
+ggsave("paulista-ridership.png", p,
+       width = 10, height = 6, dpi = 300)
+
+# Save as PDF (vector graphics)
+ggsave("paulista-ridership.pdf", p,
+       width = 10, height = 6)
+
+# Save as SVG (for web)
+ggsave("paulista-ridership.svg", p,
+       width = 10, height = 6)
+```
+
+**Recommended dimensions for common uses:**
+
+- **Academic papers**: 7-10 inches width, 4-6 inches height, 300 dpi
+- **Presentations**: 10-12 inches width, 6-7 inches height, 150 dpi
+- **Posters**: 12-16 inches width, 8-10 inches height, 300 dpi
+- **Web/dashboards**: 8-10 inches width, 5-6 inches height, 96-150 dpi
+
+## Summary
+
+You now know how to:
+
+✓ Apply `theme_insper()` to any ggplot
+✓ Use all 8 specialized plotting functions
+✓ Work with Insper's color palettes
+✓ Create publication-ready visualizations
+✓ Format numbers in Brazilian style
+✓ Save plots for different media
+
+For more advanced usage and customization options, see the function documentation:
+
+```{r help, eval=FALSE}
+?theme_insper
+?insper_timeseries
+?scale_color_insper
+?list_palettes
+```
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```

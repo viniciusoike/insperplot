@@ -1,7 +1,7 @@
 Package: insperplot
 Type: Package
 Title: Insper Themed ggplot2 Extensions
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(
     person(
       "Vinicius", "Reginatto",
@@ -34,3 +34,4 @@ Suggests:
 URL: https://github.com/viniciusreginatto/insperplot
 BugReports: https://github.com/viniciusreginatto/insperplot/issues
 Config/testthat/edition: 3
+VignetteBuilder: knitr

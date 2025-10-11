@@ -1,0 +1,818 @@
+date,year,name_station,value
+2018-01-01,2018,São Paulo - Morumbi,0
+2018-01-01,2018,Butantã,56
+2018-01-01,2018,Pinheiros,127
+2018-01-01,2018,Faria Lima,38
+2018-01-01,2018,Fradique Coutinho,15
+2018-01-01,2018,Oscar Freire,0
+2018-01-01,2018,Paulista,125
+2018-01-01,2018,Higienópolis - Mackenzie,2
+2018-01-01,2018,República,122
+2018-01-01,2018,Luz,124
+2018-02-01,2018,São Paulo - Morumbi,0
+2018-02-01,2018,Butantã,69
+2018-02-01,2018,Pinheiros,147
+2018-02-01,2018,Faria Lima,43
+2018-02-01,2018,Fradique Coutinho,19
+2018-02-01,2018,Oscar Freire,0
+2018-02-01,2018,Paulista,147
+2018-02-01,2018,Higienópolis - Mackenzie,17
+2018-02-01,2018,República,141
+2018-02-01,2018,Luz,139
+2018-03-01,2018,São Paulo - Morumbi,0
+2018-03-01,2018,Butantã,79
+2018-03-01,2018,Pinheiros,158
+2018-03-01,2018,Faria Lima,46
+2018-03-01,2018,Fradique Coutinho,20
+2018-03-01,2018,Oscar Freire,0
+2018-03-01,2018,Paulista,159
+2018-03-01,2018,Higienópolis - Mackenzie,24
+2018-03-01,2018,República,152
+2018-03-01,2018,Luz,149
+2018-04-01,2018,São Paulo - Morumbi,0
+2018-04-01,2018,Butantã,78
+2018-04-01,2018,Pinheiros,155
+2018-04-01,2018,Faria Lima,45
+2018-04-01,2018,Fradique Coutinho,19
+2018-04-01,2018,Oscar Freire,4
+2018-04-01,2018,Paulista,153
+2018-04-01,2018,Higienópolis - Mackenzie,24
+2018-04-01,2018,República,149
+2018-04-01,2018,Luz,147
+2018-05-01,2018,São Paulo - Morumbi,0
+2018-05-01,2018,Butantã,76
+2018-05-01,2018,Pinheiros,157
+2018-05-01,2018,Faria Lima,47
+2018-05-01,2018,Fradique Coutinho,20
+2018-05-01,2018,Oscar Freire,13
+2018-05-01,2018,Paulista,152
+2018-05-01,2018,Higienópolis - Mackenzie,25
+2018-05-01,2018,República,151
+2018-05-01,2018,Luz,148
+2018-06-01,2018,São Paulo - Morumbi,0
+2018-06-01,2018,Butantã,72
+2018-06-01,2018,Pinheiros,149
+2018-06-01,2018,Faria Lima,46
+2018-06-01,2018,Fradique Coutinho,19
+2018-06-01,2018,Oscar Freire,14
+2018-06-01,2018,Paulista,143
+2018-06-01,2018,Higienópolis - Mackenzie,19
+2018-06-01,2018,República,145
+2018-06-01,2018,Luz,143
+2018-07-01,2018,São Paulo - Morumbi,0
+2018-07-01,2018,Butantã,65
+2018-07-01,2018,Pinheiros,144
+2018-07-01,2018,Faria Lima,44
+2018-07-01,2018,Fradique Coutinho,18
+2018-07-01,2018,Oscar Freire,15
+2018-07-01,2018,Paulista,134
+2018-07-01,2018,Higienópolis - Mackenzie,15
+2018-07-01,2018,República,138
+2018-07-01,2018,Luz,138
+2018-08-01,2018,São Paulo - Morumbi,0
+2018-08-01,2018,Butantã,78
+2018-08-01,2018,Pinheiros,157
+2018-08-01,2018,Faria Lima,48
+2018-08-01,2018,Fradique Coutinho,19
+2018-08-01,2018,Oscar Freire,16
+2018-08-01,2018,Paulista,151
+2018-08-01,2018,Higienópolis - Mackenzie,27
+2018-08-01,2018,República,151
+2018-08-01,2018,Luz,151
+2018-09-01,2018,São Paulo - Morumbi,0
+2018-09-01,2018,Butantã,78
+2018-09-01,2018,Pinheiros,157
+2018-09-01,2018,Faria Lima,48
+2018-09-01,2018,Fradique Coutinho,19
+2018-09-01,2018,Oscar Freire,17
+2018-09-01,2018,Paulista,151
+2018-09-01,2018,Higienópolis - Mackenzie,27
+2018-09-01,2018,República,150
+2018-09-01,2018,Luz,153
+2018-10-01,2018,São Paulo - Morumbi,3
+2018-10-01,2018,Butantã,76
+2018-10-01,2018,Pinheiros,137
+2018-10-01,2018,Faria Lima,47
+2018-10-01,2018,Fradique Coutinho,19
+2018-10-01,2018,Oscar Freire,17
+2018-10-01,2018,Paulista,142
+2018-10-01,2018,Higienópolis - Mackenzie,26
+2018-10-01,2018,República,146
+2018-10-01,2018,Luz,147
+2018-11-01,2018,São Paulo - Morumbi,17
+2018-11-01,2018,Butantã,67
+2018-11-01,2018,Pinheiros,122
+2018-11-01,2018,Faria Lima,46
+2018-11-01,2018,Fradique Coutinho,19
+2018-11-01,2018,Oscar Freire,18
+2018-11-01,2018,Paulista,133
+2018-11-01,2018,Higienópolis - Mackenzie,26
+2018-11-01,2018,República,144
+2018-11-01,2018,Luz,143
+2018-12-01,2018,São Paulo - Morumbi,26
+2018-12-01,2018,Butantã,55
+2018-12-01,2018,Pinheiros,111
+2018-12-01,2018,Faria Lima,41
+2018-12-01,2018,Fradique Coutinho,18
+2018-12-01,2018,Oscar Freire,17
+2018-12-01,2018,Paulista,118
+2018-12-01,2018,Higienópolis - Mackenzie,18
+2018-12-01,2018,República,132
+2018-12-01,2018,Luz,131
+2019-01-01,2019,São Paulo - Morumbi,29
+2019-01-01,2019,Butantã,48
+2019-01-01,2019,Pinheiros,110
+2019-01-01,2019,Faria Lima,40
+2019-01-01,2019,Fradique Coutinho,18
+2019-01-01,2019,Oscar Freire,17
+2019-01-01,2019,Paulista,117
+2019-01-01,2019,Higienópolis - Mackenzie,16
+2019-01-01,2019,República,128
+2019-01-01,2019,Luz,127
+2019-02-01,2019,São Paulo - Morumbi,39
+2019-02-01,2019,Butantã,57
+2019-02-01,2019,Pinheiros,125
+2019-02-01,2019,Faria Lima,45
+2019-02-01,2019,Fradique Coutinho,20
+2019-02-01,2019,Oscar Freire,20
+2019-02-01,2019,Paulista,141
+2019-02-01,2019,Higienópolis - Mackenzie,29
+2019-02-01,2019,República,147
+2019-02-01,2019,Luz,143
+2019-03-01,2019,São Paulo - Morumbi,43
+2019-03-01,2019,Butantã,59
+2019-03-01,2019,Pinheiros,127
+2019-03-01,2019,Faria Lima,45
+2019-03-01,2019,Fradique Coutinho,21
+2019-03-01,2019,Oscar Freire,21
+2019-03-01,2019,Paulista,145
+2019-03-01,2019,Higienópolis - Mackenzie,31
+2019-03-01,2019,República,150
+2019-03-01,2019,Luz,146
+2019-04-01,2019,São Paulo - Morumbi,46
+2019-04-01,2019,Butantã,59
+2019-04-01,2019,Pinheiros,131
+2019-04-01,2019,Faria Lima,46
+2019-04-01,2019,Fradique Coutinho,21
+2019-04-01,2019,Oscar Freire,21
+2019-04-01,2019,Paulista,148
+2019-04-01,2019,Higienópolis - Mackenzie,32
+2019-04-01,2019,República,154
+2019-04-01,2019,Luz,149
+2019-05-01,2019,São Paulo - Morumbi,47
+2019-05-01,2019,Butantã,59
+2019-05-01,2019,Pinheiros,130
+2019-05-01,2019,Faria Lima,46
+2019-05-01,2019,Fradique Coutinho,22
+2019-05-01,2019,Oscar Freire,22
+2019-05-01,2019,Paulista,149
+2019-05-01,2019,Higienópolis - Mackenzie,32
+2019-05-01,2019,República,154
+2019-05-01,2019,Luz,148
+2019-06-01,2019,São Paulo - Morumbi,48
+2019-06-01,2019,Butantã,56
+2019-06-01,2019,Pinheiros,128
+2019-06-01,2019,Faria Lima,44
+2019-06-01,2019,Fradique Coutinho,21
+2019-06-01,2019,Oscar Freire,21
+2019-06-01,2019,Paulista,141
+2019-06-01,2019,Higienópolis - Mackenzie,25
+2019-06-01,2019,República,147
+2019-06-01,2019,Luz,148
+2019-07-01,2019,São Paulo - Morumbi,44
+2019-07-01,2019,Butantã,48
+2019-07-01,2019,Pinheiros,122
+2019-07-01,2019,Faria Lima,43
+2019-07-01,2019,Fradique Coutinho,20
+2019-07-01,2019,Oscar Freire,21
+2019-07-01,2019,Paulista,131
+2019-07-01,2019,Higienópolis - Mackenzie,20
+2019-07-01,2019,República,140
+2019-07-01,2019,Luz,141
+2019-08-01,2019,São Paulo - Morumbi,51
+2019-08-01,2019,Butantã,57
+2019-08-01,2019,Pinheiros,130
+2019-08-01,2019,Faria Lima,46
+2019-08-01,2019,Fradique Coutinho,21
+2019-08-01,2019,Oscar Freire,23
+2019-08-01,2019,Paulista,147
+2019-08-01,2019,Higienópolis - Mackenzie,32
+2019-08-01,2019,República,152
+2019-08-01,2019,Luz,150
+2019-09-01,2019,São Paulo - Morumbi,52
+2019-09-01,2019,Butantã,57
+2019-09-01,2019,Pinheiros,132
+2019-09-01,2019,Faria Lima,46
+2019-09-01,2019,Fradique Coutinho,22
+2019-09-01,2019,Oscar Freire,24
+2019-09-01,2019,Paulista,148
+2019-09-01,2019,Higienópolis - Mackenzie,33
+2019-09-01,2019,República,154
+2019-09-01,2019,Luz,151
+2019-10-01,2019,São Paulo - Morumbi,53
+2019-10-01,2019,Butantã,56
+2019-10-01,2019,Pinheiros,133
+2019-10-01,2019,Faria Lima,45
+2019-10-01,2019,Fradique Coutinho,22
+2019-10-01,2019,Oscar Freire,24
+2019-10-01,2019,Paulista,148
+2019-10-01,2019,Higienópolis - Mackenzie,31
+2019-10-01,2019,República,153
+2019-10-01,2019,Luz,153
+2019-11-01,2019,São Paulo - Morumbi,54
+2019-11-01,2019,Butantã,58
+2019-11-01,2019,Pinheiros,137
+2019-11-01,2019,Faria Lima,48
+2019-11-01,2019,Fradique Coutinho,22
+2019-11-01,2019,Oscar Freire,25
+2019-11-01,2019,Paulista,149
+2019-11-01,2019,Higienópolis - Mackenzie,32
+2019-11-01,2019,República,156
+2019-11-01,2019,Luz,153
+2019-12-01,2019,São Paulo - Morumbi,47
+2019-12-01,2019,Butantã,46
+2019-12-01,2019,Pinheiros,117
+2019-12-01,2019,Faria Lima,40
+2019-12-01,2019,Fradique Coutinho,18
+2019-12-01,2019,Oscar Freire,22
+2019-12-01,2019,Paulista,122
+2019-12-01,2019,Higienópolis - Mackenzie,21
+2019-12-01,2019,República,133
+2019-12-01,2019,Luz,137
+2020-01-01,2020,São Paulo - Morumbi,45
+2020-01-01,2020,Butantã,44
+2020-01-01,2020,Pinheiros,119
+2020-01-01,2020,Faria Lima,41
+2020-01-01,2020,Fradique Coutinho,19
+2020-01-01,2020,Oscar Freire,22
+2020-01-01,2020,Paulista,123
+2020-01-01,2020,Higienópolis - Mackenzie,19
+2020-01-01,2020,República,132
+2020-01-01,2020,Luz,138
+2020-02-01,2020,São Paulo - Morumbi,51
+2020-02-01,2020,Butantã,50
+2020-02-01,2020,Pinheiros,120
+2020-02-01,2020,Faria Lima,44
+2020-02-01,2020,Fradique Coutinho,21
+2020-02-01,2020,Oscar Freire,24
+2020-02-01,2020,Paulista,138
+2020-02-01,2020,Higienópolis - Mackenzie,30
+2020-02-01,2020,República,141
+2020-02-01,2020,Luz,145
+2020-03-01,2020,São Paulo - Morumbi,36
+2020-03-01,2020,Butantã,36
+2020-03-01,2020,Pinheiros,84
+2020-03-01,2020,Faria Lima,28
+2020-03-01,2020,Fradique Coutinho,13
+2020-03-01,2020,Oscar Freire,16
+2020-03-01,2020,Paulista,92
+2020-03-01,2020,Higienópolis - Mackenzie,19
+2020-03-01,2020,República,96
+2020-03-01,2020,Luz,102
+2020-04-01,2020,São Paulo - Morumbi,12
+2020-04-01,2020,Butantã,11
+2020-04-01,2020,Pinheiros,25
+2020-04-01,2020,Faria Lima,6
+2020-04-01,2020,Fradique Coutinho,3
+2020-04-01,2020,Oscar Freire,6
+2020-04-01,2020,Paulista,24
+2020-04-01,2020,Higienópolis - Mackenzie,4
+2020-04-01,2020,República,29
+2020-04-01,2020,Luz,37
+2020-05-01,2020,São Paulo - Morumbi,13
+2020-05-01,2020,Butantã,12
+2020-05-01,2020,Pinheiros,28
+2020-05-01,2020,Faria Lima,7
+2020-05-01,2020,Fradique Coutinho,4
+2020-05-01,2020,Oscar Freire,7
+2020-05-01,2020,Paulista,26
+2020-05-01,2020,Higienópolis - Mackenzie,4
+2020-05-01,2020,República,32
+2020-05-01,2020,Luz,42
+2020-06-01,2020,São Paulo - Morumbi,15
+2020-06-01,2020,Butantã,14
+2020-06-01,2020,Pinheiros,33
+2020-06-01,2020,Faria Lima,9
+2020-06-01,2020,Fradique Coutinho,5
+2020-06-01,2020,Oscar Freire,8
+2020-06-01,2020,Paulista,31
+2020-06-01,2020,Higienópolis - Mackenzie,5
+2020-06-01,2020,República,39
+2020-06-01,2020,Luz,50
+2020-07-01,2020,São Paulo - Morumbi,19
+2020-07-01,2020,Butantã,17
+2020-07-01,2020,Pinheiros,40
+2020-07-01,2020,Faria Lima,11
+2020-07-01,2020,Fradique Coutinho,6
+2020-07-01,2020,Oscar Freire,10
+2020-07-01,2020,Paulista,38
+2020-07-01,2020,Higienópolis - Mackenzie,6
+2020-07-01,2020,República,47
+2020-07-01,2020,Luz,60
+2020-08-01,2020,São Paulo - Morumbi,21
+2020-08-01,2020,Butantã,19
+2020-08-01,2020,Pinheiros,45
+2020-08-01,2020,Faria Lima,13
+2020-08-01,2020,Fradique Coutinho,7
+2020-08-01,2020,Oscar Freire,11
+2020-08-01,2020,Paulista,44
+2020-08-01,2020,Higienópolis - Mackenzie,7
+2020-08-01,2020,República,54
+2020-08-01,2020,Luz,67
+2020-09-01,2020,São Paulo - Morumbi,24
+2020-09-01,2020,Butantã,21
+2020-09-01,2020,Pinheiros,50
+2020-09-01,2020,Faria Lima,15
+2020-09-01,2020,Fradique Coutinho,8
+2020-09-01,2020,Oscar Freire,12
+2020-09-01,2020,Paulista,49
+2020-09-01,2020,Higienópolis - Mackenzie,8
+2020-09-01,2020,República,60
+2020-09-01,2020,Luz,73
+2020-10-01,2020,São Paulo - Morumbi,26
+2020-10-01,2020,Butantã,23
+2020-10-01,2020,Pinheiros,55
+2020-10-01,2020,Faria Lima,16
+2020-10-01,2020,Fradique Coutinho,9
+2020-10-01,2020,Oscar Freire,13
+2020-10-01,2020,Paulista,54
+2020-10-01,2020,Higienópolis - Mackenzie,9
+2020-10-01,2020,República,64
+2020-10-01,2020,Luz,79
+2020-11-01,2020,São Paulo - Morumbi,28
+2020-11-01,2020,Butantã,24
+2020-11-01,2020,Pinheiros,58
+2020-11-01,2020,Faria Lima,17
+2020-11-01,2020,Fradique Coutinho,9
+2020-11-01,2020,Oscar Freire,13
+2020-11-01,2020,Paulista,57
+2020-11-01,2020,Higienópolis - Mackenzie,10
+2020-11-01,2020,República,68
+2020-11-01,2020,Luz,82
+2020-12-01,2020,São Paulo - Morumbi,26
+2020-12-01,2020,Butantã,22
+2020-12-01,2020,Pinheiros,54
+2020-12-01,2020,Faria Lima,16
+2020-12-01,2020,Fradique Coutinho,8
+2020-12-01,2020,Oscar Freire,13
+2020-12-01,2020,Paulista,51
+2020-12-01,2020,Higienópolis - Mackenzie,8
+2020-12-01,2020,República,63
+2020-12-01,2020,Luz,76
+2021-01-01,2021,São Paulo - Morumbi,26
+2021-01-01,2021,Butantã,22
+2021-01-01,2021,Pinheiros,55
+2021-01-01,2021,Faria Lima,16
+2021-01-01,2021,Fradique Coutinho,9
+2021-01-01,2021,Oscar Freire,14
+2021-01-01,2021,Paulista,53
+2021-01-01,2021,Higienópolis - Mackenzie,9
+2021-01-01,2021,República,63
+2021-01-01,2021,Luz,75
+2021-02-01,2021,São Paulo - Morumbi,27
+2021-02-01,2021,Butantã,23
+2021-02-01,2021,Pinheiros,58
+2021-02-01,2021,Faria Lima,17
+2021-02-01,2021,Fradique Coutinho,9
+2021-02-01,2021,Oscar Freire,15
+2021-02-01,2021,Paulista,57
+2021-02-01,2021,Higienópolis - Mackenzie,10
+2021-02-01,2021,República,66
+2021-02-01,2021,Luz,78
+2021-03-01,2021,São Paulo - Morumbi,22
+2021-03-01,2021,Butantã,19
+2021-03-01,2021,Pinheiros,47
+2021-03-01,2021,Faria Lima,13
+2021-03-01,2021,Fradique Coutinho,7
+2021-03-01,2021,Oscar Freire,12
+2021-03-01,2021,Paulista,45
+2021-03-01,2021,Higienópolis - Mackenzie,8
+2021-03-01,2021,República,52
+2021-03-01,2021,Luz,63
+2021-04-01,2021,São Paulo - Morumbi,22
+2021-04-01,2021,Butantã,18
+2021-04-01,2021,Pinheiros,46
+2021-04-01,2021,Faria Lima,12
+2021-04-01,2021,Fradique Coutinho,7
+2021-04-01,2021,Oscar Freire,12
+2021-04-01,2021,Paulista,42
+2021-04-01,2021,Higienópolis - Mackenzie,7
+2021-04-01,2021,República,50
+2021-04-01,2021,Luz,61
+2021-05-01,2021,São Paulo - Morumbi,25
+2021-05-01,2021,Butantã,21
+2021-05-01,2021,Pinheiros,53
+2021-05-01,2021,Faria Lima,15
+2021-05-01,2021,Fradique Coutinho,8
+2021-05-01,2021,Oscar Freire,14
+2021-05-01,2021,Paulista,48
+2021-05-01,2021,Higienópolis - Mackenzie,9
+2021-05-01,2021,República,57
+2021-05-01,2021,Luz,74
+2021-06-01,2021,São Paulo - Morumbi,26
+2021-06-01,2021,Butantã,22
+2021-06-01,2021,Pinheiros,55
+2021-06-01,2021,Faria Lima,16
+2021-06-01,2021,Fradique Coutinho,9
+2021-06-01,2021,Oscar Freire,14
+2021-06-01,2021,Paulista,50
+2021-06-01,2021,Higienópolis - Mackenzie,9
+2021-06-01,2021,República,61
+2021-06-01,2021,Luz,76
+2021-07-01,2021,São Paulo - Morumbi,27
+2021-07-01,2021,Butantã,23
+2021-07-01,2021,Pinheiros,55
+2021-07-01,2021,Faria Lima,16
+2021-07-01,2021,Fradique Coutinho,9
+2021-07-01,2021,Oscar Freire,15
+2021-07-01,2021,Paulista,53
+2021-07-01,2021,Higienópolis - Mackenzie,9
+2021-07-01,2021,República,64
+2021-07-01,2021,Luz,80
+2021-08-01,2021,São Paulo - Morumbi,30
+2021-08-01,2021,Butantã,25
+2021-08-01,2021,Pinheiros,62
+2021-08-01,2021,Faria Lima,18
+2021-08-01,2021,Fradique Coutinho,10
+2021-08-01,2021,Oscar Freire,16
+2021-08-01,2021,Paulista,59
+2021-08-01,2021,Higienópolis - Mackenzie,11
+2021-08-01,2021,República,69
+2021-08-01,2021,Luz,86
+2021-09-01,2021,São Paulo - Morumbi,31
+2021-09-01,2021,Butantã,27
+2021-09-01,2021,Pinheiros,67
+2021-09-01,2021,Faria Lima,19
+2021-09-01,2021,Fradique Coutinho,11
+2021-09-01,2021,Oscar Freire,16
+2021-09-01,2021,Paulista,63
+2021-09-01,2021,Higienópolis - Mackenzie,12
+2021-09-01,2021,República,73
+2021-09-01,2021,Luz,92
+2021-10-01,2021,São Paulo - Morumbi,33.52
+2021-10-01,2021,Butantã,28.33
+2021-10-01,2021,Pinheiros,71.08
+2021-10-01,2021,Faria Lima,20.61
+2021-10-01,2021,Fradique Coutinho,11.44
+2021-10-01,2021,Oscar Freire,17.1
+2021-10-01,2021,Paulista,66.49
+2021-10-01,2021,Higienópolis - Mackenzie,12.93
+2021-10-01,2021,República,77.11
+2021-10-01,2021,Luz,96.2
+2021-11-01,2021,São Paulo - Morumbi,35.99
+2021-11-01,2021,Butantã,30.12
+2021-11-01,2021,Pinheiros,77.69
+2021-11-01,2021,Faria Lima,22.36
+2021-11-01,2021,Fradique Coutinho,12.39
+2021-11-01,2021,Oscar Freire,18.19
+2021-11-01,2021,Paulista,72.33
+2021-11-01,2021,Higienópolis - Mackenzie,14.41
+2021-11-01,2021,República,83.66
+2021-11-01,2021,Luz,102.1
+2021-12-01,2021,São Paulo - Morumbi,32.8
+2021-12-01,2021,Butantã,27.31
+2021-12-01,2021,Pinheiros,70.48
+2021-12-01,2021,Faria Lima,19.25
+2021-12-01,2021,Fradique Coutinho,10.92
+2021-12-01,2021,Oscar Freire,16.28
+2021-12-01,2021,Paulista,64.31
+2021-12-01,2021,Higienópolis - Mackenzie,11.71
+2021-12-01,2021,República,77.03
+2021-12-01,2021,Luz,93.54
+2022-01-01,2022,São Paulo - Morumbi,28.67
+2022-01-01,2022,Butantã,24.31
+2022-01-01,2022,Pinheiros,62.94
+2022-01-01,2022,Faria Lima,18.26
+2022-01-01,2022,Fradique Coutinho,9.88
+2022-01-01,2022,Oscar Freire,14.79
+2022-01-01,2022,Paulista,57.8
+2022-01-01,2022,Higienópolis - Mackenzie,10.6
+2022-01-01,2022,República,68.47
+2022-01-01,2022,Luz,86.07
+2022-02-01,2022,São Paulo - Morumbi,34.83
+2022-02-01,2022,Butantã,28.94
+2022-02-01,2022,Pinheiros,72.94
+2022-02-01,2022,Faria Lima,22.5
+2022-02-01,2022,Fradique Coutinho,11.98
+2022-02-01,2022,Oscar Freire,17.68
+2022-02-01,2022,Paulista,69.89
+2022-02-01,2022,Higienópolis - Mackenzie,13.87
+2022-02-01,2022,República,79.68
+2022-02-01,2022,Luz,98.16
+2022-03-01,2022,São Paulo - Morumbi,39.9
+2022-03-01,2022,Butantã,35.45
+2022-03-01,2022,Pinheiros,82.6
+2022-03-01,2022,Faria Lima,25.4
+2022-03-01,2022,Fradique Coutinho,13.27
+2022-03-01,2022,Oscar Freire,18.9
+2022-03-01,2022,Paulista,84.41
+2022-03-01,2022,Higienópolis - Mackenzie,19.03
+2022-03-01,2022,República,93.18
+2022-03-01,2022,Luz,106.27
+2022-04-01,2022,São Paulo - Morumbi,41.25
+2022-04-01,2022,Butantã,38.81
+2022-04-01,2022,Pinheiros,87.17
+2022-04-01,2022,Faria Lima,27.56
+2022-04-01,2022,Fradique Coutinho,14.06
+2022-04-01,2022,Oscar Freire,19.59
+2022-04-01,2022,Paulista,89.55
+2022-04-01,2022,Higienópolis - Mackenzie,22.21
+2022-04-01,2022,República,95.65
+2022-04-01,2022,Luz,114.17
+2022-05-01,2022,Vila Sônia,16.35
+2022-05-01,2022,São Paulo - Morumbi,31.67
+2022-05-01,2022,Butantã,38.9
+2022-05-01,2022,Pinheiros,88.74
+2022-05-01,2022,Faria Lima,28.84
+2022-05-01,2022,Fradique Coutinho,14.54
+2022-05-01,2022,Oscar Freire,20.12
+2022-05-01,2022,Paulista,92.59
+2022-05-01,2022,Higienópolis - Mackenzie,23.68
+2022-05-01,2022,República,96.73
+2022-05-01,2022,Luz,117.02
+2022-06-01,2022,Vila Sônia,34.47
+2022-06-01,2022,São Paulo - Morumbi,22.3
+2022-06-01,2022,Butantã,34.39
+2022-06-01,2022,Pinheiros,87.8
+2022-06-01,2022,Faria Lima,30.33
+2022-06-01,2022,Fradique Coutinho,15.21
+2022-06-01,2022,Oscar Freire,20.73
+2022-06-01,2022,Paulista,87.61
+2022-06-01,2022,Higienópolis - Mackenzie,18.5
+2022-06-01,2022,República,94.34
+2022-06-01,2022,Luz,113.85
+2022-07-01,2022,Vila Sônia,33.9
+2022-07-01,2022,São Paulo - Morumbi,21.1
+2022-07-01,2022,Butantã,31.48
+2022-07-01,2022,Pinheiros,88.44
+2022-07-01,2022,Faria Lima,30.3
+2022-07-01,2022,Fradique Coutinho,15.28
+2022-07-01,2022,Oscar Freire,20.68
+2022-07-01,2022,Paulista,83.57
+2022-07-01,2022,Higienópolis - Mackenzie,15.28
+2022-07-01,2022,República,93.31
+2022-07-01,2022,Luz,115.08
+2022-08-01,2022,Vila Sônia,37.49
+2022-08-01,2022,São Paulo - Morumbi,22.6
+2022-08-01,2022,Butantã,34.8
+2022-08-01,2022,Pinheiros,93.98
+2022-08-01,2022,Faria Lima,32.48
+2022-08-01,2022,Fradique Coutinho,16.09
+2022-08-01,2022,Oscar Freire,21.81
+2022-08-01,2022,Paulista,95.27
+2022-08-01,2022,Higienópolis - Mackenzie,25.05
+2022-08-01,2022,República,98.97
+2022-08-01,2022,Luz,121.01
+2022-09-01,2022,Vila Sônia,38.75
+2022-09-01,2022,São Paulo - Morumbi,22.29
+2022-09-01,2022,Butantã,36.29
+2022-09-01,2022,Pinheiros,97.37
+2022-09-01,2022,Faria Lima,32.59
+2022-09-01,2022,Fradique Coutinho,16.34
+2022-09-01,2022,Oscar Freire,21.51
+2022-09-01,2022,Paulista,99.42
+2022-09-01,2022,Higienópolis - Mackenzie,25.73
+2022-09-01,2022,República,102.74
+2022-09-01,2022,Luz,126.39
+2022-10-01,2022,Vila Sônia,39.62
+2022-10-01,2022,São Paulo - Morumbi,22.26
+2022-10-01,2022,Butantã,37.06
+2022-10-01,2022,Pinheiros,99.58
+2022-10-01,2022,Faria Lima,32.94
+2022-10-01,2022,Fradique Coutinho,16.61
+2022-10-01,2022,Oscar Freire,22.12
+2022-10-01,2022,Paulista,100.28
+2022-10-01,2022,Higienópolis - Mackenzie,24.11
+2022-10-01,2022,República,104.29
+2022-10-01,2022,Luz,127.55
+2022-11-01,2022,Vila Sônia,38.95
+2022-11-01,2022,São Paulo - Morumbi,21.69
+2022-11-01,2022,Butantã,35.77
+2022-11-01,2022,Pinheiros,98.3
+2022-11-01,2022,Faria Lima,32.24
+2022-11-01,2022,Fradique Coutinho,16.61
+2022-11-01,2022,Oscar Freire,22.13
+2022-11-01,2022,Paulista,96.55
+2022-11-01,2022,Higienópolis - Mackenzie,23.68
+2022-11-01,2022,República,102.12
+2022-11-01,2022,Luz,125.18
+2022-12-01,2022,Vila Sônia,35.77
+2022-12-01,2022,São Paulo - Morumbi,19.28
+2022-12-01,2022,Butantã,29.87
+2022-12-01,2022,Pinheiros,88.83
+2022-12-01,2022,Faria Lima,29.14
+2022-12-01,2022,Fradique Coutinho,14.85
+2022-12-01,2022,Oscar Freire,20.4
+2022-12-01,2022,Paulista,83.74
+2022-12-01,2022,Higienópolis - Mackenzie,15.96
+2022-12-01,2022,República,92.74
+2022-12-01,2022,Luz,114.43
+2023-01-01,2023,Vila Sônia,34.54
+2023-01-01,2023,São Paulo - Morumbi,18.26
+2023-01-01,2023,Butantã,27.17
+2023-01-01,2023,Pinheiros,87.15
+2023-01-01,2023,Faria Lima,28.65
+2023-01-01,2023,Fradique Coutinho,14.56
+2023-01-01,2023,Oscar Freire,19.87
+2023-01-01,2023,Paulista,82.55
+2023-01-01,2023,Higienópolis - Mackenzie,14.58
+2023-01-01,2023,República,90.08
+2023-01-01,2023,Luz,113.58
+2023-02-01,2023,Vila Sônia,38.15
+2023-02-01,2023,São Paulo - Morumbi,20.17
+2023-02-01,2023,Butantã,29.85
+2023-02-01,2023,Pinheiros,91.47
+2023-02-01,2023,Faria Lima,30.31
+2023-02-01,2023,Fradique Coutinho,16.09
+2023-02-01,2023,Oscar Freire,20.93
+2023-02-01,2023,Paulista,92.87
+2023-02-01,2023,Higienópolis - Mackenzie,23.5
+2023-02-01,2023,República,96.67
+2023-02-01,2023,Luz,120.29
+2023-03-01,2023,Vila Sônia,42.21
+2023-03-01,2023,São Paulo - Morumbi,24.15
+2023-03-01,2023,Butantã,36.43
+2023-03-01,2023,Pinheiros,103.42
+2023-03-01,2023,Faria Lima,33.71
+2023-03-01,2023,Fradique Coutinho,17.08
+2023-03-01,2023,Oscar Freire,23.5
+2023-03-01,2023,Paulista,101.89
+2023-03-01,2023,Higienópolis - Mackenzie,27.51
+2023-03-01,2023,República,102.68
+2023-03-01,2023,Luz,136.49
+2023-04-01,2023,Vila Sônia,43.98
+2023-04-01,2023,São Paulo - Morumbi,23.37
+2023-04-01,2023,Butantã,38.63
+2023-04-01,2023,Pinheiros,104.83
+2023-04-01,2023,Faria Lima,34.54
+2023-04-01,2023,Fradique Coutinho,17.18
+2023-04-01,2023,Oscar Freire,24.02
+2023-04-01,2023,Paulista,105.55
+2023-04-01,2023,Higienópolis - Mackenzie,27.48
+2023-04-01,2023,República,106.2
+2023-04-01,2023,Luz,135.69
+2023-05-01,2023,Vila Sônia,44.66
+2023-05-01,2023,São Paulo - Morumbi,22.78
+2023-05-01,2023,Butantã,39.36
+2023-05-01,2023,Pinheiros,104.2
+2023-05-01,2023,Faria Lima,34.71
+2023-05-01,2023,Fradique Coutinho,17.15
+2023-05-01,2023,Oscar Freire,24.12
+2023-05-01,2023,Paulista,105.66
+2023-05-01,2023,Higienópolis - Mackenzie,27.29
+2023-05-01,2023,República,106.03
+2023-05-01,2023,Luz,135.5
+2023-06-01,2023,Vila Sônia,42.08
+2023-06-01,2023,São Paulo - Morumbi,22.95
+2023-06-01,2023,Butantã,36.16
+2023-06-01,2023,Pinheiros,98.73
+2023-06-01,2023,Faria Lima,33
+2023-06-01,2023,Fradique Coutinho,16.52
+2023-06-01,2023,Oscar Freire,22.85
+2023-06-01,2023,Paulista,97.71
+2023-06-01,2023,Higienópolis - Mackenzie,20.46
+2023-06-01,2023,República,99.57
+2023-06-01,2023,Luz,129.78
+2023-07-01,2023,Vila Sônia,41.17
+2023-07-01,2023,São Paulo - Morumbi,21.02
+2023-07-01,2023,Butantã,31.96
+2023-07-01,2023,Pinheiros,98
+2023-07-01,2023,Faria Lima,32.73
+2023-07-01,2023,Fradique Coutinho,16.2
+2023-07-01,2023,Oscar Freire,22.6
+2023-07-01,2023,Paulista,94.21
+2023-07-01,2023,Higienópolis - Mackenzie,16.96
+2023-07-01,2023,República,96.94
+2023-07-01,2023,Luz,128.62
+2023-08-01,2023,Vila Sônia,45.94
+2023-08-01,2023,São Paulo - Morumbi,24.88
+2023-08-01,2023,Butantã,38.19
+2023-08-01,2023,Pinheiros,106.04
+2023-08-01,2023,Faria Lima,36
+2023-08-01,2023,Fradique Coutinho,17.6
+2023-08-01,2023,Oscar Freire,24.55
+2023-08-01,2023,Paulista,107.69
+2023-08-01,2023,Higienópolis - Mackenzie,27.48
+2023-08-01,2023,República,104.12
+2023-08-01,2023,Luz,137.99
+2023-09-01,2023,Vila Sônia,46.95
+2023-09-01,2023,São Paulo - Morumbi,24.18
+2023-09-01,2023,Butantã,37.42
+2023-09-01,2023,Pinheiros,107.76
+2023-09-01,2023,Faria Lima,35.94
+2023-09-01,2023,Fradique Coutinho,17.6
+2023-09-01,2023,Oscar Freire,24.67
+2023-09-01,2023,Paulista,107.59
+2023-09-01,2023,Higienópolis - Mackenzie,27.81
+2023-09-01,2023,República,104.64
+2023-09-01,2023,Luz,137.87
+2023-10-01,2023,Vila Sônia,46.05
+2023-10-01,2023,São Paulo - Morumbi,22.56
+2023-10-01,2023,Butantã,35.61
+2023-10-01,2023,Pinheiros,100
+2023-10-01,2023,Faria Lima,35.62
+2023-10-01,2023,Fradique Coutinho,17.1
+2023-10-01,2023,Oscar Freire,24.15
+2023-10-01,2023,Paulista,102.64
+2023-10-01,2023,Higienópolis - Mackenzie,26.25
+2023-10-01,2023,República,99.44
+2023-10-01,2023,Luz,134.84
+2023-11-01,2023,Vila Sônia,47.79
+2023-11-01,2023,São Paulo - Morumbi,25.2
+2023-11-01,2023,Butantã,38.64
+2023-11-01,2023,Pinheiros,106.14
+2023-11-01,2023,Faria Lima,36.4
+2023-11-01,2023,Fradique Coutinho,18
+2023-11-01,2023,Oscar Freire,25.13
+2023-11-01,2023,Paulista,107.16
+2023-11-01,2023,Higienópolis - Mackenzie,26.93
+2023-11-01,2023,República,104.21
+2023-11-01,2023,Luz,141.85
+2023-12-01,2023,Vila Sônia,45.18
+2023-12-01,2023,São Paulo - Morumbi,22.45
+2023-12-01,2023,Butantã,34.03
+2023-12-01,2023,Pinheiros,97.68
+2023-12-01,2023,Faria Lima,33.85
+2023-12-01,2023,Fradique Coutinho,17.03
+2023-12-01,2023,Oscar Freire,24.1
+2023-12-01,2023,Paulista,97.11
+2023-12-01,2023,Higienópolis - Mackenzie,18.63
+2023-12-01,2023,República,98.48
+2023-12-01,2023,Luz,131.34
+2024-01-01,2024,Vila Sônia,39.67
+2024-01-01,2024,São Paulo - Morumbi,19.18
+2024-01-01,2024,Butantã,27.84
+2024-01-01,2024,Pinheiros,90.73
+2024-01-01,2024,Faria Lima,30.75
+2024-01-01,2024,Fradique Coutinho,15.29
+2024-01-01,2024,Oscar Freire,21.57
+2024-01-01,2024,Paulista,88.51
+2024-01-01,2024,Higienópolis - Mackenzie,15.93
+2024-01-01,2024,República,90.07
+2024-01-01,2024,Luz,119.43
+2024-02-01,2024,Vila Sônia,44.95
+2024-02-01,2024,São Paulo - Morumbi,22.84
+2024-02-01,2024,Butantã,32.94
+2024-02-01,2024,Pinheiros,99.08
+2024-02-01,2024,Faria Lima,33.71
+2024-02-01,2024,Fradique Coutinho,17.26
+2024-02-01,2024,Oscar Freire,23.55
+2024-02-01,2024,Paulista,102.41
+2024-02-01,2024,Higienópolis - Mackenzie,25.12
+2024-02-01,2024,República,97.6
+2024-02-01,2024,Luz,131.69
+2024-03-01,2024,Vila Sônia,48.85
+2024-03-01,2024,São Paulo - Morumbi,24.03
+2024-03-01,2024,Butantã,39.58
+2024-03-01,2024,Pinheiros,107.46
+2024-03-01,2024,Faria Lima,36.3
+2024-03-01,2024,Fradique Coutinho,18.38
+2024-03-01,2024,Oscar Freire,25.07
+2024-03-01,2024,Paulista,112.22
+2024-03-01,2024,Higienópolis - Mackenzie,29.53
+2024-03-01,2024,República,104.39
+2024-03-01,2024,Luz,140.08
+2024-04-01,2024,Vila Sônia,49.15
+2024-04-01,2024,São Paulo - Morumbi,24.98
+2024-04-01,2024,Butantã,40.63
+2024-04-01,2024,Pinheiros,106.88
+2024-04-01,2024,Faria Lima,36.21
+2024-04-01,2024,Fradique Coutinho,18.3
+2024-04-01,2024,Oscar Freire,25.28
+2024-04-01,2024,Paulista,112.33
+2024-04-01,2024,Higienópolis - Mackenzie,29.5
+2024-04-01,2024,República,103.18
+2024-04-01,2024,Luz,142.86
+2024-05-01,2024,Vila Sônia,48.1
+2024-05-01,2024,São Paulo - Morumbi,25.2
+2024-05-01,2024,Butantã,39.67
+2024-05-01,2024,Pinheiros,104.5
+2024-05-01,2024,Faria Lima,35.66
+2024-05-01,2024,Fradique Coutinho,18
+2024-05-01,2024,Oscar Freire,24.87
+2024-05-01,2024,Paulista,109.53
+2024-05-01,2024,Higienópolis - Mackenzie,27.89
+2024-05-01,2024,República,101.93
+2024-05-01,2024,Luz,141.03
+2024-06-01,2024,Vila Sônia,48.04
+2024-06-01,2024,São Paulo - Morumbi,24.22
+2024-06-01,2024,Butantã,39.1
+2024-06-01,2024,Pinheiros,105.89
+2024-06-01,2024,Faria Lima,36.36
+2024-06-01,2024,Fradique Coutinho,18.1
+2024-06-01,2024,Oscar Freire,25.21
+2024-06-01,2024,Paulista,107.45
+2024-06-01,2024,Higienópolis - Mackenzie,21.97
+2024-06-01,2024,República,102.03
+2024-06-01,2024,Luz,142.52
+2024-07-01,2024,Vila Sônia,44.09
+2024-07-01,2024,São Paulo - Morumbi,23
+2024-07-01,2024,Butantã,32.2
+2024-07-01,2024,Pinheiros,99.07
+2024-07-01,2024,Faria Lima,33.86
+2024-07-01,2024,Fradique Coutinho,17.18
+2024-07-01,2024,Oscar Freire,23.65
+2024-07-01,2024,Paulista,97.31
+2024-07-01,2024,Higienópolis - Mackenzie,18.17
+2024-07-01,2024,República,95.61
+2024-07-01,2024,Luz,135.47
