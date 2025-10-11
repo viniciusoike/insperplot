@@ -17,6 +17,12 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE
 )
+
+# Load Insper fonts for vignette rendering
+# Suppresses output to keep vignette clean
+suppressMessages(suppressWarnings({
+  insperplot::import_insper_fonts(verbose = FALSE)
+}))
 ```
 
 ## Introduction
@@ -262,7 +268,7 @@ inner_join(paulista, pinheiros, by = "date") |>
   insper_scatterplot(
     x = paulista,
     y = pinheiros,
-    color = as.numeric(format(date, "%Y")),
+    color = factor(format(date, "%Y")),
     add_smooth = TRUE,
     title = "Correlação: Paulista vs Pinheiros",
     subtitle = "Demanda mensal (milhares), colorido por ano",

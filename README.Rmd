@@ -35,6 +35,35 @@ You can install the development version of insperplot from GitHub:
 pak::pak("viniciusreginatto/insperplot")
 ```
 
+## Font Setup (Optional but Recommended)
+
+insperplot uses custom fonts for the best visual appearance: **EB Garamond** (serif, for titles) and **Barlow** (sans-serif, for body text). You have two options:
+
+### Option A: Install Fonts Locally (Permanent)
+
+1. Visit [Google Fonts](https://fonts.google.com)
+2. Download "EB Garamond" and "Barlow"
+3. Install fonts on your system
+4. Restart R/RStudio
+
+```{r eval=FALSE}
+# Check font installation status
+check_insper_fonts()
+```
+
+### Option B: Load Fonts Remotely (Per-Session)
+
+```{r eval=FALSE}
+# Install font packages (one time)
+install.packages(c("showtext", "sysfonts"))
+
+# Load fonts from Google Fonts (each session)
+library(insperplot)
+import_insper_fonts()
+```
+
+**Note:** If fonts are unavailable, plots automatically fall back to system defaults.
+
 ## Quick Start
 
 ```{r example, eval=FALSE}
