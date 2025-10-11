@@ -83,7 +83,8 @@ p_line <- ggplot(line_data, aes(x, y)) +
 
 # Combine subplots --------------------------------------------------------
 
-subplot <- (p_bar | p_scatter) / p_line &
+subplot <- (p_bar | p_scatter) /
+  p_line &
   theme(
     plot.background = element_rect(fill = "transparent", color = NA),
     panel.background = element_rect(fill = "transparent", color = NA)
@@ -115,8 +116,8 @@ sticker(
   s_height = 1.5 / 1.1,
   # Hex styling
   h_fill = insper_red,
-  h_color = insper_teal,
-  h_size = 1.5,
+  h_color = "black",
+  h_size = 1,
   # Output
   filename = "man/figures/logo.png",
   dpi = 300,
