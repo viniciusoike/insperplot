@@ -13,7 +13,6 @@ insper_barplot(
   position = "dodge",
   zero = TRUE,
   text = FALSE,
-  flip = FALSE,
   palette = "categorical",
   text_size = 4,
   text_color = "black",
@@ -24,9 +23,9 @@ insper_barplot(
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Column name for x-axis (categorical variable)}
+\item{x}{<[`data-masked`][ggplot2::aes_eval]> Column name for x-axis}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Column name for y-axis (numeric variable)}
+\item{y}{<[`data-masked`][ggplot2::aes_eval]> Column name for y-axis}
 
 \item{fill_var}{<[`data-masked`][ggplot2::aes_eval]> Column name for fill aesthetic (creates grouped/stacked bars).
 If NULL, uses single_color for all bars.}
@@ -40,8 +39,6 @@ Default is Insper red.}
 \item{zero}{Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE}
 
 \item{text}{Logical. If TRUE, adds value labels on bars. Default is FALSE}
-
-\item{flip}{Logical. If TRUE, creates horizontal bars. Default is FALSE}
 
 \item{palette}{Character. Color palette name for grouped bars.
 Default is "categorical"}
@@ -59,19 +56,22 @@ A ggplot2 object
 }
 \description{
 This function creates a customized bar plot using ggplot2 with Insper's
-visual identity. It supports grouped bars, text labels, coordinate flipping,
-and automatic ordering.
+visual identity. It supports grouped bars, text labels, and automatic ordering.
 }
 \examples{
 \dontrun{
-# Simple bar plot
+# Simple bar plot (categorical x, numeric y)
 insper_barplot(mtcars, x = cyl, y = mpg)
+
+# Bar plot with swapped axes (numeric x, categorical y)
+df <- data.frame(category = letters[1:5], value = c(3, 5, 2, 8, 4))
+insper_barplot(df, x = value, y = category)
 
 # Grouped bar plot
 insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
 
-# Horizontal bars with text labels
-insper_barplot(mtcars, x = cyl, y = mpg, flip = TRUE, text = TRUE)
+# With text labels
+insper_barplot(mtcars, x = cyl, y = mpg, text = TRUE)
 
 # Custom color and label formatting
 insper_barplot(mtcars, x = cyl, y = mpg,

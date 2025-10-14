@@ -9,11 +9,8 @@ insper_timeseries(
   x,
   y,
   group = NULL,
-  line_width = 1.2,
-  add_points = FALSE,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL
+  line_width = 0.8,
+  add_points = FALSE
 )
 }
 \arguments{
@@ -28,12 +25,6 @@ insper_timeseries(
 \item{line_width}{Numeric. Width of lines. Default is 1.2}
 
 \item{add_points}{Logical. If TRUE, adds points to lines. Default is FALSE}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 }
 \value{
 A ggplot2 object

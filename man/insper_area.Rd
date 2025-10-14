@@ -10,11 +10,8 @@ insper_area(
   y,
   fill = NULL,
   stacked = FALSE,
-  area_alpha = 0.6,
-  add_line = TRUE,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL
+  area_alpha = 1,
+  add_line = TRUE
 )
 }
 \arguments{
@@ -32,12 +29,6 @@ Default is FALSE}
 \item{area_alpha}{Numeric. Transparency of areas (0-1). Default is 0.6}
 
 \item{add_line}{Logical. If TRUE, adds line on top of area. Default is TRUE}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 }
 \value{
 A ggplot2 object

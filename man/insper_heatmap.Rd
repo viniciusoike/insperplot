@@ -6,9 +6,6 @@
 \usage{
 insper_heatmap(
   data,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL,
   show_values = TRUE,
   value_color = "white",
   value_size = 3,
@@ -18,12 +15,6 @@ insper_heatmap(
 \arguments{
 \item{data}{Data frame (melted with Var1, Var2, value columns) or
 correlation matrix}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 
 \item{show_values}{Logical. If TRUE, displays values on tiles. Default is TRUE}
 

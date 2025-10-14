@@ -1,3 +1,92 @@
+# insperplot 0.7.0
+
+## Breaking Changes: API Modernization
+
+### Removed Orientation Parameters
+
+Following ggplot2's move away from `coord_flip()` (superseded in ggplot2 3.5.0+), orientation parameters have been removed from all plot functions. Users should now swap x and y arguments or add `+ coord_flip()` manually for alternative orientations.
+
+**Removed parameters:**
+- `insper_barplot()`: `flip` parameter removed
+- `insper_boxplot()`: `flip` parameter removed
+- `insper_violin()`: `flip` parameter removed
+- `insper_lollipop()`: `horizontal` parameter removed
+
+**Migration examples:**
+
+```r
+# OLD - vertical barplot with flip
+insper_barplot(df, x = category, y = value, flip = TRUE)
+
+# NEW - swap x and y arguments
+insper_barplot(df, x = value, y = category)
+
+# OR - add coord_flip() yourself
+insper_barplot(df, x = category, y = value) + coord_flip()
+```
+
+```r
+# OLD - horizontal boxplot
+insper_boxplot(df, x = group, y = value, flip = TRUE)
+
+# NEW - swap x and y
+insper_boxplot(df, x = value, y = group)
+```
+
+```r
+# OLD - horizontal lollipop
+insper_lollipop(df, x = category, y = value, horizontal = TRUE)
+
+# NEW - add coord_flip() manually
+insper_lollipop(df, x = category, y = value) + coord_flip()
+```
+
+### Removed Label Parameters
+
+Title, subtitle, and caption parameters have been removed from all plot functions to reduce API clutter. Users should use standard ggplot2 `labs()` instead, providing better flexibility and consistency with the ggplot2 ecosystem.
+
+**Removed from:** `insper_scatterplot()`, `insper_timeseries()`, `insper_boxplot()`, `insper_lollipop()`, `insper_area()`, `insper_violin()`, `insper_heatmap()`
+
+**Migration guide:**
+
+```r
+# OLD - labels as function parameters
+insper_scatterplot(df, x, y,
+                   title = "My Title",
+                   subtitle = "My Subtitle",
+                   caption = "Source: XYZ")
+
+# NEW - use ggplot2::labs()
+insper_scatterplot(df, x, y) +
+  labs(title = "My Title",
+       subtitle = "My Subtitle",
+       caption = "Source: XYZ")
+```
+
+### Improved Flexibility
+
+**`insper_barplot()`** now explicitly supports both orientations without restrictions:
+
+```r
+# Categorical x, numeric y (typical vertical bars)
+insper_barplot(df, x = group, y = value)
+
+# Numeric x, categorical y (horizontal bars)
+insper_barplot(df, x = value, y = group)
+```
+
+Documentation updated to clarify that x and y parameters accept any compatible variable types, removing the misleading "(categorical)" and "(numeric)" annotations.
+
+### Benefits
+
+- **Cleaner API**: Fewer parameters, less cognitive load
+- **Modern patterns**: Aligns with ggplot2 best practices
+- **More flexible**: Users maintain full control via standard ggplot2 patterns
+- **Future-proof**: Ready for when coord_flip() is fully deprecated
+- **Consistent**: All plot functions follow the same pattern
+
+---
+
 # insperplot 0.6.0
 
 ## Comprehensive Documentation with Vignettes

@@ -9,13 +9,9 @@ insper_lollipop(
   x,
   y,
   color = NULL,
-  horizontal = FALSE,
   sorted = FALSE,
   point_size = 4,
-  line_width = 1,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL
+  line_width = 1
 )
 }
 \arguments{
@@ -27,19 +23,11 @@ insper_lollipop(
 
 \item{color}{<[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)}
 
-\item{horizontal}{Logical. If TRUE, creates horizontal lollipops. Default is FALSE}
-
 \item{sorted}{Logical. If TRUE, sorts by y value. Default is FALSE}
 
 \item{point_size}{Numeric. Size of points. Default is 4}
 
 \item{line_width}{Numeric. Width of segments. Default is 1}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 }
 \value{
 A ggplot2 object
@@ -50,17 +38,19 @@ Insper's visual identity. Ideal for displaying ranked categorical data.
 }
 \examples{
 \dontrun{
-# Simple lollipop plot
+# Simple vertical lollipop plot
 df <- data.frame(category = letters[1:10], value = runif(10, 0, 100))
 insper_lollipop(df, x = category, y = value)
 
-# Horizontal and sorted
-insper_lollipop(df, x = category, y = value,
-                horizontal = TRUE, sorted = TRUE)
+# Sorted by value
+insper_lollipop(df, x = category, y = value, sorted = TRUE)
 
 # With color aesthetic
 df$group <- rep(c("A", "B"), 5)
 insper_lollipop(df, x = category, y = value, color = group)
+
+# For horizontal orientation, swap x and y then add coord_flip()
+insper_lollipop(df, x = category, y = value) + ggplot2::coord_flip()
 }
 
 }

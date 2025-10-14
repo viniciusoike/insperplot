@@ -28,12 +28,14 @@ test_that("insper_barplot handles grouped bars", {
   expect_s3_class(p, "ggplot")
 })
 
-test_that("insper_barplot flip parameter works", {
+test_that("insper_barplot works with swapped axes", {
   skip_if_not_installed("ggplot2")
-  df <- data.frame(x = c("A", "B"), y = c(1, 2))
-  p <- insper_barplot(df, x = x, y = y, flip = TRUE)
-  expect_s3_class(p, "ggplot")
-  expect_s3_class(p$coordinates, "CoordFlip")
+  df <- data.frame(category = c("A", "B"), value = c(1, 2))
+  # Both orientations should work
+  p1 <- insper_barplot(df, x = category, y = value)
+  p2 <- insper_barplot(df, x = value, y = category)
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
 })
 
 test_that("insper_barplot text parameter adds labels", {
@@ -113,28 +115,30 @@ test_that("insper_heatmap show_values parameter works", {
   expect_s3_class(p2, "ggplot")
 })
 
-test_that("plot functions accept title/subtitle/caption", {
+test_that("plot functions work without title/subtitle/caption (use labs() instead)", {
   skip_if_not_installed("ggplot2")
 
-  p1 <- insper_scatterplot(
-    mtcars, x = wt, y = mpg,
+  # Functions should work without built-in title parameters
+  p1 <- insper_scatterplot(mtcars, x = wt, y = mpg)
+  expect_s3_class(p1, "ggplot")
+
+  # Users can add labels with labs()
+  p1_with_labs <- p1 + ggplot2::labs(
     title = "Test Title",
     subtitle = "Test Subtitle",
     caption = "Test Caption"
   )
-  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p1_with_labs, "ggplot")
 
   p2 <- insper_timeseries(
     data.frame(time = 1:10, value = rnorm(10)),
-    x = time, y = value,
-    title = "Test"
-  )
+    x = time, y = value
+  ) + ggplot2::labs(title = "Test")
   expect_s3_class(p2, "ggplot")
 
   p3 <- insper_boxplot(
-    mtcars, x = factor(cyl), y = mpg,
-    caption = "Test"
-  )
+    mtcars, x = factor(cyl), y = mpg
+  ) + ggplot2::labs(caption = "Test")
   expect_s3_class(p3, "ggplot")
 })
 
@@ -154,12 +158,14 @@ test_that("insper_lollipop handles color aesthetic", {
   expect_s3_class(p, "ggplot")
 })
 
-test_that("insper_lollipop horizontal and sorted parameters work", {
+test_that("insper_lollipop sorted parameter works", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(category = letters[1:5], value = c(3, 1, 4, 2, 5))
-  p1 <- insper_lollipop(df, x = category, y = value, horizontal = TRUE)
-  p2 <- insper_lollipop(df, x = category, y = value, sorted = TRUE)
+  p1 <- insper_lollipop(df, x = category, y = value, sorted = TRUE)
   expect_s3_class(p1, "ggplot")
+
+  # Users can add coord_flip() for horizontal orientation
+  p2 <- insper_lollipop(df, x = category, y = value) + ggplot2::coord_flip()
   expect_s3_class(p2, "ggplot")
 })
 
@@ -208,8 +214,6 @@ test_that("insper_violin optional features work", {
   skip_if_not_installed("ggplot2")
   p1 <- insper_violin(mtcars, x = factor(cyl), y = mpg, show_boxplot = FALSE)
   p2 <- insper_violin(mtcars, x = factor(cyl), y = mpg, show_points = TRUE)
-  p3 <- insper_violin(mtcars, x = factor(cyl), y = mpg, flip = FALSE)
   expect_s3_class(p1, "ggplot")
   expect_s3_class(p2, "ggplot")
-  expect_s3_class(p3, "ggplot")
 })

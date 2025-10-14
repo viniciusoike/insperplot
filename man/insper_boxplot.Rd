@@ -11,11 +11,7 @@ insper_boxplot(
   fill = NULL,
   add_jitter = TRUE,
   add_notch = FALSE,
-  flip = TRUE,
-  box_alpha = 0.7,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL
+  box_alpha = 0.8
 )
 }
 \arguments{
@@ -31,15 +27,7 @@ insper_boxplot(
 
 \item{add_notch}{Logical. If TRUE, creates notched boxplot. Default is FALSE}
 
-\item{flip}{Logical. If TRUE, creates horizontal boxplot. Default is TRUE}
-
 \item{box_alpha}{Numeric. Transparency of boxes (0-1). Default is 0.7}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 }
 \value{
 A ggplot2 object

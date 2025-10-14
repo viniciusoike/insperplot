@@ -11,11 +11,7 @@ insper_violin(
   fill = NULL,
   show_boxplot = TRUE,
   show_points = FALSE,
-  violin_alpha = 0.7,
-  flip = TRUE,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL
+  violin_alpha = 0.7
 )
 }
 \arguments{
@@ -32,14 +28,6 @@ insper_violin(
 \item{show_points}{Logical. If TRUE, adds jittered points. Default is FALSE}
 
 \item{violin_alpha}{Numeric. Transparency of violins (0-1). Default is 0.7}
-
-\item{flip}{Logical. If TRUE, creates horizontal violins. Default is TRUE}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 }
 \value{
 A ggplot2 object

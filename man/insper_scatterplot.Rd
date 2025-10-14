@@ -12,10 +12,7 @@ insper_scatterplot(
   add_smooth = TRUE,
   smooth_method = "lm",
   point_size = 2,
-  point_alpha = 0.7,
-  title = NULL,
-  subtitle = NULL,
-  caption = NULL
+  point_alpha = 0.7
 )
 }
 \arguments{
@@ -34,12 +31,6 @@ insper_scatterplot(
 \item{point_size}{Numeric. Size of points. Default is 2}
 
 \item{point_alpha}{Numeric. Transparency of points (0-1). Default is 0.7}
-
-\item{title}{Plot title}
-
-\item{subtitle}{Plot subtitle}
-
-\item{caption}{Plot caption}
 }
 \value{
 A ggplot2 object
