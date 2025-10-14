@@ -4,12 +4,13 @@
 \alias{import_insper_fonts}
 \title{Import Insper Fonts from Google Fonts}
 \usage{
-import_insper_fonts(enable = TRUE, verbose = TRUE)
+import_insper_fonts(enable = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{enable}{Logical. If TRUE (default), automatically enables showtext for
-rendering. If FALSE, fonts are registered but you must call
-\code{showtext::showtext_auto()} manually.}
+\item{enable}{Logical. If TRUE, automatically enables showtext for
+rendering. If FALSE (default, recommended), fonts are registered but you must call
+\code{showtext::showtext_auto()} manually. **Warning**: Enabling showtext can cause
+DPI conflicts - consider using local font installation with ragg device instead.}
 
 \item{verbose}{Logical. If TRUE (default), prints status messages about font
 loading.}
@@ -62,6 +63,8 @@ Other utilities:
 \code{\link{format_num_br}()},
 \code{\link{format_percent_br}()},
 \code{\link{insper_caption}()},
-\code{\link{save_insper_plot}()}
+\code{\link{save_insper_plot}()},
+\code{\link{setup_insper_fonts}()},
+\code{\link{use_ragg_device}()}
 }
 \concept{utilities}

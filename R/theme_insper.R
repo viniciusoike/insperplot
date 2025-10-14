@@ -81,13 +81,13 @@
 #' @importFrom ggplot2 element_blank element_line element_rect element_text unit theme theme_minimal rel margin %+replace%
 #' @export
 theme_insper <- function(
-    base_size = 12,
-    font_title = "EB Garamond",
-    font_text = "Barlow",
-    grid = TRUE,
-    border = "none",
-    ...) {
-
+  base_size = 12,
+  font_title = "EB Garamond",
+  font_text = "Barlow",
+  grid = TRUE,
+  border = "none",
+  ...
+) {
   # Input validation ----
   # Check that grid parameter is logical (TRUE/FALSE)
   if (!is.logical(grid)) {
@@ -97,7 +97,9 @@ theme_insper <- function(
   # Validate border parameter against allowed values
   valid_border <- c("none", "half", "closed")
   if (!any(border %in% valid_border)) {
-    cli::cli_abort("Argument `border` must be one of 'none', 'half', or 'closed'.")
+    cli::cli_abort(
+      "Argument `border` must be one of 'none', 'half', or 'closed'."
+    )
   }
 
   # Font detection and fallback ----
@@ -112,41 +114,47 @@ theme_insper <- function(
     text = element_text(family = font_text, size = rel(1)),
 
     # Background colors using Insper's off-white
-    plot.background = element_rect(fill = insper_col("off_white"), color = insper_col("off_white")),
-    panel.background = element_rect(fill = insper_col("off_white"), color = insper_col("off_white")),
+    plot.background = element_rect(
+      fill = insper_col("off_white"),
+      color = insper_col("off_white")
+    ),
+    panel.background = element_rect(
+      fill = insper_col("off_white"),
+      color = insper_col("off_white")
+    ),
 
     # Remove minor grid lines (always off)
     panel.grid.minor = element_blank(),
 
     # Plot spacing and margins
-    plot.margin = margin(20, 15, 20, 15),
+    plot.margin = margin(10, 15, 10, 15),
 
     # Legend configuration
-    legend.position = "top",           # Position legend at top of plot
-    legend.direction = "horizontal",   # Arrange legend items horizontally
+    legend.position = "top", # Position legend at top of plot
+    legend.direction = "horizontal", # Arrange legend items horizontally
     legend.title = element_text(face = "bold"),
 
     # Axis styling
     # Note: axis.ticks are commented out in base theme, applied conditionally based on border
-    axis.text = element_text(size = rel(1), color = "gray10"),
+    axis.text = element_text(size = rel(0.8), color = "gray10"),
     axis.title = element_text(size = rel(1), color = insper_col("black")),
 
     # Title and subtitle styling
     plot.title = element_text(
-      size = rel(1.8),                        # 80% larger than base size
-      family = font_title,                    # Use title font
+      size = rel(1.3), # 30% larger than base size
+      family = font_title, # Use title font
       color = insper_col("black"),
-      hjust = 0                               # Left-align title
+      hjust = 0 # Left-align title
     ),
     plot.subtitle = element_text(
-      size = rel(0.9),                        # 10% smaller than base size
-      family = font_title,                    # Use title font
+      size = rel(0.8), # 10% smaller than base size
+      family = font_title, # Use title font
       color = insper_col("gray_meddark"),
-      hjust = 0                               # Left-align subtitle
+      hjust = 0 # Left-align subtitle
     ),
 
     # Caption styling (bottom right)
-    plot.caption = element_text(size = rel(0.8), color = "gray40", hjust = 1),
+    plot.caption = element_text(size = rel(0.5), color = "gray40", hjust = 0),
 
     # Facet strip styling
     # strip.background is commented out - uses default
@@ -159,13 +167,13 @@ theme_insper <- function(
   # Conditional grid configuration ----
   # Add or remove major grid lines based on grid parameter
   if (grid) {
-    theme_base <- theme_base + theme(
-      panel.grid.major = element_line(
-        linewidth = 0.35,                     # Thin lines
-        linetype = "dashed",                  # Dashed style
-        color = insper_col("gray_light")      # Light gray color
+    theme_base <- theme_base +
+      theme(
+        panel.grid.major = element_line(
+          linewidth = 0.35, # Thin lines
+          color = insper_col("gray_light") # Light gray color
+        )
       )
-    )
   } else {
     theme_base <- theme_base + theme(panel.grid.major = element_blank())
   }
@@ -174,20 +182,22 @@ theme_insper <- function(
   # Apply different border styles based on border parameter
   if (border == "half") {
     # Show axis lines with ticks but no full border
-    theme_base <- theme_base + theme(
-      axis.line = element_line(),                           # Add axis lines
-      axis.ticks = element_line(color = insper_col("gray_dark")),
-      axis.ticks.length = unit(7, "pt")                     # 7 point tick length
-    )
+    theme_base <- theme_base +
+      theme(
+        axis.line = element_line(), # Add axis lines
+        axis.ticks = element_line(color = insper_col("gray_dark")),
+        axis.ticks.length = unit(7, "pt") # 7 point tick length
+      )
   }
 
   if (border == "closed") {
     # Show complete rectangular border around plot area
-    theme_base <- theme_base + theme(
-      panel.border = element_rect(color = insper_col("black"), fill = NA),
-      axis.ticks = element_line(color = insper_col("gray_dark")),
-      axis.ticks.length = unit(7, "pt")                     # 7 point tick length
-    )
+    theme_base <- theme_base +
+      theme(
+        panel.border = element_rect(color = insper_col("black"), fill = NA),
+        axis.ticks = element_line(color = insper_col("gray_dark")),
+        axis.ticks.length = unit(7, "pt") # 7 point tick length
+      )
   }
 
   # Return combined theme ----
@@ -212,7 +222,6 @@ theme_insper <- function(
 #' @keywords internal
 #' @noRd
 detect_font <- function(font_name, fallback = "sans") {
-
   # First check if fonts loaded via import_insper_fonts()
   fonts_imported <- isTRUE(getOption("insperplot.fonts_loaded", FALSE))
 
@@ -225,17 +234,24 @@ detect_font <- function(font_name, fallback = "sans") {
   has_systemfonts <- requireNamespace("systemfonts", quietly = TRUE)
 
   if (has_systemfonts) {
-    tryCatch({
-      available_fonts <- systemfonts::system_fonts()$family
-      font_available <- any(grepl(font_name, available_fonts, ignore.case = TRUE))
+    tryCatch(
+      {
+        available_fonts <- systemfonts::system_fonts()$family
+        font_available <- any(grepl(
+          font_name,
+          available_fonts,
+          ignore.case = TRUE
+        ))
 
-      if (font_available) {
-        return(font_name)
+        if (font_available) {
+          return(font_name)
+        }
+      },
+      error = function(e) {
+        # If error checking fonts, use fallback silently
+        return(fallback)
       }
-    }, error = function(e) {
-      # If error checking fonts, use fallback silently
-      return(fallback)
-    })
+    )
   }
 
   # If font not found, use fallback

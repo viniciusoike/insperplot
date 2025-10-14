@@ -32,37 +32,50 @@ You can install the development version of insperplot from GitHub:
 pak::pak("viniciusreginatto/insperplot")
 ```
 
-## Font Setup (Optional but Recommended)
+## Setup (Recommended)
 
-insperplot uses custom fonts for the best visual appearance: **EB
-Garamond** (serif, for titles) and **Barlow** (sans-serif, for body
-text). You have two options:
+For the best results with insperplot, we recommend a one-time setup:
 
-### Option A: Install Fonts Locally (Permanent)
+### Quick Setup Wizard
+
+``` r
+library(insperplot)
+setup_insper_fonts()  # Interactive guide for complete setup
+```
+
+### Manual Setup
+
+**Step 1: Install Insper Fonts**
+
+insperplot uses **EB Garamond** (serif, for titles) and **Barlow**
+(sans-serif, for body text):
 
 1.  Visit [Google Fonts](https://fonts.google.com)
-2.  Download “EB Garamond” and “Barlow”
-3.  Install fonts on your system
-4.  Restart R/RStudio
+2.  Download and install “EB Garamond” and “Barlow”
+3.  Restart R/RStudio
+
+**Step 2: Install ragg Graphics Device**
 
 ``` r
-# Check font installation status
-check_insper_fonts()
+install.packages("ragg")
 ```
 
-### Option B: Load Fonts Remotely (Per-Session)
+**Step 3: Configure RStudio (if using RStudio)**
 
-``` r
-# Install font packages (one time)
-install.packages(c("showtext", "sysfonts"))
+- Go to: **Tools \> Global Options \> General \> Graphics**
+- Set **Backend** to **AGG**
+- Restart R session
 
-# Load fonts from Google Fonts (each session)
-library(insperplot)
-import_insper_fonts()
-```
+### Why This Setup?
+
+- [x] No DPI conflicts (unlike showtext approach)
+- [x] No per-session font loading overhead
+- [x] Better rendering quality and performance
+- [x] Cross-platform consistency
+- [x] Modern best practice (2025)
 
 **Note:** If fonts are unavailable, plots automatically fall back to
-system defaults.
+system defaults (serif/sans).
 
 ## Quick Start
 
@@ -157,5 +170,12 @@ MIT © Vinicius Reginatto
 This package was inspired by excellent ggplot2 theme packages including:
 
 - [hrbrthemes](https://github.com/hrbrmstr/hrbrthemes) by Bob Rudis
+  (note: removed from CRAN in 2025)
 - [bbplot](https://github.com/bbc/bbplot) by BBC Data Team
 - [ggthemes](https://github.com/jrnold/ggthemes) by Jeffrey Arnold
+
+**Font Handling Evolution**: This package initially used the showtext
+approach for font management. After hrbrthemes was removed from CRAN due
+to extrafont dependency issues, we migrated to the modern
+`systemfonts + ragg` approach, which eliminates DPI conflicts and
+provides better performance.

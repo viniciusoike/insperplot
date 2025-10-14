@@ -2,22 +2,12 @@
 
 #' @keywords internal
 .onLoad <- function(libname, pkgname) {
-  # Try to automatically import Insper fonts from Google Fonts when package loads
-  # This runs silently - if it fails, users can manually call import_insper_fonts()
-  # or install fonts locally
+  # Modern approach: Do NOT automatically enable showtext_auto()
+  # This avoids DPI conflicts and follows 2025 R graphics best practices
+  # Users should install fonts locally and use ragg device for best results
 
-  tryCatch({
-    # Only attempt if showtext/sysfonts available
-    if (requireNamespace("showtext", quietly = TRUE) &&
-        requireNamespace("sysfonts", quietly = TRUE)) {
-
-      # Try to import fonts silently (verbose = FALSE)
-      import_insper_fonts(enable = TRUE, verbose = FALSE)
-    }
-  }, error = function(e) {
-    # Silently fail - fonts will fall back to system defaults
-    # Users can manually call import_insper_fonts() if needed
-  })
+  # Set package option to track recommended setup
+  options(insperplot.fonts_loaded = FALSE)
 }
 
 
@@ -27,6 +17,7 @@
   packageStartupMessage(
     "insperplot ",
     utils::packageVersion("insperplot"),
-    " loaded.\nFor best results, use Insper fonts: see ?import_insper_fonts or ?check_insper_fonts"
+    " loaded.\n",
+    "Font setup: ?setup_insper_fonts | Device setup: ?use_ragg_device"
   )
 }

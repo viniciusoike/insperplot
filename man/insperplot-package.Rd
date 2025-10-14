@@ -110,11 +110,13 @@ insper_col()
 # Show color palettes
 show_insper_palette("reds")
 
-# Create a simple plot
+\dontrun{
+# Create a simple plot (requires fonts to be set up)
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point(color = insper_col("reds1")) +
   theme_insper()
+}
 }
 \references{
 For official Insper communications and materials, please visit:

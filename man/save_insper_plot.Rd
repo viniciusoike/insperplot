@@ -10,6 +10,7 @@ save_insper_plot(
   width = height * 1.618,
   height = 6,
   dpi = 300,
+  device = NULL,
   ...
 )
 }
@@ -24,13 +25,22 @@ save_insper_plot(
 
 \item{dpi}{Resolution}
 
+\item{device}{Graphics device to use. If NULL (default), automatically uses
+ragg::agg_png() for PNG files when ragg is installed, otherwise falls back
+to ggplot2 defaults. You can override by passing a device function.}
+
 \item{...}{Additional arguments passed to ggsave}
 }
 \description{
-Enhanced ggsave with institutional defaults
+Enhanced ggsave with institutional defaults and ragg device support
+}
+\details{
+This function automatically uses the ragg device for PNG output when available,
+which provides better font rendering and eliminates DPI issues. To set up ragg,
+see \code{\link{use_ragg_device}}.
 }
 \seealso{
-\code{\link[ggplot2]{ggsave}}
+\code{\link[ggplot2]{ggsave}}, \code{\link{use_ragg_device}}
 
 Other utilities: 
 \code{\link{check_insper_fonts}()},
@@ -38,6 +48,8 @@ Other utilities:
 \code{\link{format_num_br}()},
 \code{\link{format_percent_br}()},
 \code{\link{import_insper_fonts}()},
-\code{\link{insper_caption}()}
+\code{\link{insper_caption}()},
+\code{\link{setup_insper_fonts}()},
+\code{\link{use_ragg_device}()}
 }
 \concept{utilities}
