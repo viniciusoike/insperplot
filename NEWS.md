@@ -85,6 +85,25 @@ Documentation updated to clarify that x and y parameters accept any compatible v
 - **Future-proof**: Ready for when coord_flip() is fully deprecated
 - **Consistent**: All plot functions follow the same pattern
 
+## Visual Identity
+
+### Package Logo Redesign
+
+The package hex logo has been redesigned with improved visual composition:
+
+* **New design features**:
+  - Bar chart + lollipop chart + line chart composition (previously bar + scatter + line)
+  - Package name repositioned to top of hex for better visibility
+  - Refined subplot sizing and positioning for better balance
+  - Thinner border (h_size: 0.85) for modern aesthetic
+
+* **Simplified output**:
+  - Only full-size logo (`man/figures/logo.png`) is now generated
+  - Small logo variant (`logo-small.png`) removed as it's no longer needed
+  - Logo generation script (`data-raw/create_logo.R`) streamlined
+
+The logo continues to represent insperplot's core purpose: creating beautiful, publication-ready data visualizations with Insper's visual identity.
+
 ---
 
 # insperplot 0.6.0

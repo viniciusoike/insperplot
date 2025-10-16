@@ -49,22 +49,62 @@ line_data <- data.frame(
 
 # Bar plot data
 bar_data <- data.frame(
-  x = letters[1:3],
-  y = c(3, 5, 2)
+  x = letters[1:5],
+  y = c(3, 5, 4, 2, 3.5)
 )
 
 # Scatter plot data
-scatter_data <- data.frame(
-  x = rnorm(20),
-  y = rnorm(20) * 2 + 5 + rnorm(20, sd = 2)
+scatter_data <- tibble::tibble(
+  x = rnorm(25),
+  y = x * 2 + 5 + rnorm(25, sd = 2)
 )
 
+spo <- geobr::read_municipality(3550308)
+
+lollipop_data <- data.frame(
+  x = c(3.5, 2.5),
+  y = c(1.8, 1.1),
+  z = c(1.1, 2.5),
+  a = c(1.5, 2.5)
+)
+
+p_lolli <- lollipop_data |>
+  tidyr::pivot_longer(cols = everything()) |>
+  ggplot(aes(value, name)) +
+  geom_line(aes(group = name), lwd = 0.5, color = "white") +
+  geom_point(size = 0.75, color = "white") +
+  geom_vline(xintercept = 2, lwd = 0.25, linetype = "dashed", color = "white") +
+  scale_x_continuous(limits = c(0.9, 3.7)) +
+  theme_subplot()
+# theme(
+#   panel.background = element_rect(fill = insper_red, color = "white"),
+#   plot.background = element_rect(fill = insper_red, color = "white")
+# )
+
 # Build subplots ----------------------------------------------------------
+p_map <- ggplot(spo) +
+  geom_sf(fill = "white", color = "white") +
+  theme_subplot()
 
 p_scatter <- ggplot(scatter_data, aes(x, y)) +
-  geom_point(color = "white", size = 0.1) +
-  geom_smooth(se = FALSE, color = "white", linewidth = 0.5) +
-  theme_subplot()
+  geom_point(
+    shape = 21,
+    color = "white",
+    size = sample(c(0.1, 0.2, 0.55, 1.1), size = 25, replace = TRUE)
+  ) +
+  # geom_smooth(se = FALSE, color = "white", linewidth = 0.5) +
+  theme_subplot() +
+  theme(
+    plot.margin = margin(10, 10, 10, 10),
+    plot.background = element_rect(fill = "transparent", color = "white"),
+    panel.background = element_rect(fill = "transparent", color = "white")
+  )
+
+
+# p_scatter <- ggplot(scatter_data, aes(x, y)) +
+#   geom_point(color = "white", size = 0.1) +
+#   geom_smooth(se = FALSE, color = "white", linewidth = 0.5) +
+#   theme_subplot()
 
 p_bar <- ggplot(bar_data, aes(x, y)) +
   geom_col(fill = "white", width = 0.7) +
@@ -81,9 +121,17 @@ p_line <- ggplot(line_data, aes(x, y)) +
   theme_subplot() +
   theme(plot.margin = margin(0, 0, 0, 0))
 
+
+p_scatter +
+  theme(
+    plot.margin = margin(0, 0, 0, 0),
+    plot.background = element_rect(fill = insper_red, color = insper_red),
+    panel.background = element_rect(fill = insper_red, color = insper_red)
+  )
+
 # Combine subplots --------------------------------------------------------
 
-subplot <- (p_bar | p_scatter) /
+subplot <- (p_bar | p_lolli) /
   p_line &
   theme(
     plot.background = element_rect(fill = "transparent", color = NA),
@@ -104,20 +152,20 @@ sticker(
   subplot = subplot,
   # Package name
   package = "insperplot",
-  p_size = 7,
+  p_size = 5,
   p_color = "black",
   p_x = 1,
-  p_y = 0.465,
+  p_y = 1.6,
   p_family = "garamond",
   # Subplot positioning
   s_x = 1,
-  s_y = 1.15,
-  s_width = 1.5,
-  s_height = 1.5 / 1.1,
+  s_y = 0.865,
+  s_width = 1.75,
+  s_height = 1.55 / 1.1,
   # Hex styling
   h_fill = insper_red,
   h_color = "black",
-  h_size = 1,
+  h_size = 0.85,
   # Output
   filename = "man/figures/logo.png",
   dpi = 300,
@@ -125,33 +173,3 @@ sticker(
 )
 
 cli_alert_success("Logo created: {.file man/figures/logo.png}")
-
-# Create small version for README -----------------------------------------
-
-if (file.exists("man/figures/logo.png")) {
-  if (require("magick", quietly = TRUE)) {
-    logo <- magick::image_read("man/figures/logo.png")
-    logo_small <- magick::image_scale(logo, "240x278")
-    magick::image_write(logo_small, "man/figures/logo-small.png")
-    cli_alert_success("Small logo created: {.file man/figures/logo-small.png}")
-  } else {
-    cli_alert_warning("Install {.pkg magick} to generate small logo version")
-    cli_alert_info("Run: {.code install.packages('magick')}")
-  }
-}
-
-# Usage instructions ------------------------------------------------------
-
-cli_rule("Usage")
-cli_bullets(c(
-  "i" = "Add to README: {.code <img src=\"man/figures/logo.png\" align=\"right\" height=\"139\" />}",
-  "i" = "Rebuild site: {.code pkgdown::build_site()}"
-))
-
-cli_rule("Customization")
-cli_bullets(c(
-  "*" = "Colors: Adjust {.code insper_red}, {.code insper_teal}",
-  "*" = "Text: Modify {.code p_size}, {.code p_x}, {.code p_y}",
-  "*" = "Subplot: Change {.code s_x}, {.code s_y}, {.code s_width}, {.code s_height}",
-  "*" = "Border: Update {.code h_color}, {.code h_size}"
-))
