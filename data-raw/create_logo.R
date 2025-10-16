@@ -152,7 +152,7 @@ sticker(
   subplot = subplot,
   # Package name
   package = "insperplot",
-  p_size = 5,
+  p_size = 6,
   p_color = "black",
   p_x = 1,
   p_y = 1.6,
