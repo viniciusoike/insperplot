@@ -27,12 +27,14 @@ Imports:
     rlang (>= 1.0.0),
     scales (>= 1.2.0)
 Suggests:
+    forcats,
     systemfonts,
     ragg,
     showtext,
     sysfonts,
     tidyr,
     testthat (>= 3.0.0),
+    vdiffr (>= 1.0.0),
     knitr,
     rmarkdown
 URL: https://github.com/viniciusreginatto/insperplot

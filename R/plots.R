@@ -97,20 +97,47 @@ insper_barplot <- function(
       scale_fill_insper(palette = palette, ...)
   }
 
-  # Add horizontal line at zero if requested
+  # Detect orientation by checking if x or y is numeric in the data
+  # Capture the expressions once
+  x_quo <- rlang::enquo(x)
+  y_quo <- rlang::enquo(y)
+
+  # Evaluate in the data context
+  x_vals <- rlang::eval_tidy(x_quo, data)
+  y_vals <- rlang::eval_tidy(y_quo, data)
+
+  # Check if numeric (not factor, character, or other discrete types)
+  x_is_numeric <- is.numeric(x_vals) && !is.factor(x_vals)
+  y_is_numeric <- is.numeric(y_vals) && !is.factor(y_vals)
+
+  # Determine if we have horizontal bars (numeric x, categorical y)
+  # If both are numeric or both are categorical, default to vertical (y is value axis)
+  is_horizontal <- x_is_numeric && !y_is_numeric
+
+  # Add line at zero if requested (horizontal or vertical depending on orientation)
   if (zero) {
-    p <- p + ggplot2::geom_hline(yintercept = 0, linewidth = 1)
+    if (is_horizontal) {
+      # Horizontal bars: vertical line at x = 0
+      p <- p + ggplot2::geom_vline(xintercept = 0, linewidth = 1)
+    } else {
+      # Vertical bars: horizontal line at y = 0
+      p <- p + ggplot2::geom_hline(yintercept = 0, linewidth = 1)
+    }
   }
 
   # Add text labels if requested
   if (text) {
+    # Adjust text position based on orientation
+    text_vjust <- if (is_horizontal) 0.5 else -0.5
+    text_hjust <- if (is_horizontal) -0.1 else 0.5
+
     if (!has_fill) {
       # Simple text labels
       p <- p +
         ggplot2::geom_text(
           ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
-          vjust = -0.5,
-          hjust = 0.5,
+          vjust = text_vjust,
+          hjust = text_hjust,
           size = text_size,
           color = text_color
         )
@@ -121,21 +148,32 @@ insper_barplot <- function(
         ggplot2::geom_text(
           ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
           position = ggplot2::position_dodge(width = dodge_width),
-          vjust = -0.5,
-          hjust = 0.5,
+          vjust = text_vjust,
+          hjust = text_hjust,
           size = text_size,
           color = text_color
         )
     }
   }
 
-  # Apply y-axis scale
-  p <- p +
-    ggplot2::scale_y_continuous(
-      expand = ggplot2::expansion(mult = c(0, 0.1)),
-      labels = scales::comma_format()
-    ) +
-    theme_insper()
+  # Apply continuous scale to the numeric axis
+  if (is_horizontal) {
+    # Horizontal bars: scale x-axis
+    p <- p +
+      ggplot2::scale_x_continuous(
+        expand = ggplot2::expansion(mult = c(0, 0.1)),
+        labels = scales::comma_format()
+      )
+  } else {
+    # Vertical bars: scale y-axis
+    p <- p +
+      ggplot2::scale_y_continuous(
+        expand = ggplot2::expansion(mult = c(0, 0.1)),
+        labels = scales::comma_format()
+      )
+  }
+
+  p <- p + theme_insper() + theme(panel.grid.major.x = element_blank())
 
   return(p)
 }

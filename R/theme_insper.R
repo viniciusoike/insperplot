@@ -21,6 +21,11 @@
 #'     \item "half" - Shows axis lines with ticks but no full border
 #'     \item "closed" - Shows a complete rectangular border around the plot area
 #'   }
+#' @param align Character. Alignment of title and caption. Must be one of:
+#'   \itemize{
+#'     \item "panel" - Align to the plot panel area (default)
+#'     \item "plot" - Align to the entire plot area including margins
+#'   }
 #' @param ... Additional arguments passed to \code{theme_minimal()}.
 #'
 #' @return A ggplot2 theme object that can be added to ggplot objects using the
@@ -86,12 +91,22 @@ theme_insper <- function(
   font_text = "Barlow",
   grid = TRUE,
   border = "none",
+  align = "panel",
   ...
 ) {
   # Input validation ----
   # Check that grid parameter is logical (TRUE/FALSE)
   if (!is.logical(grid)) {
     cli::cli_abort("Argument `grid` must be one of `TRUE` or `FALSE`.")
+  }
+
+  # Validate align parameter against allowed values
+  valid_align <- c("panel", "plot")
+  if (!align %in% valid_align) {
+    cli::cli_abort(c(
+      "{.arg align} must be one of {.val panel} or {.val plot}",
+      "x" = "You supplied: {.val {align}}"
+    ))
   }
 
   # Validate border parameter against allowed values
@@ -144,22 +159,30 @@ theme_insper <- function(
       size = rel(1.3), # 30% larger than base size
       family = font_title, # Use title font
       color = insper_col("black"),
-      hjust = 0 # Left-align title
+      hjust = 0, # Left-align title
+      margin = margin(b = 5)
     ),
     plot.subtitle = element_text(
       size = rel(0.8), # 10% smaller than base size
-      family = font_title, # Use title font
+      family = font_text, # Use title font
       color = insper_col("gray_meddark"),
-      hjust = 0 # Left-align subtitle
+      hjust = 0, # Left-align subtitle
+      margin = margin(t = 3, b = 5)
     ),
-
     # Caption styling (bottom right)
-    plot.caption = element_text(size = rel(0.5), color = "gray40", hjust = 0),
+    plot.caption = element_text(
+      size = rel(0.5),
+      color = "gray40",
+      hjust = 0,
+      margin = margin(t = 3)
+    ),
 
     # Facet strip styling
     # strip.background is commented out - uses default
     strip.text = element_text(size = rel(1), face = "bold"),
 
+    plot.title.position = align,
+    plot.caption.position = align,
     # Mark theme as complete (replaces all elements from base theme)
     complete = TRUE
   )

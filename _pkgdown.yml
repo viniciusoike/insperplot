@@ -41,7 +41,13 @@ reference:
   desc: Apply Insper's visual identity to ggplot2 plots
   contents:
   - theme_insper
+  - theme_insper_minimal
+  - theme_insper_presentation
+  - theme_insper_print
+  - import_insper_fonts
+  - setup_insper_fonts
   - check_insper_fonts
+  - use_ragg_device
 
 - title: Colors and Palettes
   desc: Access Insper brand colors and palettes
@@ -49,6 +55,7 @@ reference:
   - insper_col
   - insper_pal
   - show_insper_palette
+  - show_palette_types
   - list_palettes
   - get_insper_colors
 

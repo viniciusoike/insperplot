@@ -13,3 +13,4 @@
 ^\.Rprofile$
 ^claude$
 ^\.claude$
+^tests/small_issues\.R$

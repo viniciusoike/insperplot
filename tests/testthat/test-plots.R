@@ -31,11 +31,32 @@ test_that("insper_barplot handles grouped bars", {
 test_that("insper_barplot works with swapped axes", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(category = c("A", "B"), value = c(1, 2))
-  # Both orientations should work
+
+  # Vertical bars: categorical x, numeric y
   p1 <- insper_barplot(df, x = category, y = value)
-  p2 <- insper_barplot(df, x = value, y = category)
   expect_s3_class(p1, "ggplot")
+
+  # Check for horizontal line at y=0 (vertical bars)
+  has_hline <- any(sapply(p1$layers, function(l) {
+    inherits(l$geom, "GeomHline")
+  }))
+  expect_true(has_hline, "Vertical bars should have horizontal line at y=0")
+
+  # Check for y-axis continuous scale
+  expect_true("ScaleContinuousPosition" %in% class(p1$scales$get_scales("y")))
+
+  # Horizontal bars: numeric x, categorical y
+  p2 <- insper_barplot(df, x = value, y = category)
   expect_s3_class(p2, "ggplot")
+
+  # Check for vertical line at x=0 (horizontal bars)
+  has_vline <- any(sapply(p2$layers, function(l) {
+    inherits(l$geom, "GeomVline")
+  }))
+  expect_true(has_vline, "Horizontal bars should have vertical line at x=0")
+
+  # Check for x-axis continuous scale
+  expect_true("ScaleContinuousPosition" %in% class(p2$scales$get_scales("x")))
 })
 
 test_that("insper_barplot text parameter adds labels", {

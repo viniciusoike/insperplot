@@ -61,3 +61,5 @@ data-raw/*.csv
 dev/
 scratch/
 inst/doc
+
+/.quarto/

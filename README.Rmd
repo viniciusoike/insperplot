@@ -31,8 +31,8 @@ knitr::opts_chunk$set(
 You can install the development version of insperplot from GitHub:
 
 ```{r eval=FALSE}
-# install.packages("pak")
-pak::pak("viniciusreginatto/insperplot")
+# install.packages("remotes")
+remotes::install_github("viniciusoike/insperplot")
 ```
 
 ## Setup (Recommended)

@@ -10,6 +10,7 @@ theme_insper(
   font_text = "Barlow",
   grid = TRUE,
   border = "none",
+  align = "panel",
   ...
 )
 }
@@ -34,6 +35,12 @@ Default is TRUE.}
   \item "none" - No border or axis lines (default)
   \item "half" - Shows axis lines with ticks but no full border
   \item "closed" - Shows a complete rectangular border around the plot area
+}}
+
+\item{align}{Character. Alignment of title and caption. Must be one of:
+\itemize{
+  \item "panel" - Align to the plot panel area (default)
+  \item "plot" - Align to the entire plot area including margins
 }}
 
 \item{...}{Additional arguments passed to \code{theme_minimal()}.}
@@ -100,5 +107,10 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 }
 \seealso{
 \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{import_insper_fonts}}, \code{\link{check_insper_fonts}}
+
+Other themes: 
+\code{\link{theme_insper_minimal}()},
+\code{\link{theme_insper_presentation}()},
+\code{\link{theme_insper_print}()}
 }
 \concept{themes}
