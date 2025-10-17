@@ -65,7 +65,7 @@
 #'   ggplot(aes(x = date, y = value, color = indicator)) +
 #'   geom_line() +
 #'   facet_wrap(~indicator, scales = "free_y") +
-#'   scale_color_insper(palette = "main") +
+#'   scale_color_insper_d(palette = "main") +
 #'   theme_insper()
 #' }
 "macro_series"
@@ -238,7 +238,7 @@
 #' # Passenger entries by station
 #' ggplot(spo_metro, aes(x = date, y = value, color = name_station)) +
 #'   geom_line(alpha = 0.7) +
-#'   scale_color_insper(palette = "qualitative_main") +
+#'   scale_color_insper_d(palette = "main") +
 #'   theme_insper() +
 #'   labs(
 #'     title = "São Paulo Metro Line 4 - Daily Passenger Entries",

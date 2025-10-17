@@ -4,7 +4,7 @@
 \alias{insper_pal}
 \title{Get Insper Color Palette}
 \usage{
-insper_pal(palette = "primary", n = NULL, type = "discrete", reverse = FALSE)
+insper_pal(palette = "main", n = NULL, type = "discrete", reverse = FALSE)
 }
 \arguments{
 \item{palette}{Character string indicating palette name}
@@ -23,10 +23,11 @@ Get Insper Color Palette
 }
 \examples{
 insper_pal("main")
-insper_pal("reds_seq", n = 5)
+insper_pal("reds", n = 5)
+insper_pal("red_teal")
 }
 \seealso{
-\code{\link{insper_col}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper}}, \code{\link{scale_fill_insper}}
+\code{\link{show_insper_colors}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
 
 Other colors: 
 \code{\link{get_insper_colors}()},

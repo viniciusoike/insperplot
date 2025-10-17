@@ -48,27 +48,26 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
       # Main
       "main",
       # Sequential
-      "reds_seq", "oranges_seq", "teals_seq", "grays_seq",
+      "reds", "oranges", "teals", "grays",
       # Diverging
-      "diverging_red_teal", "diverging_red_teal_extended", "diverging_insper",
+      "red_teal", "red_teal_ext", "diverging",
       # Qualitative
-      "qualitative_main", "qualitative_bright", "qualitative_contrast",
-      "categorical", "bright", "contrast", "accent"
+      "bright", "contrast", "categorical", "accent"
     ),
     type = c(
       "qualitative",  # main
       rep("sequential", 4),
       rep("diverging", 3),
-      rep("qualitative", 7)
+      rep("qualitative", 4)
     ),
     n_colors = c(
       6,  # main
       5, 5, 5, 5,  # sequential
       5, 11, 5,  # diverging
-      6, 6, 6, 8, 5, 5, 5  # qualitative
+      6, 6, 8, 5  # qualitative
     ),
     recommended_use = c(
-      "Primary Insper brand colors",
+      "Primary brand colors for categorical data",
       "Intensity scales (light to dark red)",
       "Intensity scales (light to dark orange)",
       "Intensity scales (light to dark teal)",
@@ -76,12 +75,9 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
       "Diverging data (negative/positive, red/teal)",
       "Extended diverging palette (11 colors)",
       "Classic diverging palette (teal/gray/red)",
-      "Main categorical palette (6 distinct colors)",
       "Bright categorical colors (high contrast)",
       "High contrast categorical colors",
       "8-color categorical palette",
-      "Legacy bright palette",
-      "Legacy contrast palette",
       "Accent colors for highlights"
     ),
     stringsAsFactors = FALSE
@@ -126,13 +122,13 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
 #' get_insper_colors()
 #'
 #' # Get colors from a specific palette
-#' get_insper_colors("reds_seq")
+#' get_insper_colors("reds")
 #'
 #' # Get first 3 colors
-#' get_insper_colors("qualitative_main", n = 3)
+#' get_insper_colors("main", n = 3)
 #'
 #' # Reverse palette
-#' get_insper_colors("diverging_red_teal", reverse = TRUE)
+#' get_insper_colors("red_teal", reverse = TRUE)
 get_insper_colors <- function(palette = NULL, n = NULL, show_hex = TRUE, reverse = FALSE) {
 
   if (is.null(palette)) {

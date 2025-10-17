@@ -32,13 +32,13 @@ features for discovery and exploration.
 get_insper_colors()
 
 # Get colors from a specific palette
-get_insper_colors("reds_seq")
+get_insper_colors("reds")
 
 # Get first 3 colors
-get_insper_colors("qualitative_main", n = 3)
+get_insper_colors("main", n = 3)
 
 # Reverse palette
-get_insper_colors("diverging_red_teal", reverse = TRUE)
+get_insper_colors("red_teal", reverse = TRUE)
 }
 \seealso{
 \code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_palette}}

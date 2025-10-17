@@ -1,3 +1,101 @@
+# insperplot 0.9.0
+
+## Breaking Changes
+
+This release completes the API modernization started in v0.8.0, removing all deprecated functions and simplifying palette names for better usability.
+
+### Removed Deprecated Functions
+
+The following deprecated functions have been **removed** (they showed deprecation warnings in v0.8.0):
+
+**Scale functions:**
+- ❌ `scale_color_insper()` - Use `scale_color_insper_d()` or `scale_color_insper_c()` instead
+- ❌ `scale_colour_insper()` - Use `scale_colour_insper_d()` or `scale_colour_insper_c()` instead
+- ❌ `scale_fill_insper()` - Use `scale_fill_insper_d()` or `scale_fill_insper_c()` instead
+
+**Color extraction:**
+- ❌ `insper_col()` - Use `show_insper_colors()` instead
+
+**Migration guide:**
+```r
+# OLD (will now error)
+ggplot(data, aes(x, y, color = group)) +
+  geom_point() +
+  scale_color_insper()
+
+# NEW - for discrete/categorical data
+ggplot(data, aes(x, y, color = group)) +
+  geom_point() +
+  scale_color_insper_d()
+
+# NEW - for continuous data
+ggplot(data, aes(x, y, color = value)) +
+  geom_point() +
+  scale_color_insper_c()
+
+# OLD color extraction (will now error)
+color <- insper_col("reds1")
+
+# NEW
+color <- show_insper_colors("reds1")
+```
+
+### Simplified Palette Names
+
+Palette names have been simplified to be shorter and more intuitive. Old names still work with deprecation warnings (will be removed in v1.0.0):
+
+**Sequential palettes:**
+- `reds_seq` → `reds` ⚠️
+- `oranges_seq` → `oranges` ⚠️
+- `teals_seq` → `teals` ⚠️
+- `grays_seq` → `grays` ⚠️
+
+**Diverging palettes:**
+- `diverging_red_teal` → `red_teal` ⚠️
+- `diverging_red_teal_extended` → `red_teal_ext` ⚠️
+- `diverging_insper` → `diverging` ⚠️
+
+**Qualitative palettes:**
+- `qualitative_main` → `main` ⚠️
+- `qualitative_bright` → `bright` ⚠️
+- `qualitative_contrast` → `contrast` ⚠️
+
+**Migration:**
+```r
+# OLD (still works with warning)
+ggplot(data, aes(x, y, color = value)) +
+  geom_tile() +
+  scale_color_insper_c(palette = "reds_seq")
+
+# NEW
+ggplot(data, aes(x, y, color = value)) +
+  geom_tile() +
+  scale_color_insper_c(palette = "reds")
+
+# List all available palettes
+list_palettes()
+```
+
+### Updated Default Palettes
+
+- `scale_color_insper_c()` and `scale_fill_insper_c()` now default to `"teals"` (was `"teals_seq"`)
+
+## Benefits
+
+- **Simpler API**: Removed 4 deprecated functions, cleaned up palette naming
+- **Less verbose**: `reds` instead of `reds_seq`, `red_teal` instead of `diverging_red_teal`
+- **Clearer intent**: `_d` and `_c` suffixes make discrete vs continuous explicit
+- **Better consistency**: Follows ggplot2 conventions (e.g., `scale_color_viridis_d()`)
+
+## Documentation Updates
+
+- All examples updated to use new function names and palette names
+- All tests updated (19 scale tests, 24 color tests passing)
+- README, vignette, and package documentation fully updated
+- Comprehensive migration guide in NEWS
+
+---
+
 # insperplot 0.8.0
 
 ## Breaking Changes

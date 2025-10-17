@@ -6,15 +6,39 @@
 #' @param reverse Logical indicating whether to reverse palette
 #' @return Vector of hex color codes
 #' @family colors
-#' @seealso \code{\link{insper_col}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper}}, \code{\link{scale_fill_insper}}
+#' @seealso \code{\link{show_insper_colors}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
 #' @export
 #' @examples
 #' insper_pal("main")
-#' insper_pal("reds_seq", n = 5)
-insper_pal <- function(palette = "primary", n = NULL, type = "discrete", reverse = FALSE) {
+#' insper_pal("reds", n = 5)
+#' insper_pal("red_teal")
+insper_pal <- function(palette = "main", n = NULL, type = "discrete", reverse = FALSE) {
 
   if (!palette %in% names(insper_colors)) {
-    stop("Palette not found. Available palettes: ", paste(names(insper_colors), collapse = ", "))
+    cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_colors)}}")
+  }
+
+  # Deprecation warnings for old palette names
+  deprecated_palettes <- c(
+    "reds_seq" = "reds",
+    "oranges_seq" = "oranges",
+    "teals_seq" = "teals",
+    "grays_seq" = "grays",
+    "diverging_red_teal" = "red_teal",
+    "diverging_red_teal_extended" = "red_teal_ext",
+    "diverging_insper" = "diverging",
+    "qualitative_main" = "main",
+    "qualitative_bright" = "bright",
+    "qualitative_contrast" = "contrast"
+  )
+
+  if (palette %in% names(deprecated_palettes)) {
+    new_name <- deprecated_palettes[[palette]]
+    cli::cli_warn(c(
+      "!" = "Palette name {.val {palette}} is deprecated.",
+      "i" = "Use {.val {new_name}} instead.",
+      "i" = "Old names will be removed in v1.0.0"
+    ))
   }
 
   pal <- insper_colors[[palette]]
@@ -27,7 +51,7 @@ insper_pal <- function(palette = "primary", n = NULL, type = "discrete", reverse
 
   if (type == "discrete") {
     if (n > length(pal)) {
-      warning("Not enough colors in palette. Recycling colors.")
+      cli::cli_warn("Not enough colors in palette. Recycling colors.")
       pal <- rep(pal, length.out = n)
     } else {
       pal <- pal[1:n]

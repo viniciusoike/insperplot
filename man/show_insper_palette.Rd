@@ -7,7 +7,7 @@
 show_insper_palette(palette = "all")
 }
 \arguments{
-\item{palette}{Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals")}
+\item{palette}{Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals", "main")}
 }
 \value{
 A ggplot2 object showing the color palette
@@ -18,9 +18,10 @@ Display the Insper color palette visually
 \examples{
 show_insper_palette()
 show_insper_palette("reds")
+show_insper_palette("main")
 }
 \seealso{
-\code{\link{insper_col}}, \code{\link{insper_pal}}
+\code{\link{show_insper_colors}}, \code{\link{insper_pal}}
 
 Other colors: 
 \code{\link{get_insper_colors}()},

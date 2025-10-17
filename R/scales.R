@@ -51,8 +51,8 @@ scale_fill_insper_d <- function(palette = "main", reverse = FALSE, ...) {
 #' library(ggplot2)
 #' ggplot(mtcars, aes(x = wt, y = mpg, color = hp)) +
 #'   geom_point() +
-#'   scale_color_insper_c(palette = "teals_seq")
-scale_color_insper_c <- function(palette = "teals_seq", reverse = FALSE, ...) {
+#'   scale_color_insper_c(palette = "teals")
+scale_color_insper_c <- function(palette = "teals", reverse = FALSE, ...) {
   ggplot2::scale_color_gradientn(
     colours = insper_pal(palette, type = "continuous", reverse = reverse),
     ...
@@ -66,57 +66,9 @@ scale_colour_insper_c <- scale_color_insper_c
 #' @rdname scale_color_insper_c
 #' @importFrom ggplot2 scale_fill_gradientn
 #' @export
-scale_fill_insper_c <- function(palette = "teals_seq", reverse = FALSE, ...) {
+scale_fill_insper_c <- function(palette = "teals", reverse = FALSE, ...) {
   ggplot2::scale_fill_gradientn(
     colours = insper_pal(palette, type = "continuous", reverse = reverse),
     ...
   )
-}
-
-
-#' Insper Color Scales (Deprecated)
-#'
-#' These functions are deprecated. Please use:
-#' \itemize{
-#'   \item \code{\link{scale_color_insper_d}} for discrete scales
-#'   \item \code{\link{scale_color_insper_c}} for continuous scales
-#' }
-#'
-#' @param palette Character string indicating palette name
-#' @param discrete Logical indicating whether to use discrete scale
-#' @param reverse Logical indicating whether to reverse palette
-#' @param ... Additional arguments passed to ggplot2 scale functions
-#' @return ggplot2 scale object
-#' @keywords internal
-#' @export
-scale_color_insper <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
-  .Deprecated(
-    new = "scale_color_insper_d() or scale_color_insper_c()",
-    msg = "scale_color_insper() is deprecated. Use scale_color_insper_d() for discrete scales or scale_color_insper_c() for continuous scales."
-  )
-
-  if (discrete) {
-    scale_color_insper_d(palette = palette, reverse = reverse, ...)
-  } else {
-    scale_color_insper_c(palette = palette, reverse = reverse, ...)
-  }
-}
-
-#' @rdname scale_color_insper
-#' @export
-scale_colour_insper <- scale_color_insper
-
-#' @rdname scale_color_insper
-#' @export
-scale_fill_insper <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
-  .Deprecated(
-    new = "scale_fill_insper_d() or scale_fill_insper_c()",
-    msg = "scale_fill_insper() is deprecated. Use scale_fill_insper_d() for discrete scales or scale_fill_insper_c() for continuous scales."
-  )
-
-  if (discrete) {
-    scale_fill_insper_d(palette = palette, reverse = reverse, ...)
-  } else {
-    scale_fill_insper_c(palette = palette, reverse = reverse, ...)
-  }
 }

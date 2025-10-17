@@ -108,7 +108,7 @@ ggplot(metro |> filter(name_station == "Paulista"),
 # With theme_insper()
 ggplot(metro |> filter(name_station == "Paulista"),
        aes(x = date, y = value)) +
-  geom_line(color = insper_col("teals1"), linewidth = 1.2) +
+  geom_line(color = show_insper_colors("teals1"), linewidth = 1.2) +
   theme_insper() +
   labs(
     title = "Estação Paulista - Linha 4",
@@ -124,17 +124,17 @@ Notice the clean typography, subtle grid, and professional appearance!
 
 ### Extracting Colors
 
-Use `insper_col()` to access Insper's brand colors:
+Use `show_insper_colors()` to access Insper's brand colors:
 
 ```{r colors}
 # Get primary Insper red
-insper_col("reds1")
+show_insper_colors("reds1")
 
 # Get multiple colors
-insper_col("reds1", "teals1", "oranges1")
+show_insper_colors("reds1", "teals1", "oranges1")
 
 # View all available colors
-head(insper_col(), 10)
+head(show_insper_colors(), 10)
 ```
 
 ### Visualizing Palettes
@@ -144,8 +144,8 @@ head(insper_col(), 10)
 show_insper_palette()
 
 # Show specific color families
-show_insper_palette("reds_seq")
-show_insper_palette("teals_seq")
+show_insper_palette("reds")
+show_insper_palette("teals")
 ```
 
 ### Discovering Palettes
@@ -155,7 +155,7 @@ show_insper_palette("teals_seq")
 list_palettes()
 
 # Interactive palette explorer
-get_insper_colors("qualitative_main")
+get_insper_colors("main")
 ```
 
 ## Plot Gallery: All 8 Functions
@@ -375,7 +375,7 @@ library(scales)
 # For axis labels in plots
 ggplot(metro |> filter(name_station == "Paulista"),
        aes(x = date, y = value)) +
-  geom_line(color = insper_col("teals1"), linewidth = 1.2) +
+  geom_line(color = show_insper_colors("teals1"), linewidth = 1.2) +
   scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",")) +
   theme_insper() +
   labs(
@@ -436,7 +436,7 @@ For more advanced usage and customization options, see the function documentatio
 ```{r help, eval=FALSE}
 ?theme_insper
 ?insper_timeseries
-?scale_color_insper
+?scale_color_insper_d
 ?list_palettes
 ```
 

@@ -9,7 +9,7 @@ insper_heatmap(
   show_values = TRUE,
   value_color = "white",
   value_size = 3,
-  palette = "diverging_insper"
+  palette = "diverging"
 )
 }
 \arguments{
@@ -22,7 +22,7 @@ correlation matrix}
 
 \item{value_size}{Numeric. Size of value text. Default is 3}
 
-\item{palette}{Character. Palette name for fill scale. Default is "diverging_insper"}
+\item{palette}{Character. Palette name for fill scale. Default is "diverging"}
 }
 \value{
 A ggplot2 object
@@ -41,7 +41,7 @@ insper_heatmap(cor_mat)
 insper_heatmap(cor_mat, show_values = FALSE)
 
 # Custom palette
-insper_heatmap(cor_mat, palette = "diverging_red_teal")
+insper_heatmap(cor_mat, palette = "red_teal")
 
 # From melted data frame
 melted <- data.frame(

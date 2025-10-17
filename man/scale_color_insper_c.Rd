@@ -6,11 +6,11 @@
 \alias{scale_fill_insper_c}
 \title{Insper Continuous Color Scale for ggplot2}
 \usage{
-scale_color_insper_c(palette = "teals_seq", reverse = FALSE, ...)
+scale_color_insper_c(palette = "teals", reverse = FALSE, ...)
 
-scale_colour_insper_c(palette = "teals_seq", reverse = FALSE, ...)
+scale_colour_insper_c(palette = "teals", reverse = FALSE, ...)
 
-scale_fill_insper_c(palette = "teals_seq", reverse = FALSE, ...)
+scale_fill_insper_c(palette = "teals", reverse = FALSE, ...)
 }
 \arguments{
 \item{palette}{Character string indicating palette name}
@@ -29,7 +29,7 @@ Insper Continuous Color Scale for ggplot2
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg, color = hp)) +
   geom_point() +
-  scale_color_insper_c(palette = "teals_seq")
+  scale_color_insper_c(palette = "teals")
 }
 \seealso{
 \code{\link{insper_pal}}, \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}

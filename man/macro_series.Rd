@@ -75,7 +75,7 @@ macro_series |>
   ggplot(aes(x = date, y = value, color = indicator)) +
   geom_line() +
   facet_wrap(~indicator, scales = "free_y") +
-  scale_color_insper(palette = "main") +
+  scale_color_insper_d(palette = "main") +
   theme_insper()
 }
 }

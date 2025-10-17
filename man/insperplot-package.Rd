@@ -29,15 +29,15 @@ Pesquisa.
 
 **Colors:**
 \itemize{
-  \item \code{\link{insper_col}} - Extract Insper brand colors
+  \item \code{\link{show_insper_colors}} - Extract Insper brand colors
   \item \code{\link{insper_pal}} - Get color palettes
   \item \code{\link{show_insper_palette}} - Visualize color palettes
 }
 
 **Scales:**
 \itemize{
-  \item \code{\link{scale_color_insper}} - Insper color scales for ggplot2
-  \item \code{\link{scale_fill_insper}} - Insper fill scales for ggplot2
+  \item \code{\link{scale_color_insper_d}} / \code{\link{scale_fill_insper_d}} - Discrete color scales
+  \item \code{\link{scale_color_insper_c}} / \code{\link{scale_fill_insper_c}} - Continuous color scales
 }
 
 **Plot Functions:**
@@ -63,10 +63,10 @@ Pesquisa.
 The package includes several pre-defined palettes:
 \itemize{
   \item **main** - Primary Insper colors
-  \item **reds_seq, oranges_seq, teals_seq, grays_seq** - Sequential single-color gradients
-  \item **diverging_insper, diverging_red_teal** - Diverging palettes for data with a meaningful center
-  \item **qualitative_main, qualitative_bright, qualitative_contrast** - Qualitative palettes for categorical data
-  \item **categorical** - 8-color palette for multi-category data
+  \item **reds, oranges, teals, grays** - Sequential single-color gradients
+  \item **diverging, red_teal, red_teal_ext** - Diverging palettes for data with a meaningful center
+  \item **bright, contrast** - Qualitative palettes for categorical data
+  \item **categorical, accent** - Additional color options
 }
 
 Use \code{\link{list_palettes}()} to see all available palettes with detailed information.
@@ -87,7 +87,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 # Use Insper color palettes
 ggplot(mtcars, aes(x = factor(cyl), fill = factor(cyl))) +
   geom_bar() +
-  scale_fill_insper(palette = "reds_seq") +
+  scale_fill_insper_d(palette = "reds") +
   theme_insper()
 }
 }

@@ -477,7 +477,7 @@ insper_boxplot <- function(
 #' @param show_values Logical. If TRUE, displays values on tiles. Default is TRUE
 #' @param value_color Character. Color for value text. Default is "white"
 #' @param value_size Numeric. Size of value text. Default is 3
-#' @param palette Character. Palette name for fill scale. Default is "diverging_insper"
+#' @param palette Character. Palette name for fill scale. Default is "diverging"
 #' @return A ggplot2 object
 #'
 #' @examples
@@ -490,7 +490,7 @@ insper_boxplot <- function(
 #' insper_heatmap(cor_mat, show_values = FALSE)
 #'
 #' # Custom palette
-#' insper_heatmap(cor_mat, palette = "diverging_red_teal")
+#' insper_heatmap(cor_mat, palette = "red_teal")
 #'
 #' # From melted data frame
 #' melted <- data.frame(
@@ -509,7 +509,7 @@ insper_heatmap <- function(
   show_values = TRUE,
   value_color = "white",
   value_size = 3,
-  palette = "diverging_insper"
+  palette = "diverging"
 ) {
   # Input validation with cli
   if (!is.data.frame(data) && !is.matrix(data)) {

@@ -63,56 +63,43 @@ show_insper_colors <- function(...) {
 }
 
 
-#' Extract Insper Colors (Deprecated)
-#'
-#' This function has been renamed to \code{\link{show_insper_colors}} for clarity.
-#'
-#' @param ... Character names of colors. If none provided, returns all colors.
-#' @return Named character vector of hex codes
-#' @keywords internal
-#' @export
-insper_col <- function(...) {
-  .Deprecated(
-    new = "show_insper_colors()",
-    msg = "insper_col() is deprecated and will be removed in a future version. Please use show_insper_colors() instead."
-  )
-  show_insper_colors(...)
-}
-
-
 #' Show Insper Color Palette
 #'
 #' Display the Insper color palette visually
 #'
-#' @param palette Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals")
+#' @param palette Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals", "main")
 #' @return A ggplot2 object showing the color palette
 #' @family colors
-#' @seealso \code{\link{insper_col}}, \code{\link{insper_pal}}
+#' @seealso \code{\link{show_insper_colors}}, \code{\link{insper_pal}}
 #' @export
 #' @examples
 #' show_insper_palette()
 #' show_insper_palette("reds")
+#' show_insper_palette("main")
 show_insper_palette <- function(palette = "all") {
   cols <- show_insper_colors()
 
   if (palette != "all") {
-    # Support both old color group names and new palette names
+    # Support color group names and palette names
     pattern <- switch(
       palette,
       "grays" = "gray",
-      "grays_seq" = "gray",
+      "grays_seq" = "gray",  # backwards compat
       "reds" = "red",
-      "reds_seq" = "red",
+      "reds_seq" = "red",  # backwards compat
       "oranges" = "orange",
-      "oranges_seq" = "orange",
+      "oranges_seq" = "orange",  # backwards compat
       "magentas" = "magenta",
       "teals" = "teal",
-      "teals_seq" = "teal",
-      "qualitative_main" = "^(reds1|oranges1|teals1|gray_meddark)",
-      "qualitative_bright" = "^(reds1|oranges1|teals1|magentas)",
-      "qualitative_contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)",
+      "teals_seq" = "teal",  # backwards compat
+      "main" = "^(reds1|oranges1|teals1|gray_meddark)",
+      "qualitative_main" = "^(reds1|oranges1|teals1|gray_meddark)",  # backwards compat
+      "bright" = "^(reds1|oranges1|teals1|magentas)",
+      "qualitative_bright" = "^(reds1|oranges1|teals1|magentas)",  # backwards compat
+      "contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)",
+      "qualitative_contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)",  # backwards compat
       stop(
-        "Invalid palette. Choose: all, grays, reds, oranges, magentas, teals, or palette names like reds_seq, qualitative_main, etc."
+        "Invalid palette. Choose: all, grays, reds, oranges, magentas, teals, main, bright, or contrast."
       )
     )
     cols <- cols[grepl(pattern, names(cols))]
