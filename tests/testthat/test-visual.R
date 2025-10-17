@@ -4,6 +4,10 @@
 # Skip tests if vdiffr is not available
 skip_if_not_installed("vdiffr")
 
+# Skip all visual tests if Insper fonts are not available
+# Visual tests require fonts for consistent rendering across systems
+skip_if_no_fonts()
+
 library(ggplot2)
 
 # Test data

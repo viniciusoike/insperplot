@@ -52,7 +52,7 @@ reference:
 - title: Colors and Palettes
   desc: Access Insper brand colors and palettes
   contents:
-  - insper_col
+  - show_insper_colors
   - insper_pal
   - show_insper_palette
   - show_palette_types
@@ -75,6 +75,8 @@ reference:
   - insper_boxplot
   - insper_violin
   - insper_heatmap
+  - insper_histogram
+  - insper_density
 
 - title: Utilities
   desc: Helper functions for formatting and saving plots
