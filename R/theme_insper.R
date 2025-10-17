@@ -37,7 +37,7 @@
 #'   \item Off-white background color for both plot and panel
 #'   \item Horizontal legend positioned at the top
 #'   \item Bold legend titles
-#'   \item Custom color scheme using insper_col() function
+#'   \item Custom color scheme using show_insper_colors() function
 #'   \item Consistent spacing and typography hierarchy
 #' }
 #'
@@ -130,12 +130,12 @@ theme_insper <- function(
 
     # Background colors using Insper's off-white
     plot.background = element_rect(
-      fill = insper_col("off_white"),
-      color = insper_col("off_white")
+      fill = show_insper_colors("off_white"),
+      color = show_insper_colors("off_white")
     ),
     panel.background = element_rect(
-      fill = insper_col("off_white"),
-      color = insper_col("off_white")
+      fill = show_insper_colors("off_white"),
+      color = show_insper_colors("off_white")
     ),
 
     # Remove minor grid lines (always off)
@@ -152,20 +152,20 @@ theme_insper <- function(
     # Axis styling
     # Note: axis.ticks are commented out in base theme, applied conditionally based on border
     axis.text = element_text(size = rel(0.8), color = "gray10"),
-    axis.title = element_text(size = rel(1), color = insper_col("black")),
+    axis.title = element_text(size = rel(1), color = show_insper_colors("black")),
 
     # Title and subtitle styling
     plot.title = element_text(
       size = rel(1.3), # 30% larger than base size
       family = font_title, # Use title font
-      color = insper_col("black"),
+      color = show_insper_colors("black"),
       hjust = 0, # Left-align title
       margin = margin(b = 5)
     ),
     plot.subtitle = element_text(
       size = rel(0.8), # 10% smaller than base size
       family = font_text, # Use title font
-      color = insper_col("gray_meddark"),
+      color = show_insper_colors("gray_meddark"),
       hjust = 0, # Left-align subtitle
       margin = margin(t = 3, b = 5)
     ),
@@ -194,7 +194,7 @@ theme_insper <- function(
       theme(
         panel.grid.major = element_line(
           linewidth = 0.35, # Thin lines
-          color = insper_col("gray_light") # Light gray color
+          color = show_insper_colors("gray_light") # Light gray color
         )
       )
   } else {
@@ -208,7 +208,7 @@ theme_insper <- function(
     theme_base <- theme_base +
       theme(
         axis.line = element_line(), # Add axis lines
-        axis.ticks = element_line(color = insper_col("gray_dark")),
+        axis.ticks = element_line(color = show_insper_colors("gray_dark")),
         axis.ticks.length = unit(7, "pt") # 7 point tick length
       )
   }
@@ -217,8 +217,8 @@ theme_insper <- function(
     # Show complete rectangular border around plot area
     theme_base <- theme_base +
       theme(
-        panel.border = element_rect(color = insper_col("black"), fill = NA),
-        axis.ticks = element_line(color = insper_col("gray_dark")),
+        panel.border = element_rect(color = show_insper_colors("black"), fill = NA),
+        axis.ticks = element_line(color = show_insper_colors("gray_dark")),
         axis.ticks.length = unit(7, "pt") # 7 point tick length
       )
   }

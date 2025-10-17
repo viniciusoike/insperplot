@@ -19,7 +19,7 @@
 #' @param text_size Numeric. Size of text labels. Default is 4
 #' @param text_color Character. Color of text labels. Default is "black"
 #' @param label_formatter Function. Formatter for text labels. Default is scales::comma
-#' @param ... Additional arguments passed to scale_fill_insper()
+#' @param ... Additional arguments passed to scale_fill_insper_d()
 #'
 #' @return A ggplot2 object
 #'
@@ -40,12 +40,12 @@
 #'
 #' # Custom color and label formatting
 #' insper_barplot(mtcars, x = cyl, y = mpg,
-#'                single_color = insper_col("teals1"),
+#'                single_color = show_insper_colors("teals1"),
 #'                label_formatter = format_num_br)
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 #' @importFrom ggplot2 aes geom_col
 #' @export
 insper_barplot <- function(
@@ -53,7 +53,7 @@ insper_barplot <- function(
   x,
   y,
   fill_var = NULL,
-  single_color = insper_col("reds1"),
+  single_color = show_insper_colors("reds1"),
   position = "dodge",
   zero = TRUE,
   text = FALSE,
@@ -94,7 +94,7 @@ insper_barplot <- function(
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill_var }})
     ) +
       ggplot2::geom_col(position = position) +
-      scale_fill_insper(palette = palette, ...)
+      scale_fill_insper_d(palette = palette, ...)
   }
 
   # Detect orientation by checking if x or y is numeric in the data
@@ -187,10 +187,12 @@ insper_barplot <- function(
 #' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis
 #' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis
 #' @param color <[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)
-#' @param add_smooth Logical. If TRUE, adds a regression line. Default is TRUE
+#' @param add_smooth Logical. If TRUE, adds a regression line. Default is FALSE
 #' @param smooth_method Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"
 #' @param point_size Numeric. Size of points. Default is 2
-#' @param point_alpha Numeric. Transparency of points (0-1). Default is 0.7
+#' @param point_alpha Numeric. Transparency of points (0-1). Default is 1
+#' @param ... Additional arguments passed to \code{ggplot2::geom_point()},
+#'   allowing custom aesthetics like shape, stroke, etc.
 #' @return A ggplot2 object
 #'
 #' @examples
@@ -201,25 +203,34 @@ insper_barplot <- function(
 #' # Colored by variable
 #' insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
 #'
-#' # Without smooth line
-#' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = FALSE)
+#' # With smooth line
+#' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE)
 #'
 #' # With loess smoothing
-#' insper_scatterplot(mtcars, x = wt, y = mpg, smooth_method = "loess")
+#' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "loess")
+#'
+#' # Custom point shape
+#' insper_scatterplot(mtcars, x = wt, y = mpg, shape = 17)
+#'
+#' # Using shape 21 with both color and fill
+#' insper_scatterplot(mtcars, x = wt, y = mpg,
+#'                    color = factor(cyl),
+#'                    shape = 21, stroke = 1.5)
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 #' @export
 insper_scatterplot <- function(
   data,
   x,
   y,
   color = NULL,
-  add_smooth = TRUE,
+  add_smooth = FALSE,
   smooth_method = "lm",
   point_size = 2,
-  point_alpha = 0.7
+  point_alpha = 1,
+  ...
 ) {
   # Input validation with cli
   if (!is.data.frame(data)) {
@@ -243,17 +254,18 @@ insper_scatterplot <- function(
   if (!has_color) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_point(
-        color = insper_col("teals1"),
+        color = show_insper_colors("teals1"),
         size = point_size,
-        alpha = point_alpha
+        alpha = point_alpha,
+        ...
       )
   } else {
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, y = {{ y }}, color = {{ color }})
     ) +
-      ggplot2::geom_point(size = point_size, alpha = point_alpha) +
-      scale_color_insper()
+      ggplot2::geom_point(size = point_size, alpha = point_alpha, ...) +
+      scale_color_insper_d()
   }
 
   # Add smooth line if requested
@@ -261,8 +273,8 @@ insper_scatterplot <- function(
     p <- p +
       ggplot2::geom_smooth(
         method = smooth_method,
-        color = insper_col("oranges1"),
-        fill = insper_col("oranges1"),
+        color = show_insper_colors("oranges1"),
+        fill = show_insper_colors("oranges1"),
         alpha = 0.2
       )
   }
@@ -305,7 +317,7 @@ insper_scatterplot <- function(
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 #' @export
 insper_timeseries <- function(
   data,
@@ -329,10 +341,10 @@ insper_timeseries <- function(
   # Initialize plot
   if (!has_group) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_line(color = insper_col("teals1"), linewidth = line_width)
+      ggplot2::geom_line(color = show_insper_colors("teals1"), linewidth = line_width)
 
     if (add_points) {
-      p <- p + ggplot2::geom_point(color = insper_col("teals1"), size = 1)
+      p <- p + ggplot2::geom_point(color = show_insper_colors("teals1"), size = 1)
     }
   } else {
     p <- ggplot2::ggplot(
@@ -340,7 +352,7 @@ insper_timeseries <- function(
       ggplot2::aes(x = {{ x }}, y = {{ y }}, color = {{ group }})
     ) +
       ggplot2::geom_line(linewidth = line_width) +
-      scale_color_insper()
+      scale_color_insper_d()
 
     if (add_points) {
       p <- p + ggplot2::geom_point(size = 1)
@@ -365,9 +377,10 @@ insper_timeseries <- function(
 #' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
 #' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
 #' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
-#' @param add_jitter Logical. If TRUE, adds jittered points. Default is TRUE
+#' @param add_jitter Logical. If TRUE, adds jittered points. If NULL (default),
+#'   automatically enables jitter when the largest group has <100 observations.
 #' @param add_notch Logical. If TRUE, creates notched boxplot. Default is FALSE
-#' @param box_alpha Numeric. Transparency of boxes (0-1). Default is 0.7
+#' @param box_alpha Numeric. Transparency of boxes (0-1). Default is 0.8
 #' @return A ggplot2 object
 #'
 #' @examples
@@ -387,14 +400,14 @@ insper_timeseries <- function(
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 #' @export
 insper_boxplot <- function(
   data,
   x,
   y,
   fill = NULL,
-  add_jitter = TRUE,
+  add_jitter = NULL,
   add_notch = FALSE,
   box_alpha = 0.8
 ) {
@@ -409,11 +422,24 @@ insper_boxplot <- function(
   # Check if fill was provided using rlang
   has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
 
+  # Smart default for add_jitter: enable only if <100 obs per group
+  if (is.null(add_jitter)) {
+    x_quo <- rlang::enquo(x)
+    x_vals <- rlang::eval_tidy(x_quo, data)
+
+    # Count observations per group
+    group_counts <- table(x_vals)
+    max_group_size <- max(group_counts)
+
+    # Auto-enable jitter if all groups have <100 observations
+    add_jitter <- max_group_size < 100
+  }
+
   # Initialize plot
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_boxplot(
-        fill = insper_col("teals2"),
+        fill = show_insper_colors("teals2"),
         alpha = box_alpha,
         notch = add_notch
       )
@@ -423,7 +449,7 @@ insper_boxplot <- function(
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
       ggplot2::geom_boxplot(alpha = box_alpha, notch = add_notch) +
-      scale_fill_insper()
+      scale_fill_insper_d()
   }
 
   # Add jittered points if requested
@@ -432,7 +458,7 @@ insper_boxplot <- function(
       ggplot2::geom_jitter(
         width = 0.2,
         alpha = 0.5,
-        color = insper_col("gray_med")
+        color = show_insper_colors("gray_med")
       )
   }
 
@@ -476,7 +502,7 @@ insper_boxplot <- function(
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 #' @export
 insper_heatmap <- function(
   data,
@@ -524,7 +550,7 @@ insper_heatmap <- function(
     ggplot2::aes(x = Var1, y = Var2, fill = value)
   ) +
     ggplot2::geom_tile(color = "white", linewidth = 0.5) +
-    scale_fill_insper(palette = palette, discrete = FALSE) +
+    scale_fill_insper_c(palette = palette) +
     theme_insper() +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
@@ -577,7 +603,7 @@ insper_heatmap <- function(
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 #' @export
 insper_lollipop <- function(
   data,
@@ -610,11 +636,11 @@ insper_lollipop <- function(
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_segment(
         ggplot2::aes(xend = {{ x }}, yend = 0),
-        color = insper_col("teals1"),
+        color = show_insper_colors("teals1"),
         linewidth = line_width
       ) +
       ggplot2::geom_point(
-        color = insper_col("reds1"),
+        color = show_insper_colors("reds1"),
         size = point_size
       )
   } else {
@@ -627,7 +653,7 @@ insper_lollipop <- function(
         linewidth = line_width
       ) +
       ggplot2::geom_point(size = point_size) +
-      scale_color_insper()
+      scale_color_insper_d()
   }
 
   p <- p + theme_insper()
@@ -669,7 +695,7 @@ insper_lollipop <- function(
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}, \code{\link{insper_timeseries}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}, \code{\link{insper_timeseries}}
 #' @export
 insper_area <- function(
   data,
@@ -697,10 +723,10 @@ insper_area <- function(
   # Initialize plot
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_area(fill = insper_col("teals1"), alpha = area_alpha)
+      ggplot2::geom_area(fill = show_insper_colors("teals1"), alpha = area_alpha)
 
     if (add_line) {
-      p <- p + ggplot2::geom_line(color = insper_col("teals3"), linewidth = 1)
+      p <- p + ggplot2::geom_line(color = show_insper_colors("teals3"), linewidth = 1)
     }
   } else {
     p <- ggplot2::ggplot(
@@ -708,7 +734,7 @@ insper_area <- function(
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
       ggplot2::geom_area(alpha = area_alpha, position = position) +
-      scale_fill_insper()
+      scale_fill_insper_d()
 
     if (add_line) {
       p <- p +
@@ -717,7 +743,7 @@ insper_area <- function(
           linewidth = 0.8,
           position = position
         ) +
-        scale_color_insper()
+        scale_color_insper_d()
     }
   }
 
@@ -739,7 +765,7 @@ insper_area <- function(
 #' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
 #' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
 #' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
-#' @param show_boxplot Logical. If TRUE, overlays a boxplot. Default is TRUE
+#' @param show_boxplot Logical. If TRUE, overlays a boxplot. Default is FALSE
 #' @param show_points Logical. If TRUE, adds jittered points. Default is FALSE
 #' @param violin_alpha Numeric. Transparency of violins (0-1). Default is 0.7
 #' @return A ggplot2 object
@@ -759,14 +785,14 @@ insper_area <- function(
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper}}, \code{\link{insper_boxplot}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}, \code{\link{insper_boxplot}}
 #' @export
 insper_violin <- function(
   data,
   x,
   y,
   fill = NULL,
-  show_boxplot = TRUE,
+  show_boxplot = FALSE,
   show_points = FALSE,
   violin_alpha = 0.7
 ) {
@@ -784,14 +810,14 @@ insper_violin <- function(
   # Initialize plot
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_violin(fill = insper_col("teals2"), alpha = violin_alpha)
+      ggplot2::geom_violin(fill = show_insper_colors("teals2"), alpha = violin_alpha)
   } else {
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
       ggplot2::geom_violin(alpha = violin_alpha) +
-      scale_fill_insper()
+      scale_fill_insper_d()
   }
 
   # Add boxplot if requested
@@ -805,11 +831,226 @@ insper_violin <- function(
       ggplot2::geom_jitter(
         width = 0.1,
         alpha = 0.5,
-        color = insper_col("gray_med")
+        color = show_insper_colors("gray_med")
       )
   }
 
   p <- p + theme_insper()
+
+  return(p)
+}
+
+
+#' Insper Histogram
+#'
+#' Create histograms with formal bin selection methods using Insper's visual identity.
+#' Implements Sturges, Freedman-Diaconis, and Scott algorithms for optimal bin width.
+#'
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (numeric)
+#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param bins Numeric. Number of bins. Only used when bin_method = "manual"
+#' @param bin_method Character. Bin selection method: "sturges", "fd" (Freedman-Diaconis),
+#'   "scott", or "manual". Default is "sturges"
+#' @param fill_color Character. Hex color for bars when not using fill aesthetic.
+#'   Default is Insper red.
+#' @param border_color Character. Color for bar borders. Default is "white"
+#' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE
+#' @return A ggplot2 object
+#'
+#' @details
+#' Bin selection methods:
+#' \itemize{
+#'   \item **Sturges**: \eqn{k = \lceil \log_2(n) + 1 \rceil}. Works well for normal distributions.
+#'   \item **Freedman-Diaconis**: Uses IQR to determine bin width. Robust to outliers.
+#'   \item **Scott**: Uses standard deviation. Optimal for normal distributions.
+#'   \item **Manual**: Specify exact number of bins with the `bins` parameter.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Simple histogram with Sturges method
+#' insper_histogram(mtcars, x = mpg)
+#'
+#' # Using Freedman-Diaconis method
+#' insper_histogram(mtcars, x = mpg, bin_method = "fd")
+#'
+#' # Manual bin specification
+#' insper_histogram(mtcars, x = mpg, bin_method = "manual", bins = 15)
+#'
+#' # Grouped histogram
+#' insper_histogram(mtcars, x = mpg, fill = factor(cyl))
+#' }
+#'
+#' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{insper_density}}
+#' @importFrom grDevices nclass.Sturges nclass.FD nclass.scott
+#' @export
+insper_histogram <- function(
+  data,
+  x,
+  fill = NULL,
+  bins = NULL,
+  bin_method = c("sturges", "fd", "scott", "manual"),
+  fill_color = show_insper_colors("reds1"),
+  border_color = "white",
+  zero = TRUE
+) {
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
+
+  bin_method <- match.arg(bin_method)
+
+  if (bin_method == "manual" && is.null(bins)) {
+    cli::cli_abort(c(
+      "{.arg bins} must be specified when bin_method = 'manual'",
+      "i" = "Set a number of bins, e.g., bins = 30"
+    ))
+  }
+
+  # Check if fill was provided using rlang
+  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+
+  # Extract x values for bin calculation
+  x_quo <- rlang::enquo(x)
+  x_vals <- rlang::eval_tidy(x_quo, data)
+
+  # Calculate number of bins based on method
+  if (bin_method == "sturges") {
+    n_bins <- nclass.Sturges(x_vals)
+  } else if (bin_method == "fd") {
+    n_bins <- nclass.FD(x_vals)
+  } else if (bin_method == "scott") {
+    n_bins <- nclass.scott(x_vals)
+  } else {  # manual
+    n_bins <- bins
+  }
+
+  # Initialize plot
+  if (!has_fill) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }})) +
+      ggplot2::geom_histogram(
+        fill = fill_color,
+        color = border_color,
+        bins = n_bins
+      )
+  } else {
+    p <- ggplot2::ggplot(
+      data,
+      ggplot2::aes(x = {{ x }}, fill = {{ fill }})
+    ) +
+      ggplot2::geom_histogram(
+        color = border_color,
+        bins = n_bins,
+        position = "identity",
+        alpha = 0.7
+      ) +
+      scale_fill_insper_d()
+  }
+
+  # Add line at zero if requested
+  if (zero) {
+    p <- p + ggplot2::geom_hline(yintercept = 0, linewidth = 1)
+  }
+
+  # Apply theme and scale
+  p <- p +
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05))) +
+    theme_insper()
+
+  return(p)
+}
+
+
+#' Insper Density Plot
+#'
+#' Create density plots to visualize distributions using Insper's visual identity.
+#' Supports grouped densities with automatic color assignment.
+#'
+#' @param data A data frame containing the data to plot
+#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (numeric)
+#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill/group aesthetic (optional)
+#' @param fill_color Character. Hex color for density area when not using fill aesthetic.
+#'   Default is Insper teal.
+#' @param line_color Character. Color for density line. Default is darker teal.
+#' @param alpha Numeric. Transparency of density area (0-1). Default is 0.6
+#' @param bandwidth Numeric. Bandwidth for density estimation. Default is NULL (automatic).
+#' @param adjust Numeric. Adjustment multiplier for bandwidth. Default is 1.
+#' @param kernel Character. Kernel for density estimation. Default is "gaussian".
+#' @return A ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' # Simple density plot
+#' insper_density(mtcars, x = mpg)
+#'
+#' # Grouped density plot
+#' insper_density(mtcars, x = mpg, fill = factor(cyl))
+#'
+#' # Adjust bandwidth
+#' insper_density(mtcars, x = mpg, adjust = 0.5)
+#' }
+#'
+#' @family plots
+#' @seealso \code{\link{theme_insper}}, \code{\link{insper_histogram}}
+#' @export
+insper_density <- function(
+  data,
+  x,
+  fill = NULL,
+  fill_color = show_insper_colors("teals1"),
+  line_color = show_insper_colors("teals3"),
+  alpha = 0.6,
+  bandwidth = NULL,
+  adjust = 1,
+  kernel = "gaussian"
+) {
+  # Input validation with cli
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame",
+      "x" = "You supplied an object of class {.cls {class(data)}}"
+    ))
+  }
+
+  # Check if fill was provided using rlang
+  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+
+  # Initialize plot
+  if (!has_fill) {
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }})) +
+      ggplot2::geom_density(
+        fill = fill_color,
+        color = line_color,
+        alpha = alpha,
+        bw = bandwidth,
+        adjust = adjust,
+        kernel = kernel
+      )
+  } else {
+    p <- ggplot2::ggplot(
+      data,
+      ggplot2::aes(x = {{ x }}, fill = {{ fill }}, color = {{ fill }})
+    ) +
+      ggplot2::geom_density(
+        alpha = alpha,
+        bw = bandwidth,
+        adjust = adjust,
+        kernel = kernel
+      ) +
+      scale_fill_insper_d() +
+      scale_color_insper_d()
+  }
+
+  # Apply theme and scale
+  p <- p +
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05))) +
+    theme_insper()
 
   return(p)
 }

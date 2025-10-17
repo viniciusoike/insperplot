@@ -9,7 +9,7 @@ insper_barplot(
   x,
   y,
   fill_var = NULL,
-  single_color = insper_col("reds1"),
+  single_color = show_insper_colors("reds1"),
   position = "dodge",
   zero = TRUE,
   text = FALSE,
@@ -49,7 +49,7 @@ Default is "categorical"}
 
 \item{label_formatter}{Function. Formatter for text labels. Default is scales::comma}
 
-\item{...}{Additional arguments passed to scale_fill_insper()}
+\item{...}{Additional arguments passed to scale_fill_insper_d()}
 }
 \value{
 A ggplot2 object
@@ -75,18 +75,20 @@ insper_barplot(mtcars, x = cyl, y = mpg, text = TRUE)
 
 # Custom color and label formatting
 insper_barplot(mtcars, x = cyl, y = mpg,
-               single_color = insper_col("teals1"),
+               single_color = show_insper_colors("teals1"),
                label_formatter = format_num_br)
 }
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 
 Other plots: 
 \code{\link{insper_area}()},
 \code{\link{insper_boxplot}()},
+\code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
+\code{\link{insper_histogram}()},
 \code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},

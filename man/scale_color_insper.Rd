@@ -4,7 +4,7 @@
 \alias{scale_color_insper}
 \alias{scale_colour_insper}
 \alias{scale_fill_insper}
-\title{Insper Color Scales for ggplot2}
+\title{Insper Color Scales (Deprecated)}
 \usage{
 scale_color_insper(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 
@@ -25,15 +25,10 @@ scale_fill_insper(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 ggplot2 scale object
 }
 \description{
-Insper Color Scales for ggplot2
+These functions are deprecated. Please use:
+\itemize{
+  \item \code{\link{scale_color_insper_d}} for discrete scales
+  \item \code{\link{scale_color_insper_c}} for continuous scales
 }
-\examples{
-library(ggplot2)
-ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl))) +
-  geom_point() +
-  scale_color_insper()
 }
-\seealso{
-\code{\link{insper_pal}}, \code{\link{theme_insper}}
-}
-\concept{scales}
+\keyword{internal}

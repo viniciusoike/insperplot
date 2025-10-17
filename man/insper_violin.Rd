@@ -9,7 +9,7 @@ insper_violin(
   x,
   y,
   fill = NULL,
-  show_boxplot = TRUE,
+  show_boxplot = FALSE,
   show_points = FALSE,
   violin_alpha = 0.7
 )
@@ -23,7 +23,7 @@ insper_violin(
 
 \item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
 
-\item{show_boxplot}{Logical. If TRUE, overlays a boxplot. Default is TRUE}
+\item{show_boxplot}{Logical. If TRUE, overlays a boxplot. Default is FALSE}
 
 \item{show_points}{Logical. If TRUE, adds jittered points. Default is FALSE}
 
@@ -52,13 +52,15 @@ insper_violin(mtcars, x = factor(cyl), y = mpg,
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}, \code{\link{insper_boxplot}}
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}, \code{\link{insper_boxplot}}
 
 Other plots: 
 \code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},
+\code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
+\code{\link{insper_histogram}()},
 \code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()}

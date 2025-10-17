@@ -53,7 +53,7 @@ rec_passengers |>
   group_by(date) |>
   summarise(total_passengers = sum(passengers, na.rm = TRUE)) |>
   ggplot(aes(x = date, y = total_passengers)) +
-  geom_line(color = insper_col("reds1")) +
+  geom_line(color = show_insper_colors("reds1")) +
   theme_insper() +
   labs(
     title = "Daily Total Passengers - Greater Recife",
@@ -69,7 +69,7 @@ rec_passengers |>
   arrange(desc(avg_daily)) |>
   head(10) |>
   ggplot(aes(x = reorder(name_line, avg_daily), y = avg_daily)) +
-  geom_col(fill = insper_col("teals1")) +
+  geom_col(fill = show_insper_colors("teals1")) +
   coord_flip() +
   theme_insper() +
   labs(

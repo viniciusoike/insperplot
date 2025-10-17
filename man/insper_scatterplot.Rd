@@ -9,10 +9,11 @@ insper_scatterplot(
   x,
   y,
   color = NULL,
-  add_smooth = TRUE,
+  add_smooth = FALSE,
   smooth_method = "lm",
   point_size = 2,
-  point_alpha = 0.7
+  point_alpha = 1,
+  ...
 )
 }
 \arguments{
@@ -24,13 +25,16 @@ insper_scatterplot(
 
 \item{color}{<[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)}
 
-\item{add_smooth}{Logical. If TRUE, adds a regression line. Default is TRUE}
+\item{add_smooth}{Logical. If TRUE, adds a regression line. Default is FALSE}
 
 \item{smooth_method}{Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"}
 
 \item{point_size}{Numeric. Size of points. Default is 2}
 
-\item{point_alpha}{Numeric. Transparency of points (0-1). Default is 0.7}
+\item{point_alpha}{Numeric. Transparency of points (0-1). Default is 1}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_point()},
+allowing custom aesthetics like shape, stroke, etc.}
 }
 \value{
 A ggplot2 object
@@ -47,22 +51,32 @@ insper_scatterplot(mtcars, x = wt, y = mpg)
 # Colored by variable
 insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
 
-# Without smooth line
-insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = FALSE)
+# With smooth line
+insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE)
 
 # With loess smoothing
-insper_scatterplot(mtcars, x = wt, y = mpg, smooth_method = "loess")
+insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "loess")
+
+# Custom point shape
+insper_scatterplot(mtcars, x = wt, y = mpg, shape = 17)
+
+# Using shape 21 with both color and fill
+insper_scatterplot(mtcars, x = wt, y = mpg,
+                   color = factor(cyl),
+                   shape = 21, stroke = 1.5)
 }
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+\code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 
 Other plots: 
 \code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},
+\code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
+\code{\link{insper_histogram}()},
 \code{\link{insper_lollipop}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

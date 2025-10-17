@@ -30,8 +30,8 @@ insper_pal("reds_seq", n = 5)
 
 Other colors: 
 \code{\link{get_insper_colors}()},
-\code{\link{insper_col}()},
 \code{\link{list_palettes}()},
+\code{\link{show_insper_colors}()},
 \code{\link{show_insper_palette}()},
 \code{\link{show_palette_types}()}
 }

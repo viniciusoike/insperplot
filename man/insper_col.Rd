@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{insper_col}
 \alias{insper_col}
-\title{Extract Insper Colors}
+\title{Extract Insper Colors (Deprecated)}
 \usage{
 insper_col(...)
 }
@@ -13,20 +13,6 @@ insper_col(...)
 Named character vector of hex codes
 }
 \description{
-Extract hex codes from the Insper color palette
+This function has been renamed to \code{\link{show_insper_colors}} for clarity.
 }
-\examples{
-insper_col()
-insper_col("reds1", "teals1")
-}
-\seealso{
-\code{\link{insper_pal}}, \code{\link{show_insper_palette}}
-
-Other colors: 
-\code{\link{get_insper_colors}()},
-\code{\link{insper_pal}()},
-\code{\link{list_palettes}()},
-\code{\link{show_insper_palette}()},
-\code{\link{show_palette_types}()}
-}
-\concept{colors}
+\keyword{internal}

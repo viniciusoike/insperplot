@@ -44,9 +44,9 @@ get_insper_colors("diverging_red_teal", reverse = TRUE)
 \code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_palette}}
 
 Other colors: 
-\code{\link{insper_col}()},
 \code{\link{insper_pal}()},
 \code{\link{list_palettes}()},
+\code{\link{show_insper_colors}()},
 \code{\link{show_insper_palette}()},
 \code{\link{show_palette_types}()}
 }

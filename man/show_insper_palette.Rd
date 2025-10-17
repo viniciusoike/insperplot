@@ -24,9 +24,9 @@ show_insper_palette("reds")
 
 Other colors: 
 \code{\link{get_insper_colors}()},
-\code{\link{insper_col}()},
 \code{\link{insper_pal}()},
 \code{\link{list_palettes}()},
+\code{\link{show_insper_colors}()},
 \code{\link{show_palette_types}()}
 }
 \concept{colors}

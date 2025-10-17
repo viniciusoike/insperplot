@@ -1,3 +1,134 @@
+# insperplot 0.8.0
+
+## Breaking Changes
+
+### Renamed Scale Functions
+
+Following ggplot2 naming conventions, scale functions have been renamed to use `_d` (discrete) and `_c` (continuous) suffixes:
+
+**Old names (deprecated):**
+- `scale_color_insper(discrete = TRUE)` / `scale_color_insper(discrete = FALSE)`
+- `scale_fill_insper(discrete = TRUE)` / `scale_fill_insper(discrete = FALSE)`
+
+**New names:**
+- `scale_color_insper_d()` / `scale_color_insper_c()`
+- `scale_fill_insper_d()` / `scale_fill_insper_c()`
+- British spellings also available: `scale_colour_insper_d()` / `scale_colour_insper_c()`
+
+**Migration:**
+```r
+# OLD
+ggplot(data, aes(x, y, fill = factor(group))) +
+  geom_point() +
+  scale_fill_insper()
+
+# NEW
+ggplot(data, aes(x, y, fill = factor(group))) +
+  geom_point() +
+  scale_fill_insper_d()
+
+# OLD - continuous scale
+ggplot(data, aes(x, y, fill = value)) +
+  geom_tile() +
+  scale_fill_insper(discrete = FALSE)
+
+# NEW - continuous scale
+ggplot(data, aes(x, y, fill = value)) +
+  geom_tile() +
+  scale_fill_insper_c()
+```
+
+Old function names remain available with deprecation warnings and will be removed in a future version.
+
+### Renamed Color Extraction Function
+
+`insper_col()` has been renamed to `show_insper_colors()` for clarity (it's a utility function, not a plotting function):
+
+**Migration:**
+```r
+# OLD
+color <- insper_col("reds1")
+all_colors <- insper_col()
+
+# NEW
+color <- show_insper_colors("reds1")
+all_colors <- show_insper_colors()
+```
+
+The old `insper_col()` name remains available with a deprecation warning.
+
+### Changed Default Parameters
+
+To improve UX and reduce visual clutter by default:
+
+**`insper_scatterplot()`:**
+- `add_smooth` now defaults to `FALSE` (was `TRUE`)
+- `point_alpha` now defaults to `1` (was `0.7`)
+
+**`insper_boxplot()`:**
+- `add_jitter` now defaults to `NULL` with smart auto-detection:
+  - Automatically enables jitter if the largest group has <100 observations
+  - Can still be explicitly set to `TRUE` or `FALSE` to override
+
+**`insper_violin()`:**
+- `show_boxplot` now defaults to `FALSE` (was `TRUE`)
+
+## New Features
+
+### New Plot Functions
+
+**`insper_histogram()`**: Create histograms with formal bin selection methods
+- Implements Sturges, Freedman-Diaconis (FD), and Scott algorithms
+- Default uses Sturges method for optimal bin width
+- Supports grouped histograms with fill aesthetic
+- Full Insper styling
+
+```r
+# Simple histogram
+insper_histogram(mtcars, x = mpg)
+
+# Using Freedman-Diaconis method
+insper_histogram(mtcars, x = mpg, bin_method = "fd")
+
+# Grouped histogram
+insper_histogram(mtcars, x = mpg, fill = factor(cyl))
+```
+
+**`insper_density()`**: Create density plots
+- Supports grouped densities
+- Customizable bandwidth and kernel
+- Full Insper styling
+
+```r
+# Simple density plot
+insper_density(mtcars, x = mpg)
+
+# Grouped density
+insper_density(mtcars, x = mpg, fill = factor(cyl))
+```
+
+### Enhanced Flexibility
+
+**`insper_scatterplot()`** now accepts `...` parameter for full geom_point() customization:
+
+```r
+# Custom point shape
+insper_scatterplot(mtcars, x = wt, y = mpg, shape = 17)
+
+# Use shape = 21 with both color and fill
+insper_scatterplot(mtcars, x = wt, y = mpg,
+                   color = factor(cyl),
+                   shape = 21, stroke = 1.5)
+```
+
+## Internal Improvements
+
+- All internal package code updated to use new function names
+- All documentation updated with new function references
+- Improved code consistency throughout the package
+
+---
+
 # insperplot 0.7.0
 
 ## Breaking Changes: API Modernization

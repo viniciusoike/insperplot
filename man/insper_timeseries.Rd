@@ -54,13 +54,15 @@ insper_timeseries(df, x = date, y = value)
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_color_insper}}
+\code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 
 Other plots: 
 \code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},
+\code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
+\code{\link{insper_histogram}()},
 \code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_violin}()}

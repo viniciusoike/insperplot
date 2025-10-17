@@ -52,8 +52,8 @@ list_palettes(names_only = TRUE)
 \seealso{
 Other colors: 
 \code{\link{get_insper_colors}()},
-\code{\link{insper_col}()},
 \code{\link{insper_pal}()},
+\code{\link{show_insper_colors}()},
 \code{\link{show_insper_palette}()},
 \code{\link{show_palette_types}()}
 }

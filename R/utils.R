@@ -1,16 +1,27 @@
-#' Extract Insper Colors
+#' Show Insper Colors
 #'
-#' Extract hex codes from the Insper color palette
+#' Extract hex codes from the Insper color palette. This is a utility function
+#' for retrieving color values, NOT a plotting function.
 #'
 #' @param ... Character names of colors. If none provided, returns all colors.
 #' @return Named character vector of hex codes
 #' @family colors
 #' @seealso \code{\link{insper_pal}}, \code{\link{show_insper_palette}}
+#' @note This is a color extraction utility, not a plotting function. For creating
+#'   bar plots, use \code{\link{insper_barplot}} or \code{ggplot2::geom_col()}.
 #' @export
 #' @examples
-#' insper_col()
-#' insper_col("reds1", "teals1")
-insper_col <- function(...) {
+#' # Get all colors
+#' show_insper_colors()
+#'
+#' # Get specific colors
+#' show_insper_colors("reds1", "teals1")
+#'
+#' # Use in plots
+#' library(ggplot2)
+#' ggplot(mtcars, aes(wt, mpg)) +
+#'   geom_point(color = show_insper_colors("teals1"))
+show_insper_colors <- function(...) {
   cols <- c(
     # Basic
     `white` = "#ffffff",
@@ -52,6 +63,23 @@ insper_col <- function(...) {
 }
 
 
+#' Extract Insper Colors (Deprecated)
+#'
+#' This function has been renamed to \code{\link{show_insper_colors}} for clarity.
+#'
+#' @param ... Character names of colors. If none provided, returns all colors.
+#' @return Named character vector of hex codes
+#' @keywords internal
+#' @export
+insper_col <- function(...) {
+  .Deprecated(
+    new = "show_insper_colors()",
+    msg = "insper_col() is deprecated and will be removed in a future version. Please use show_insper_colors() instead."
+  )
+  show_insper_colors(...)
+}
+
+
 #' Show Insper Color Palette
 #'
 #' Display the Insper color palette visually
@@ -65,7 +93,7 @@ insper_col <- function(...) {
 #' show_insper_palette()
 #' show_insper_palette("reds")
 show_insper_palette <- function(palette = "all") {
-  cols <- insper_col()
+  cols <- show_insper_colors()
 
   if (palette != "all") {
     # Support both old color group names and new palette names

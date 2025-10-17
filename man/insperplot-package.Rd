@@ -80,7 +80,7 @@ library(ggplot2)
 
 # Create a basic plot with Insper theme
 ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point(color = insper_col("reds1"), size = 3) +
+  geom_point(color = show_insper_colors("reds1"), size = 3) +
   theme_insper() +
   labs(title = "Fuel Efficiency vs Weight")
 
@@ -105,7 +105,7 @@ This package follows modern R development best practices:
 
 \examples{
 # View available colors
-insper_col()
+show_insper_colors()
 
 # Show color palettes
 show_insper_palette("reds")
@@ -114,7 +114,7 @@ show_insper_palette("reds")
 # Create a simple plot (requires fonts to be set up)
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point(color = insper_col("reds1")) +
+  geom_point(color = show_insper_colors("reds1")) +
   theme_insper()
 }
 }

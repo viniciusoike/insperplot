@@ -31,9 +31,9 @@ show_palette_types(save_plot = TRUE, filename = "my_palettes.png")
 \seealso{
 Other colors: 
 \code{\link{get_insper_colors}()},
-\code{\link{insper_col}()},
 \code{\link{insper_pal}()},
 \code{\link{list_palettes}()},
+\code{\link{show_insper_colors}()},
 \code{\link{show_insper_palette}()}
 }
 \concept{colors}

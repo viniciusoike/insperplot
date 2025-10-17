@@ -57,12 +57,14 @@ insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}, \code{\link{insper_timeseries}}
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}, \code{\link{insper_timeseries}}
 
 Other plots: 
 \code{\link{insper_barplot}()},
 \code{\link{insper_boxplot}()},
+\code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
+\code{\link{insper_histogram}()},
 \code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},

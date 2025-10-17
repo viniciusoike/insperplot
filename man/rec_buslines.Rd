@@ -50,7 +50,7 @@ rec_buslines |>
   arrange(desc(n)) |>
   head(10) |>
   ggplot(aes(x = reorder(abbrev_company, n), y = n)) +
-  geom_col(fill = insper_col("teals1")) +
+  geom_col(fill = show_insper_colors("teals1")) +
   coord_flip() +
   theme_insper() +
   labs(

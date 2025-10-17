@@ -9,7 +9,7 @@ insper_boxplot(
   x,
   y,
   fill = NULL,
-  add_jitter = TRUE,
+  add_jitter = NULL,
   add_notch = FALSE,
   box_alpha = 0.8
 )
@@ -23,11 +23,12 @@ insper_boxplot(
 
 \item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
 
-\item{add_jitter}{Logical. If TRUE, adds jittered points. Default is TRUE}
+\item{add_jitter}{Logical. If TRUE, adds jittered points. If NULL (default),
+automatically enables jitter when the largest group has <100 observations.}
 
 \item{add_notch}{Logical. If TRUE, creates notched boxplot. Default is FALSE}
 
-\item{box_alpha}{Numeric. Transparency of boxes (0-1). Default is 0.7}
+\item{box_alpha}{Numeric. Transparency of boxes (0-1). Default is 0.8}
 }
 \value{
 A ggplot2 object
@@ -54,12 +55,14 @@ insper_boxplot(mtcars, x = factor(cyl), y = mpg, flip = FALSE)
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_fill_insper}}
+\code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 
 Other plots: 
 \code{\link{insper_area}()},
 \code{\link{insper_barplot}()},
+\code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
+\code{\link{insper_histogram}()},
 \code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},

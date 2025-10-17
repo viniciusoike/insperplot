@@ -58,7 +58,7 @@ library(ggplot2)
 
 # Plot inflation over time
 ggplot(macro_series, aes(x = date, y = ipca)) +
-  geom_line(color = insper_col("reds1")) +
+  geom_line(color = show_insper_colors("reds1")) +
   theme_insper() +
   labs(
     title = "Brazilian Inflation (IPCA)",
