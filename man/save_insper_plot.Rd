@@ -8,7 +8,7 @@ save_insper_plot(
   plot,
   filename,
   width = height * 1.618,
-  height = 6,
+  height = 4.3,
   dpi = 300,
   device = NULL,
   ...

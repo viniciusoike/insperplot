@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Extends ggplot2 with Insper Instituto de Ensino e Pesquisa visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use. This is an unofficial package created by an Insper employee, not an official Insper product.
+Extends ggplot2 with Insper's identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use. This is not an official Insper product.
 
 This package extends ggplot2 with Insper Instituto de Ensino e Pesquisa
 visual identity, providing custom themes, color palettes, and specialized
@@ -137,7 +137,7 @@ Useful links:
 }
 }
 \author{
-\strong{Maintainer}: Vinicius Reginatto \email{vinicius.reginatto@example.com}
+\strong{Maintainer}: Vinicius Reginatto \email{viniciusor@insper.edu.br}
 
 }
 \keyword{internal}

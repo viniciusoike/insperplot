@@ -13,7 +13,7 @@ skip_if_no_fonts <- function() {
   fonts_available <- all(font_status)
 
   if (!fonts_available) {
-    testthat::skip("Insper fonts not available (EB Garamond or Barlow missing)")
+    testthat::skip("Insper fonts not available (Georgia, Inter, EB Garamond, or Playfair Display missing)")
   }
 }
 

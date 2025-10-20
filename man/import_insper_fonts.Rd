@@ -19,9 +19,9 @@ loading.}
 Invisibly returns TRUE if fonts loaded successfully, FALSE otherwise.
 }
 \description{
-Loads Insper's recommended fonts (EB Garamond and Barlow) from Google Fonts
-using the showtext package. This allows using custom fonts without installing
-them locally on your system.
+Loads Insper's recommended fonts (Inter, EB Garamond, and Playfair Display)
+from Google Fonts using the showtext package. This allows using custom fonts
+without installing them locally on your system.
 }
 \details{
 This function provides an alternative to installing fonts locally on your

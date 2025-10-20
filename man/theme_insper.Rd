@@ -6,8 +6,8 @@
 \usage{
 theme_insper(
   base_size = 12,
-  font_title = "EB Garamond",
-  font_text = "Barlow",
+  font_title = "Georgia",
+  font_text = "Inter",
   grid = TRUE,
   border = "none",
   align = "panel",
@@ -19,12 +19,13 @@ theme_insper(
 Default is 12. All other text sizes are calculated relative to this value.}
 
 \item{font_title}{Character. Font family to use for plot titles and subtitles.
-Default is "EB Garamond" (serif). The theme automatically detects font
-availability and falls back to "serif" if unavailable.}
+Default is "Georgia" (serif, from Insper's official template). The theme
+automatically detects font availability and falls back to "EB Garamond",
+then "Playfair Display", then "serif" if unavailable.}
 
 \item{font_text}{Character. Font family to use for all other text elements
-(axis labels, legend text, etc.). Default is "Barlow" (sans-serif).
-Falls back to "sans" if unavailable.}
+(axis labels, legend text, etc.). Default is "Inter" (sans-serif, from
+Insper's official template). Falls back to "Arial" then "sans" if unavailable.}
 
 \item{grid}{Logical. Whether to display major grid lines. If TRUE, shows
 dashed grid lines in light gray. If FALSE, removes all grid lines.
@@ -66,10 +67,11 @@ The theme applies Insper's visual identity through:
 
 **Font Setup:**
 
-The theme uses two custom fonts by default:
+The theme uses fonts based on Insper's official template:
 \itemize{
-  \item EB Garamond (serif) for titles
-  \item Barlow (sans-serif) for body text
+  \item Georgia (serif, system font) for titles - falls back to EB Garamond,
+        then Playfair Display
+  \item Inter (sans-serif, Google Font) for body text - falls back to Arial
 }
 
 To use these fonts, you have two options:
@@ -78,8 +80,8 @@ To use these fonts, you have two options:
   \item Load fonts remotely - use \code{\link{import_insper_fonts}()}
 }
 
-If fonts are unavailable, the theme automatically falls back to system
-defaults ("serif" and "sans") without errors.
+If fonts are unavailable, the theme automatically falls back through the
+chain and ultimately to system defaults ("serif" and "sans") without errors.
 
 The function validates input parameters and will throw an error if invalid
 values are provided for \code{grid} or \code{border} arguments.

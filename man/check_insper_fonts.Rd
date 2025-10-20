@@ -19,10 +19,12 @@ or loaded via \code{\link{import_insper_fonts}}) and provides setup
 instructions if they're missing.
 }
 \details{
-The recommended fonts are free Google Fonts:
+The recommended fonts based on Insper's official template:
 \itemize{
-  \item **EB Garamond**: Classical serif font for titles
-  \item **Barlow**: Modern sans-serif font for body text
+  \item **Georgia**: System serif font for titles (primary)
+  \item **Inter**: Modern sans-serif font for body text (Google Font)
+  \item **EB Garamond**: Classical serif font for titles (fallback, Google Font)
+  \item **Playfair Display**: Elegant serif font for titles (alternative, Google Font)
 }
 
 **Two ways to use these fonts:**
@@ -30,9 +32,10 @@ The recommended fonts are free Google Fonts:
 **Option A - Local Installation (permanent, recommended for development):**
 \enumerate{
   \item Visit \url{https://fonts.google.com}
-  \item Search for "EB Garamond" and "Barlow"
+  \item Search for "Inter", "EB Garamond", and "Playfair Display"
   \item Download and install fonts on your system
   \item Restart R/RStudio
+  \item Note: Georgia is typically pre-installed on most systems
 }
 
 **Option B - Remote Loading (per-session, recommended for scripts/reproducibility):**

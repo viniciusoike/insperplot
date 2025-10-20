@@ -6,8 +6,8 @@
 \usage{
 theme_insper_presentation(
   base_size = 16,
-  font_title = "EB Garamond",
-  font_text = "Barlow",
+  font_title = "Georgia",
+  font_text = "Inter",
   ...
 )
 }
@@ -15,9 +15,11 @@ theme_insper_presentation(
 \item{base_size}{Numeric. Base font size for all text elements in points.
 Default is 16 (larger than standard for better readability on slides).}
 
-\item{font_title}{Character. Font family for titles. Default is "EB Garamond".}
+\item{font_title}{Character. Font family for titles. Default is "Georgia"
+(from Insper's official template).}
 
-\item{font_text}{Character. Font family for body text. Default is "Barlow".}
+\item{font_text}{Character. Font family for body text. Default is "Inter"
+(from Insper's official template).}
 
 \item{...}{Additional arguments passed to \code{\link{theme_insper}}.}
 }

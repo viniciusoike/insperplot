@@ -84,20 +84,20 @@ show_insper_palette <- function(palette = "all") {
     pattern <- switch(
       palette,
       "grays" = "gray",
-      "grays_seq" = "gray",  # backwards compat
+      "grays_seq" = "gray", # backwards compat
       "reds" = "red",
-      "reds_seq" = "red",  # backwards compat
+      "reds_seq" = "red", # backwards compat
       "oranges" = "orange",
-      "oranges_seq" = "orange",  # backwards compat
+      "oranges_seq" = "orange", # backwards compat
       "magentas" = "magenta",
       "teals" = "teal",
-      "teals_seq" = "teal",  # backwards compat
+      "teals_seq" = "teal", # backwards compat
       "main" = "^(reds1|oranges1|teals1|gray_meddark)",
-      "qualitative_main" = "^(reds1|oranges1|teals1|gray_meddark)",  # backwards compat
+      "qualitative_main" = "^(reds1|oranges1|teals1|gray_meddark)", # backwards compat
       "bright" = "^(reds1|oranges1|teals1|magentas)",
-      "qualitative_bright" = "^(reds1|oranges1|teals1|magentas)",  # backwards compat
+      "qualitative_bright" = "^(reds1|oranges1|teals1|magentas)", # backwards compat
       "contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)",
-      "qualitative_contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)",  # backwards compat
+      "qualitative_contrast" = "^(reds1|oranges2|teals1|magentas1|gray_meddark)", # backwards compat
       stop(
         "Invalid palette. Choose: all, grays, reds, oranges, magentas, teals, main, bright, or contrast."
       )
@@ -167,7 +167,7 @@ save_insper_plot <- function(
   plot,
   filename,
   width = height * 1.618,
-  height = 6,
+  height = 4.3,
   dpi = 300,
   device = NULL,
   ...
@@ -299,9 +299,9 @@ format_num_br <- function(x, digits = NULL) {
 
 #' Import Insper Fonts from Google Fonts
 #'
-#' Loads Insper's recommended fonts (EB Garamond and Barlow) from Google Fonts
-#' using the showtext package. This allows using custom fonts without installing
-#' them locally on your system.
+#' Loads Insper's recommended fonts (Inter, EB Garamond, and Playfair Display)
+#' from Google Fonts using the showtext package. This allows using custom fonts
+#' without installing them locally on your system.
 #'
 #' @param enable Logical. If TRUE, automatically enables showtext for
 #'   rendering. If FALSE (default, recommended), fonts are registered but you must call
@@ -368,11 +368,14 @@ import_insper_fonts <- function(enable = FALSE, verbose = TRUE) {
   # Try to import fonts from Google Fonts
   tryCatch(
     {
-      # Import EB Garamond (serif, for titles)
+      # Import Inter (sans-serif, for body text - official template)
+      sysfonts::font_add_google("Inter", "Inter")
+
+      # Import EB Garamond (serif, fallback for titles)
       sysfonts::font_add_google("EB Garamond", "EB Garamond")
 
-      # Import Barlow (sans-serif, for body text)
-      sysfonts::font_add_google("Barlow", "Barlow")
+      # Import Playfair Display (serif, alternative for titles)
+      sysfonts::font_add_google("Playfair Display", "Playfair Display")
 
       # Enable showtext for rendering if requested
       if (enable) {
@@ -385,9 +388,11 @@ import_insper_fonts <- function(enable = FALSE, verbose = TRUE) {
       if (verbose) {
         cli::cli_alert_success("Insper fonts loaded from Google Fonts")
         cli::cli_bullets(c(
-          "v" = "EB Garamond (serif) - for titles",
-          "v" = "Barlow (sans-serif) - for body text"
+          "v" = "Inter (sans-serif) - for body text",
+          "v" = "EB Garamond (serif) - for titles (fallback)",
+          "v" = "Playfair Display (serif) - for titles (alternative)"
         ))
+        cli::cli_alert_info("Georgia (system font) used as primary title font")
       }
 
       return(invisible(TRUE))
@@ -417,10 +422,12 @@ import_insper_fonts <- function(enable = FALSE, verbose = TRUE) {
 #' @return Invisibly returns a named logical vector indicating which fonts are available.
 #'
 #' @details
-#' The recommended fonts are free Google Fonts:
+#' The recommended fonts based on Insper's official template:
 #' \itemize{
-#'   \item **EB Garamond**: Classical serif font for titles
-#'   \item **Barlow**: Modern sans-serif font for body text
+#'   \item **Georgia**: System serif font for titles (primary)
+#'   \item **Inter**: Modern sans-serif font for body text (Google Font)
+#'   \item **EB Garamond**: Classical serif font for titles (fallback, Google Font)
+#'   \item **Playfair Display**: Elegant serif font for titles (alternative, Google Font)
 #' }
 #'
 #' **Two ways to use these fonts:**
@@ -428,9 +435,10 @@ import_insper_fonts <- function(enable = FALSE, verbose = TRUE) {
 #' **Option A - Local Installation (permanent, recommended for development):**
 #' \enumerate{
 #'   \item Visit \url{https://fonts.google.com}
-#'   \item Search for "EB Garamond" and "Barlow"
+#'   \item Search for "Inter", "EB Garamond", and "Playfair Display"
 #'   \item Download and install fonts on your system
 #'   \item Restart R/RStudio
+#'   \item Note: Georgia is typically pre-installed on most systems
 #' }
 #'
 #' **Option B - Remote Loading (per-session, recommended for scripts/reproducibility):**
@@ -463,26 +471,38 @@ check_insper_fonts <- function(verbose = TRUE) {
       )
     }
     return(invisible(c(
+      "Georgia" = FALSE,
+      "Inter" = fonts_imported,
       "EB Garamond" = fonts_imported,
-      "Barlow" = fonts_imported
+      "Playfair Display" = fonts_imported
     )))
   }
 
   # Check for recommended fonts (locally installed)
+  has_georgia <- any(grepl("Georgia", available_fonts, ignore.case = TRUE))
+  has_inter <- any(grepl("Inter", available_fonts, ignore.case = TRUE))
   has_garamond <- any(grepl(
     "EB Garamond|Garamond",
     available_fonts,
     ignore.case = TRUE
   ))
-  has_barlow <- any(grepl("Barlow", available_fonts, ignore.case = TRUE))
+  has_playfair <- any(grepl(
+    "Playfair Display|Playfair",
+    available_fonts,
+    ignore.case = TRUE
+  ))
 
   # Fonts available if either imported OR installed locally
+  georgia_available <- has_georgia # System font, not imported via showtext
+  inter_available <- has_inter || fonts_imported
   garamond_available <- has_garamond || fonts_imported
-  barlow_available <- has_barlow || fonts_imported
+  playfair_available <- has_playfair || fonts_imported
 
   font_status <- c(
+    "Georgia" = georgia_available,
+    "Inter" = inter_available,
     "EB Garamond" = garamond_available,
-    "Barlow" = barlow_available
+    "Playfair Display" = playfair_available
   )
 
   if (verbose) {
@@ -494,35 +514,77 @@ check_insper_fonts <- function(verbose = TRUE) {
       )
     }
 
+    # Georgia (system font, primary for titles)
+    if (has_georgia) {
+      cli::cli_alert_success(
+        "Georgia (serif, primary for titles) - system font"
+      )
+    } else {
+      cli::cli_alert_warning("Georgia (serif) not found - will use fallbacks")
+    }
+
+    # Inter (body text from official template)
+    if (has_inter) {
+      cli::cli_alert_success("Inter (sans-serif, body text) installed locally")
+    } else if (fonts_imported) {
+      cli::cli_alert_success("Inter (sans-serif, body text) loaded via import")
+    } else {
+      cli::cli_alert_danger("Inter (sans-serif, body text) not found")
+    }
+
+    # EB Garamond (title fallback)
     if (has_garamond) {
-      cli::cli_alert_success("EB Garamond (serif) installed locally")
-    } else if (!fonts_imported) {
-      cli::cli_alert_danger("EB Garamond (serif) not found")
+      cli::cli_alert_success(
+        "EB Garamond (serif, title fallback) installed locally"
+      )
+    } else if (fonts_imported) {
+      cli::cli_alert_success(
+        "EB Garamond (serif, title fallback) loaded via import"
+      )
+    } else {
+      cli::cli_alert_warning("EB Garamond (serif, title fallback) not found")
     }
 
-    if (has_barlow) {
-      cli::cli_alert_success("Barlow (sans-serif) installed locally")
-    } else if (!fonts_imported) {
-      cli::cli_alert_danger("Barlow (sans-serif) not found")
+    # Playfair Display (title alternative)
+    if (has_playfair) {
+      cli::cli_alert_success(
+        "Playfair Display (serif, title alternative) installed locally"
+      )
+    } else if (fonts_imported) {
+      cli::cli_alert_success(
+        "Playfair Display (serif, title alternative) loaded via import"
+      )
+    } else {
+      cli::cli_alert_warning(
+        "Playfair Display (serif, title alternative) not found"
+      )
     }
 
-    if (!garamond_available || !barlow_available) {
+    all_available <- all(c(
+      georgia_available,
+      inter_available,
+      garamond_available,
+      playfair_available
+    ))
+
+    if (!all_available) {
       cli::cli_h3("Font Setup Needed")
 
-      cli::cli_alert_warning("Fonts not found. Run the setup wizard:")
+      cli::cli_alert_warning("Some fonts not found. Run the setup wizard:")
       cli::cli_code("setup_insper_fonts()")
       cli::cli_text("")
 
       cli::cli_alert_info("Or install manually:")
       cli::cli_ol(c(
         "Visit {.url https://fonts.google.com}",
-        "Search for: {.strong EB Garamond} and {.strong Barlow}",
+        "Search for: {.strong Inter}, {.strong EB Garamond}, and {.strong Playfair Display}",
         "Download and install fonts on your system",
-        "Restart R/RStudio"
+        "Restart R/RStudio",
+        "Note: Georgia is typically pre-installed on most systems"
       ))
 
       cli::cli_alert_info(
-        "Plots will use system fallback fonts (serif/sans) until fonts are installed"
+        "Plots will use system fallback fonts until fonts are installed"
       )
     } else {
       cli::cli_alert_success("All recommended fonts are available!")
@@ -611,7 +673,9 @@ use_ragg_device <- function(set_rstudio = TRUE, verbose = TRUE) {
         "v" = "Automatically used by {.fun ggsave}"
       ))
 
-      cli::cli_alert_success("You're all set! ragg will work automatically with ggsave()")
+      cli::cli_alert_success(
+        "You're all set! ragg will work automatically with ggsave()"
+      )
     } else {
       cli::cli_alert_danger("{.pkg ragg} is not installed")
       cli::cli_h3("Installation")
@@ -692,7 +756,11 @@ setup_insper_fonts <- function(check_only = FALSE) {
   if (has_systemfonts) {
     available_fonts <- try(systemfonts::system_fonts()$family, silent = TRUE)
     if (!inherits(available_fonts, "try-error")) {
-      has_garamond <- any(grepl("EB Garamond|Garamond", available_fonts, ignore.case = TRUE))
+      has_garamond <- any(grepl(
+        "EB Garamond|Garamond",
+        available_fonts,
+        ignore.case = TRUE
+      ))
       has_barlow <- any(grepl("Barlow", available_fonts, ignore.case = TRUE))
       fonts_installed <- has_garamond && has_barlow
     }
@@ -715,9 +783,23 @@ setup_insper_fonts <- function(check_only = FALSE) {
   # Status overview
   cli::cli_h2("Current Status")
   cli::cli_bullets(c(
-    if (fonts_installed) "v" else "x" ~ "Insper fonts installed locally: {.strong {if(fonts_installed) 'YES' else 'NO'}}",
-    if (has_ragg) "v" else "x" ~ "ragg package installed: {.strong {if(has_ragg) 'YES' else 'NO'}}",
-    if (fonts_imported) "i" else " " ~ "Fonts loaded via showtext: {.strong {if(fonts_imported) 'YES (not recommended)' else 'NO'}}"
+    if (fonts_installed) {
+      "v"
+    } else {
+      "x" ~
+        "Insper fonts installed locally: {.strong {if(fonts_installed) 'YES' else 'NO'}}"
+    },
+    if (has_ragg) {
+      "v"
+    } else {
+      "x" ~ "ragg package installed: {.strong {if(has_ragg) 'YES' else 'NO'}}"
+    },
+    if (fonts_imported) {
+      "i"
+    } else {
+      " " ~
+        "Fonts loaded via showtext: {.strong {if(fonts_imported) 'YES (not recommended)' else 'NO'}}"
+    }
   ))
   cli::cli_text("")
 
@@ -728,11 +810,17 @@ setup_insper_fonts <- function(check_only = FALSE) {
     cli::cli_h3("You're ready to create beautiful plots!")
     cli::cli_text("Example:")
     cli::cli_code("library(ggplot2)")
-    cli::cli_code("ggplot(mtcars, aes(wt, mpg)) + geom_point() + theme_insper()")
+    cli::cli_code(
+      "ggplot(mtcars, aes(wt, mpg)) + geom_point() + theme_insper()"
+    )
     cli::cli_text("")
     if (Sys.getenv("RSTUDIO") == "1") {
-      cli::cli_alert_info("Don't forget to set RStudio graphics backend to AGG:")
-      cli::cli_text("{.strong Tools > Global Options > General > Graphics > Backend > AGG}")
+      cli::cli_alert_info(
+        "Don't forget to set RStudio graphics backend to AGG:"
+      )
+      cli::cli_text(
+        "{.strong Tools > Global Options > General > Graphics > Backend > AGG}"
+      )
     }
   } else {
     cli::cli_h2("Setup Steps")
@@ -750,7 +838,9 @@ setup_insper_fonts <- function(check_only = FALSE) {
         "Restart R/RStudio after installation"
       ))
       cli::cli_text("")
-      cli::cli_alert_info("After installing, run {.code check_insper_fonts()} to verify")
+      cli::cli_alert_info(
+        "After installing, run {.code check_insper_fonts()} to verify"
+      )
       cli::cli_text("")
       step_num <- step_num + 1
     }
@@ -760,7 +850,9 @@ setup_insper_fonts <- function(check_only = FALSE) {
       cli::cli_h3("Step {step_num}: Install ragg Package")
       cli::cli_code("install.packages('ragg')")
       cli::cli_text("")
-      cli::cli_alert_info("After installing, run {.code use_ragg_device()} for setup")
+      cli::cli_alert_info(
+        "After installing, run {.code use_ragg_device()} for setup"
+      )
       cli::cli_text("")
       step_num <- step_num + 1
     }

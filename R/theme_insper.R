@@ -7,11 +7,12 @@
 #' @param base_size Numeric. Base font size for all text elements in points.
 #'   Default is 12. All other text sizes are calculated relative to this value.
 #' @param font_title Character. Font family to use for plot titles and subtitles.
-#'   Default is "EB Garamond" (serif). The theme automatically detects font
-#'   availability and falls back to "serif" if unavailable.
+#'   Default is "Georgia" (serif, from Insper's official template). The theme
+#'   automatically detects font availability and falls back to "EB Garamond",
+#'   then "Playfair Display", then "serif" if unavailable.
 #' @param font_text Character. Font family to use for all other text elements
-#'   (axis labels, legend text, etc.). Default is "Barlow" (sans-serif).
-#'   Falls back to "sans" if unavailable.
+#'   (axis labels, legend text, etc.). Default is "Inter" (sans-serif, from
+#'   Insper's official template). Falls back to "Arial" then "sans" if unavailable.
 #' @param grid Logical. Whether to display major grid lines. If TRUE, shows
 #'   dashed grid lines in light gray. If FALSE, removes all grid lines.
 #'   Default is TRUE.
@@ -43,10 +44,11 @@
 #'
 #' **Font Setup:**
 #'
-#' The theme uses two custom fonts by default:
+#' The theme uses fonts based on Insper's official template:
 #' \itemize{
-#'   \item EB Garamond (serif) for titles
-#'   \item Barlow (sans-serif) for body text
+#'   \item Georgia (serif, system font) for titles - falls back to EB Garamond,
+#'         then Playfair Display
+#'   \item Inter (sans-serif, Google Font) for body text - falls back to Arial
 #' }
 #'
 #' To use these fonts, you have two options:
@@ -55,8 +57,8 @@
 #'   \item Load fonts remotely - use \code{\link{import_insper_fonts}()}
 #' }
 #'
-#' If fonts are unavailable, the theme automatically falls back to system
-#' defaults ("serif" and "sans") without errors.
+#' If fonts are unavailable, the theme automatically falls back through the
+#' chain and ultimately to system defaults ("serif" and "sans") without errors.
 #'
 #' The function validates input parameters and will throw an error if invalid
 #' values are provided for \code{grid} or \code{border} arguments.
@@ -87,8 +89,8 @@
 #' @export
 theme_insper <- function(
   base_size = 12,
-  font_title = "EB Garamond",
-  font_text = "Barlow",
+  font_title = "Georgia",
+  font_text = "Inter",
   grid = TRUE,
   border = "none",
   align = "panel",
@@ -118,9 +120,17 @@ theme_insper <- function(
   }
 
   # Font detection and fallback ----
-  # Detect if custom fonts are available, fall back to system defaults if not
-  font_title <- detect_font(font_title, fallback = "serif")
-  font_text <- detect_font(font_text, fallback = "sans")
+  # Detect if custom fonts are available, fall back through chain if not
+  # Title: Georgia -> EB Garamond -> Playfair Display -> serif
+  # Body: Inter -> Arial -> sans
+  font_title <- detect_font(
+    font_title,
+    fallback_chain = c("EB Garamond", "Playfair Display", "serif")
+  )
+  font_text <- detect_font(
+    font_text,
+    fallback_chain = c("Arial", "sans")
+  )
 
   # Base theme configuration ----
   # Define the core theme elements that apply regardless of options
@@ -233,18 +243,20 @@ theme_insper <- function(
 
 # Helper Functions --------------------------------------------------------
 
-#' Detect Font Availability with Fallback
+#' Detect Font Availability with Fallback Chain
 #'
 #' Internal helper function to detect if a font is available and provide
-#' fallback if not. Checks both loaded fonts (via showtext) and system fonts.
+#' fallback chain if not. Checks both loaded fonts (via showtext) and system fonts.
 #'
 #' @param font_name Character. Name of font to check
-#' @param fallback Character. Fallback font if requested font unavailable
+#' @param fallback_chain Character vector. Fallback fonts to try in order if
+#'   requested font unavailable
 #'
-#' @return Character. Either the requested font (if available) or fallback
+#' @return Character. Either the requested font (if available) or first available
+#'   font from fallback chain
 #' @keywords internal
 #' @noRd
-detect_font <- function(font_name, fallback = "sans") {
+detect_font <- function(font_name, fallback_chain = "sans") {
   # First check if fonts loaded via import_insper_fonts()
   fonts_imported <- isTRUE(getOption("insperplot.fonts_loaded", FALSE))
 
@@ -260,6 +272,8 @@ detect_font <- function(font_name, fallback = "sans") {
     tryCatch(
       {
         available_fonts <- systemfonts::system_fonts()$family
+
+        # Check if requested font is available
         font_available <- any(grepl(
           font_name,
           available_fonts,
@@ -269,14 +283,32 @@ detect_font <- function(font_name, fallback = "sans") {
         if (font_available) {
           return(font_name)
         }
+
+        # If not, try each font in the fallback chain
+        for (fallback_font in fallback_chain) {
+          # Skip generic families (serif, sans, mono) - always available
+          if (fallback_font %in% c("serif", "sans", "mono")) {
+            return(fallback_font)
+          }
+
+          fallback_available <- any(grepl(
+            fallback_font,
+            available_fonts,
+            ignore.case = TRUE
+          ))
+
+          if (fallback_available) {
+            return(fallback_font)
+          }
+        }
       },
       error = function(e) {
-        # If error checking fonts, use fallback silently
-        return(fallback)
+        # If error checking fonts, use last fallback silently
+        return(fallback_chain[length(fallback_chain)])
       }
     )
   }
 
-  # If font not found, use fallback
-  return(fallback)
+  # If systemfonts not available, use last fallback
+  return(fallback_chain[length(fallback_chain)])
 }

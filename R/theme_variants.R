@@ -6,8 +6,10 @@
 #'
 #' @param base_size Numeric. Base font size for all text elements in points.
 #'   Default is 12.
-#' @param font_title Character. Font family for titles. Default is "EB Garamond".
-#' @param font_text Character. Font family for body text. Default is "Barlow".
+#' @param font_title Character. Font family for titles. Default is "Georgia"
+#'   (from Insper's official template).
+#' @param font_text Character. Font family for body text. Default is "Inter"
+#'   (from Insper's official template).
 #' @param ... Additional arguments passed to \code{\link{theme_insper}}.
 #'
 #' @return A ggplot2 theme object.
@@ -44,8 +46,8 @@
 #' @export
 theme_insper_minimal <- function(
   base_size = 12,
-  font_title = "EB Garamond",
-  font_text = "Barlow",
+  font_title = "Georgia",
+  font_text = "Inter",
   ...
 ) {
   theme_insper(
@@ -68,8 +70,10 @@ theme_insper_minimal <- function(
 #'
 #' @param base_size Numeric. Base font size for all text elements in points.
 #'   Default is 16 (larger than standard for better readability on slides).
-#' @param font_title Character. Font family for titles. Default is "EB Garamond".
-#' @param font_text Character. Font family for body text. Default is "Barlow".
+#' @param font_title Character. Font family for titles. Default is "Georgia"
+#'   (from Insper's official template).
+#' @param font_text Character. Font family for body text. Default is "Inter"
+#'   (from Insper's official template).
 #' @param ... Additional arguments passed to \code{\link{theme_insper}}.
 #'
 #' @return A ggplot2 theme object.
@@ -106,8 +110,8 @@ theme_insper_minimal <- function(
 #' @export
 theme_insper_presentation <- function(
   base_size = 16,
-  font_title = "EB Garamond",
-  font_text = "Barlow",
+  font_title = "Georgia",
+  font_text = "Inter",
   ...
 ) {
   theme_insper(
@@ -129,8 +133,10 @@ theme_insper_presentation <- function(
 #'
 #' @param base_size Numeric. Base font size for all text elements in points.
 #'   Default is 11 (slightly smaller for print).
-#' @param font_title Character. Font family for titles. Default is "EB Garamond".
-#' @param font_text Character. Font family for body text. Default is "Barlow".
+#' @param font_title Character. Font family for titles. Default is "Georgia"
+#'   (from Insper's official template).
+#' @param font_text Character. Font family for body text. Default is "Inter"
+#'   (from Insper's official template).
 #' @param ... Additional arguments passed to \code{\link{theme_insper}}.
 #'
 #' @return A ggplot2 theme object.
@@ -171,8 +177,8 @@ theme_insper_presentation <- function(
 #' @export
 theme_insper_print <- function(
   base_size = 11,
-  font_title = "EB Garamond",
-  font_text = "Barlow",
+  font_title = "Georgia",
+  font_text = "Inter",
   ...
 ) {
   theme_insper(

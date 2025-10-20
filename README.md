@@ -47,12 +47,17 @@ setup_insper_fonts()  # Interactive guide for complete setup
 
 **Step 1: Install Insper Fonts**
 
-insperplot uses **EB Garamond** (serif, for titles) and **Barlow**
-(sans-serif, for body text):
+insperplot uses fonts based on Insper's official template:
+
+- **Georgia** (serif, primary for titles) - typically pre-installed
+- **Inter** (sans-serif, for body text) - Google Font
+- **EB Garamond** & **Playfair Display** (serif, title fallbacks) -
+  Google Fonts
 
 1.  Visit [Google Fonts](https://fonts.google.com)
-2.  Download and install “EB Garamond” and “Barlow”
+2.  Download and install "Inter", "EB Garamond", and "Playfair Display"
 3.  Restart R/RStudio
+4.  Note: Georgia is typically already installed on most systems
 
 **Step 2: Install ragg Graphics Device**
 

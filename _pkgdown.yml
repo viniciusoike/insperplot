@@ -6,8 +6,8 @@ template:
   bslib:
     primary: "#E4002B"
     secondary: "#009491"
-    base_font: {google: "Barlow"}
-    heading_font: {google: "EB Garamond"}
+    base_font: {google: "Inter"}
+    heading_font: "Georgia"
 
 home:
   sidebar:
