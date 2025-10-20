@@ -341,10 +341,14 @@ insper_timeseries <- function(
   # Initialize plot
   if (!has_group) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_line(color = show_insper_colors("teals1"), linewidth = line_width)
+      ggplot2::geom_line(
+        color = show_insper_colors("teals1"),
+        linewidth = line_width
+      )
 
     if (add_points) {
-      p <- p + ggplot2::geom_point(color = show_insper_colors("teals1"), size = 1)
+      p <- p +
+        ggplot2::geom_point(color = show_insper_colors("teals1"), size = 1)
     }
   } else {
     p <- ggplot2::ggplot(
@@ -672,8 +676,15 @@ insper_lollipop <- function(
 #' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
 #' @param stacked Logical. If TRUE and fill is provided, creates stacked areas.
 #'   Default is FALSE
-#' @param area_alpha Numeric. Transparency of areas (0-1). Default is 0.6
+#' @param area_alpha Numeric. Transparency of areas (0-1). Default is 1
+#' @param fill_color Character. Hex color code for area when not using fill aesthetic.
+#'   Default is Insper teal
 #' @param add_line Logical. If TRUE, adds line on top of area. Default is TRUE
+#' @param line_color Character. Hex color code for line when not using fill aesthetic.
+#'   Default is darker Insper teal
+#' @param line_width Numeric. Width of line. Default is 1
+#' @param line_alpha Numeric. Transparency of line (0-1). Default is 1
+#' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is FALSE
 #' @return A ggplot2 object
 #'
 #' @examples
@@ -692,6 +703,13 @@ insper_lollipop <- function(
 #'
 #' # Stacked areas
 #' insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
+#'
+#' # Custom colors and line width
+#' insper_area(df, x = time, y = value,
+#'             fill_color = show_insper_colors("reds1"),
+#'             line_color = show_insper_colors("reds3"),
+#'             line_width = 1.5,
+#'             zero = TRUE)
 #' }
 #'
 #' @family plots
@@ -703,8 +721,13 @@ insper_area <- function(
   y,
   fill = NULL,
   stacked = FALSE,
-  area_alpha = 1,
-  add_line = TRUE
+  area_alpha = 0.9,
+  fill_color = show_insper_colors("teals1"),
+  add_line = TRUE,
+  line_color = show_insper_colors("teals3"),
+  line_width = 0.8,
+  line_alpha = 1,
+  zero = FALSE
 ) {
   # Input validation with cli
   if (!is.data.frame(data)) {
@@ -723,10 +746,15 @@ insper_area <- function(
   # Initialize plot
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_area(fill = show_insper_colors("teals1"), alpha = area_alpha)
+      ggplot2::geom_area(fill = fill_color, alpha = area_alpha)
 
     if (add_line) {
-      p <- p + ggplot2::geom_line(color = show_insper_colors("teals3"), linewidth = 1)
+      p <- p +
+        ggplot2::geom_line(
+          color = line_color,
+          linewidth = line_width,
+          alpha = line_alpha
+        )
     }
   } else {
     p <- ggplot2::ggplot(
@@ -740,11 +768,17 @@ insper_area <- function(
       p <- p +
         ggplot2::geom_line(
           ggplot2::aes(color = {{ fill }}),
-          linewidth = 0.8,
+          linewidth = line_width,
+          alpha = line_alpha,
           position = position
         ) +
         scale_color_insper_d()
     }
+  }
+
+  # Add line at zero if requested
+  if (zero) {
+    p <- p + ggplot2::geom_hline(yintercept = 0, linewidth = 1)
   }
 
   p <- p +
@@ -810,7 +844,10 @@ insper_violin <- function(
   # Initialize plot
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_violin(fill = show_insper_colors("teals2"), alpha = violin_alpha)
+      ggplot2::geom_violin(
+        fill = show_insper_colors("teals2"),
+        alpha = violin_alpha
+      )
   } else {
     p <- ggplot2::ggplot(
       data,
@@ -927,7 +964,8 @@ insper_histogram <- function(
     n_bins <- nclass.FD(x_vals)
   } else if (bin_method == "scott") {
     n_bins <- nclass.scott(x_vals)
-  } else {  # manual
+  } else {
+    # manual
     n_bins <- bins
   }
 
@@ -960,7 +998,9 @@ insper_histogram <- function(
 
   # Apply theme and scale
   p <- p +
-    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05))) +
+    ggplot2::scale_y_continuous(
+      expand = ggplot2::expansion(mult = c(0, 0.05))
+    ) +
     theme_insper()
 
   return(p)
@@ -1049,7 +1089,9 @@ insper_density <- function(
 
   # Apply theme and scale
   p <- p +
-    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05))) +
+    ggplot2::scale_y_continuous(
+      expand = ggplot2::expansion(mult = c(0, 0.05))
+    ) +
     theme_insper()
 
   return(p)

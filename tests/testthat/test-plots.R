@@ -219,6 +219,42 @@ test_that("insper_area stacked parameter works", {
   expect_s3_class(p, "ggplot")
 })
 
+test_that("insper_area custom fill_color works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_area(df, x = time, y = value,
+                   fill_color = show_insper_colors("reds1"))
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_area custom line parameters work", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_area(df, x = time, y = value,
+                   line_color = show_insper_colors("oranges1"),
+                   line_width = 2,
+                   line_alpha = 0.5)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_area zero parameter adds horizontal line", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_area(df, x = time, y = value, zero = TRUE)
+  expect_s3_class(p, "ggplot")
+  # Check that the plot contains a horizontal line layer
+  expect_true(any(sapply(p$layers, function(layer) {
+    inherits(layer$geom, "GeomHline")
+  })))
+})
+
+test_that("insper_area works without line overlay", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_area(df, x = time, y = value, add_line = FALSE)
+  expect_s3_class(p, "ggplot")
+})
+
 test_that("insper_violin creates plot", {
   skip_if_not_installed("ggplot2")
   p <- insper_violin(mtcars, x = factor(cyl), y = mpg)
