@@ -1,18 +1,17 @@
 Package: insperplot
 Type: Package
 Title: Insper Themed ggplot2 Extensions
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: c(
     person(
       "Vinicius", "Reginatto",
-      email = "vinicius.reginatto@example.com",
+      email = "viniciusor@insper.edu.br",
       role = c("aut", "cre")
     )
   )
-Description: Extends ggplot2 with Insper Instituto de Ensino e Pesquisa visual
-    identity, providing custom themes, color palettes, and specialized plotting
-    functions for academic and institutional use. This is an unofficial package
-    created by an Insper employee, not an official Insper product.
+Description: Extends ggplot2 with Insper's identity, providing custom themes,
+    color palettes, and specialized plotting functions for academic and
+    institutional use. This is not an official Insper product.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

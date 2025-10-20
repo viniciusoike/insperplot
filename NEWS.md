@@ -1,3 +1,47 @@
+# insperplot 0.9.1
+
+## Enhancements
+
+### Improved `insper_area()` Customization
+
+Enhanced `insper_area()` with five new parameters for greater flexibility while maintaining 100% backward compatibility:
+
+**New parameters:**
+- `fill_color` - Custom color for area fill (default: `show_insper_colors("teals1")`)
+- `line_color` - Custom color for line overlay (default: `show_insper_colors("teals3")`)
+- `line_width` - Adjustable line width (default: 0.8)
+- `line_alpha` - Line transparency control (default: 1)
+- `zero` - Add horizontal line at y = 0 (default: `FALSE`)
+
+**Example:**
+```r
+spo_metro |>
+  summarise(total = sum(value), .by = date) |>
+  insper_area(
+    x = date,
+    y = total,
+    fill_color = show_insper_colors("reds1"),
+    line_color = show_insper_colors("reds3"),
+    line_width = 1.5,
+    line_alpha = 0.8,
+    area_alpha = 0.6,
+    zero = TRUE
+  )
+```
+
+**Design consistency:**
+- Parameter naming follows package conventions (e.g., `zero` matches `insper_barplot()` and `insper_histogram()`)
+- Kept `area_alpha` (more specific than generic `fill_alpha`)
+- All parameters apply to both single and grouped area charts
+
+### Documentation
+
+- Added comprehensive CLAUDE.md file with architecture documentation and development guidelines
+- Updated `insper_area()` documentation with new parameter examples
+- Added 5 new tests covering all new parameters
+
+---
+
 # insperplot 0.9.0
 
 ## Breaking Changes
