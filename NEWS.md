@@ -1,3 +1,53 @@
+# insperplot 1.0.0
+
+## Major Release: Stable API
+
+This is the **first stable release** of insperplot! The package API is now frozen and follows [semantic versioning](https://semver.org/).
+
+**Lifecycle change:** Package status updated from "experimental" to **"stable"** ✨
+
+## Breaking Changes
+
+### Removed Deprecated Palette Names
+
+Old palette names that showed deprecation warnings in v0.9.x have been **completely removed**. You must now use the simplified names introduced in v0.9.0:
+
+**Removed palette names:**
+- ❌ `reds_seq`, `oranges_seq`, `teals_seq`, `grays_seq` → Use `reds`, `oranges`, `teals`, `grays`
+- ❌ `diverging_red_teal`, `diverging_red_teal_extended`, `diverging_insper` → Use `red_teal`, `red_teal_ext`, `diverging`
+- ❌ `qualitative_main`, `qualitative_bright`, `qualitative_contrast` → Use `main`, `bright`, `contrast`
+
+**Migration:**
+```r
+# OLD (will now error)
+scale_fill_insper_c(palette = "reds_seq")
+
+# NEW
+scale_fill_insper_c(palette = "reds")
+
+# List all available palettes
+list_palettes()
+```
+
+## Bug Fixes
+
+- Fixed vignette build errors caused by undefined variable references
+- Fixed font handling in vignettes to prevent failures when fonts unavailable
+- Updated all documentation to use current API (`show_insper_colors()` instead of removed `insper_col()`)
+- Moved example scripts from `tests/` to `inst/examples/` to prevent test execution issues
+
+## Documentation
+
+- Updated README with stable lifecycle badge
+- Clarified v1.0.0 breaking changes in NEWS
+- Package documentation is complete and production-ready
+
+## Acknowledgments
+
+Thank you to all users who provided feedback during the experimental phase (v0.1.0 - v0.9.1). The API is now stable and ready for production use!
+
+---
+
 # insperplot 0.9.1
 
 ## Enhancements

@@ -20,8 +20,9 @@ knitr::opts_chunk$set(
 
 # Load Insper fonts for vignette rendering
 # Suppresses output to keep vignette clean
+# Wrapped in try() to prevent vignette build failure if fonts unavailable
 suppressMessages(suppressWarnings({
-  insperplot::import_insper_fonts(verbose = FALSE)
+  try(insperplot::import_insper_fonts(verbose = FALSE), silent = TRUE)
 }))
 ```
 
@@ -205,11 +206,11 @@ Explore relationships between stations with `insper_scatterplot()`:
 
 ```{r scatterplot}
 # Compare Paulista vs Pinheiros ridership
-paulista <- metro |>
+paulista <- spo_metro |>
   filter(name_station == "Paulista") |>
   select(date, paulista = value)
 
-pinheiros <- metro |>
+pinheiros <- spo_metro |>
   filter(name_station == "Pinheiros") |>
   select(date, pinheiros = value)
 
@@ -260,7 +261,7 @@ large_numbers <- c(1234.56, 1234567.89, 0.1234)
 library(scales)
 
 # For axis labels in plots
-ggplot(metro |> filter(name_station == "Paulista"),
+ggplot(spo_metro |> filter(name_station == "Paulista"),
        aes(x = date, y = value)) +
   geom_line(color = show_insper_colors("teals1"), linewidth = 1.2) +
   scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",")) +
@@ -279,7 +280,7 @@ Save plots in publication-ready formats:
 
 ```{r saving, eval=FALSE}
 # Create a plot
-p <- metro |>
+p <- spo_metro |>
   filter(name_station == "Paulista") |>
   insper_timeseries(
     x = date,

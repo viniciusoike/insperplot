@@ -7,7 +7,7 @@
 
 [![R-CMD-check](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 **insperplot** extends ggplot2 with [Insper Instituto de Ensino e
@@ -28,8 +28,8 @@ refer to [Insper’s official website](https://www.insper.edu.br/).
 You can install the development version of insperplot from GitHub:
 
 ``` r
-# install.packages("pak")
-pak::pak("viniciusreginatto/insperplot")
+# install.packages("remotes")
+remotes::install_github("viniciusoike/insperplot")
 ```
 
 ## Setup (Recommended)
@@ -47,15 +47,13 @@ setup_insper_fonts()  # Interactive guide for complete setup
 
 **Step 1: Install Insper Fonts**
 
-insperplot uses fonts based on Insper's official template:
-
-- **Georgia** (serif, primary for titles) - typically pre-installed
-- **Inter** (sans-serif, for body text) - Google Font
-- **EB Garamond** & **Playfair Display** (serif, title fallbacks) -
-  Google Fonts
+insperplot uses fonts based on Insper’s official template: - **Georgia**
+(serif, primary for titles) - typically pre-installed - **Inter**
+(sans-serif, for body text) - Google Font - **EB Garamond** & **Playfair
+Display** (serif, title fallbacks) - Google Fonts
 
 1.  Visit [Google Fonts](https://fonts.google.com)
-2.  Download and install "Inter", "EB Garamond", and "Playfair Display"
+2.  Download and install “Inter”, “EB Garamond”, and “Playfair Display”
 3.  Restart R/RStudio
 4.  Note: Georgia is typically already installed on most systems
 
@@ -90,7 +88,7 @@ library(ggplot2)
 
 # Create a basic plot with Insper theme
 ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point(color = insper_col("reds1"), size = 3) +
+  geom_point(color = show_insper_colors("reds1"), size = 3) +
   theme_insper() +
   labs(
     title = "Fuel Efficiency vs Weight",
@@ -102,7 +100,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 # Use Insper color palettes
 ggplot(mtcars, aes(x = factor(cyl), fill = factor(cyl))) +
   geom_bar() +
-  scale_fill_insper(palette = "reds_seq") +
+  scale_fill_insper_d(palette = "reds") +
   theme_insper() +
   labs(title = "Distribution by Cylinders", fill = "Cylinders")
 
@@ -126,9 +124,12 @@ show_insper_palette()
 ## Main Functions
 
 - `theme_insper()`: Apply Insper’s visual identity to ggplot2 plots
-- `insper_col()`: Extract Insper brand colors
+- `show_insper_colors()`: Extract Insper brand colors
 - `insper_pal()`: Get color palettes
-- `scale_*_insper()`: Insper color scales for ggplot2
+- `scale_color_insper_d()` / `scale_fill_insper_d()`: Discrete color
+  scales
+- `scale_color_insper_c()` / `scale_fill_insper_c()`: Continuous color
+  scales
 - `show_insper_palette()`: Visualize available color palettes
 
 ## Color Palettes
@@ -136,13 +137,12 @@ show_insper_palette()
 insperplot includes several pre-defined palettes:
 
 - **main**: Primary Insper colors
-- **reds_seq**, **oranges_seq**, **teals_seq**, **grays_seq**:
-  Sequential single-color gradients
-- **diverging_insper**, **diverging_red_teal**: Diverging palettes for
+- **reds**, **oranges**, **teals**, **grays**: Sequential single-color
+  gradients
+- **diverging**, **red_teal**, **red_teal_ext**: Diverging palettes for
   data with a meaningful center
-- **qualitative_main**, **qualitative_bright**,
-  **qualitative_contrast**: Qualitative palettes for categorical data
-- **categorical**: 8-color palette for multi-category data
+- **bright**, **contrast**: Qualitative palettes for categorical data
+- **categorical**, **accent**: Additional color options
 
 Use `list_palettes()` to see all available palettes with detailed
 information.

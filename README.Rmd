@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 **insperplot** extends ggplot2 with [Insper Instituto de Ensino e Pesquisa](https://www.insper.edu.br/) visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.

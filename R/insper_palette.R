@@ -18,29 +18,6 @@ insper_pal <- function(palette = "main", n = NULL, type = "discrete", reverse = 
     cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_colors)}}")
   }
 
-  # Deprecation warnings for old palette names
-  deprecated_palettes <- c(
-    "reds_seq" = "reds",
-    "oranges_seq" = "oranges",
-    "teals_seq" = "teals",
-    "grays_seq" = "grays",
-    "diverging_red_teal" = "red_teal",
-    "diverging_red_teal_extended" = "red_teal_ext",
-    "diverging_insper" = "diverging",
-    "qualitative_main" = "main",
-    "qualitative_bright" = "bright",
-    "qualitative_contrast" = "contrast"
-  )
-
-  if (palette %in% names(deprecated_palettes)) {
-    new_name <- deprecated_palettes[[palette]]
-    cli::cli_warn(c(
-      "!" = "Palette name {.val {palette}} is deprecated.",
-      "i" = "Use {.val {new_name}} instead.",
-      "i" = "Old names will be removed in v1.0.0"
-    ))
-  }
-
   pal <- insper_colors[[palette]]
 
   if (reverse) pal <- rev(pal)
