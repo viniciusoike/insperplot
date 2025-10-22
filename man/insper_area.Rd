@@ -10,11 +10,11 @@ insper_area(
   y,
   fill = NULL,
   stacked = FALSE,
-  area_alpha = 1,
+  area_alpha = 0.9,
   fill_color = show_insper_colors("teals1"),
   add_line = TRUE,
   line_color = show_insper_colors("teals3"),
-  line_width = 1,
+  line_width = 0.8,
   line_alpha = 1,
   zero = FALSE
 )

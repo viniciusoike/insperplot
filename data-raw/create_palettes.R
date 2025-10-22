@@ -47,24 +47,7 @@ insper_colors <- list(
     red = "#E74C3C",
     yellow = "#F39C12",
     purple = "#9B59B6"
-  ),
-
-  # ========== DEPRECATED ALIASES (for backward compatibility) ==========
-  # These will show deprecation warnings - remove in v1.0.0
-  reds_seq = c("#FEE5E7", "#FCA5A8", "#E4002B", "#A50020", "#6B0015"),
-  oranges_seq = c("#FEF1E5", "#FAA61A", "#F58220", "#F15A22", "#B83E16"),
-  teals_seq = c("#E5F7F7", "#3CBFAE", "#27A5A2", "#009491", "#006763"),
-  grays_seq = c("#F5F5F5", "#E6E7E8", "#BCBEC0", "#414042", "#1A1A1A"),
-  diverging_red_teal = c("#E4002B", "#FCA5A8", "#FFFFFF", "#7DD4D2", "#009491"),
-  diverging_red_teal_extended = c(
-    "#6B0015", "#A50020", "#E4002B", "#FCA5A8", "#FEE5E7",
-    "#FFFFFF",
-    "#E5F7F7", "#7DD4D2", "#009491", "#006763", "#003D3B"
-  ),
-  diverging_insper = c("#009491", "#3CBFAE", "#E6E7E8", "#FCA5A8", "#E4002B"),
-  qualitative_main = c("#E4002B", "#F15A22", "#FAA61A", "#009491", "#3CBFAE", "#414042"),
-  qualitative_bright = c("#E4002B", "#F15A22", "#FAA61A", "#009491", "#EE2A5D", "#9B59B6"),
-  qualitative_contrast = c("#E4002B", "#009491", "#F58220", "#A62B4D", "#414042", "#3CBFAE")
+  )
 )
 
 usethis::use_data(insper_colors, internal = TRUE, overwrite = TRUE)
