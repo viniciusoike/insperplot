@@ -4,11 +4,11 @@
 \alias{show_insper_palette}
 \title{Visualize Insper Color Palettes}
 \usage{
-show_insper_palette(palette = "all")
+show_insper_palette(palette = "main")
 }
 \arguments{
-\item{palette}{Character. Name of palette or "all". Use \code{\link{list_palettes}}
-to see available options. Default "all".}
+\item{palette}{Character. Name of palette. Use \code{\link{list_palettes}}
+to see available options. Default "main".}
 }
 \value{
 A ggplot2 object
@@ -22,16 +22,15 @@ This function visualizes the palettes that are used by ggplot2 scale functions
 like \code{\link{scale_fill_insper_d}} and \code{\link{scale_color_insper_c}}.
 
 Available palettes: main, reds, oranges, teals, grays, red_teal, red_teal_ext,
-diverging, bright, contrast, categorical, accent.
+diverging, bright, contrast, categorical, accent_red, accent_teal, and more.
 }
 \examples{
-# Show single palette
+# Show default palette
+show_insper_palette()
+
+# Show specific palettes
 show_insper_palette("reds")
 show_insper_palette("red_teal")
-
-# Show all palettes
-show_insper_palette()
-show_insper_palette("all")
 }
 \seealso{
 \code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_colors}}

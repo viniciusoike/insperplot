@@ -37,7 +37,7 @@
 #'
 #' # Get just the names
 #' list_palettes(names_only = TRUE)
-list_palettes <- function(type = c("all", "sequential", "diverging", "qualitative"),
+list_palettes <- function(type = c("all", "sequential", "diverging", "qualitative", "accent"),
                           names_only = FALSE) {
 
   type <- match.arg(type)
@@ -52,19 +52,27 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
       # Diverging
       "red_teal", "red_teal_ext", "diverging",
       # Qualitative
-      "bright", "contrast", "categorical", "accent"
+      "bright", "contrast", "categorical",
+      # Accent palettes
+      "accent_red", "accent_teal",
+      # Additional categorical palettes
+      "categorical_ito", "categorical_tab", "categorical_set"
     ),
     type = c(
       "qualitative",  # main
       rep("sequential", 4),
       rep("diverging", 3),
-      rep("qualitative", 4)
+      rep("qualitative", 3),
+      rep("accent", 2),
+      rep("qualitative", 3)
     ),
     n_colors = c(
       6,  # main
       5, 5, 5, 5,  # sequential
       5, 11, 5,  # diverging
-      6, 6, 8, 5  # qualitative
+      6, 6, 8,  # qualitative
+      6, 6,  # accent
+      8, 10, 9  # categorical variants
     ),
     recommended_use = c(
       "Primary brand colors for categorical data",
@@ -78,7 +86,11 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
       "Bright categorical colors (high contrast)",
       "High contrast categorical colors",
       "8-color categorical palette",
-      "Accent colors for highlights"
+      "Accent palette with red emphasis",
+      "Accent palette with teal emphasis",
+      "Okabe-Ito colorblind-safe palette",
+      "Tableau 10 categorical palette",
+      "ColorBrewer Set1 palette"
     ),
     stringsAsFactors = FALSE
   )

@@ -30,11 +30,12 @@
 #' show_insper_colors("grays")
 show_insper_colors <- function(color_family = "all") {
   # Define variables to avoid R CMD check NOTE
-  name <- hex <- text_color <- NULL
+  color <- hex <- y <- x <- reverse_col <- NULL
 
   cols <- insper_individual_colors
 
   if (color_family != "all") {
+    # Filter by color family
     pattern <- switch(color_family,
       "reds" = "^reds[0-9]",
       "oranges" = "^oranges[0-9]",
@@ -48,42 +49,49 @@ show_insper_colors <- function(color_family = "all") {
       ))
     )
     cols <- cols[grepl(pattern, names(cols))]
+
+    # Simple horizontal layout for filtered colors
+    df <- data.frame(
+      color = names(cols),
+      hex = as.character(cols),
+      y = 1,
+      x = seq_along(cols),
+      reverse_col = factor(rep(0, length(cols)))
+    )
+  } else {
+    # Grid layout for all colors
+    # Layout: row 1 = white/off_white/black
+    #         row 2 = grays (4 colors)
+    #         rows 3-6 = reds/oranges/magentas/teals (3 each)
+    df <- data.frame(
+      color = names(cols),
+      hex = as.character(cols),
+      y = c(1, 1, 1, 2, 2, 2, 2, rep(3:6, each = 3)),
+      x = c(1, 2, 3, 1, 2, 3, 4, rep(1:3, 4)),
+      reverse_col = factor(c(1, 1, 0, 0, 0, 1, 1, rep(0, 12)))
+    )
   }
 
-  # Create data frame for plotting
-  df <- data.frame(
-    name = names(cols),
-    hex = as.character(cols),
-    x = seq_along(cols),
-    stringsAsFactors = FALSE
-  )
-
-  # Determine text color (white on dark, black on light)
-  df$text_color <- ifelse(
-    grDevices::col2rgb(df$hex)[1,] * 0.299 +
-    grDevices::col2rgb(df$hex)[2,] * 0.587 +
-    grDevices::col2rgb(df$hex)[3,] * 0.114 > 128,
-    "black", "white"
-  )
-
-  # Create plot
-  ggplot2::ggplot(df, ggplot2::aes(x = x, y = 1, fill = hex)) +
+  # Create plot with grid layout
+  ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, fill = hex)) +
     ggplot2::geom_tile(width = 0.9, height = 0.9, color = "black") +
     ggplot2::scale_fill_identity() +
     ggplot2::geom_text(
-      ggplot2::aes(label = paste0(name, "\n", hex), color = text_color),
-      size = 3, fontface = "bold"
+      ggplot2::aes(label = paste0(color, "\n", hex), color = reverse_col),
+      size = 3,
+      fontface = "bold"
     ) +
-    ggplot2::scale_color_identity() +
+    ggplot2::scale_color_manual(values = c("white", "black")) +
+    ggplot2::guides(color = "none") +
     ggplot2::theme_void() +
     ggplot2::labs(
-      title = paste("Insper Individual Colors:", tools::toTitleCase(color_family)),
+      title = paste("Insper Color Palette:", tools::toTitleCase(color_family)),
       subtitle = "Use get_insper_colors('name') to extract by name"
     ) +
     ggplot2::theme(
-      plot.title = ggplot2::element_text(hjust = 0.5, size = 14, face = "bold"),
+      plot.title = ggplot2::element_text(hjust = 0.5, size = 14),
       plot.subtitle = ggplot2::element_text(hjust = 0.5, size = 10),
-      plot.margin = ggplot2::margin(10, 10, 10, 10)
+      plot.background = ggplot2::element_rect(fill = "gray90")
     )
 }
 
@@ -93,8 +101,8 @@ show_insper_colors <- function(color_family = "all") {
 #' Display color palettes used by scale_*_insper_*() functions.
 #' To see individual colors, use \code{\link{show_insper_colors}}.
 #'
-#' @param palette Character. Name of palette or "all". Use \code{\link{list_palettes}}
-#'   to see available options. Default "all".
+#' @param palette Character. Name of palette. Use \code{\link{list_palettes}}
+#'   to see available options. Default "main".
 #' @return A ggplot2 object
 #'
 #' @details
@@ -102,27 +110,21 @@ show_insper_colors <- function(color_family = "all") {
 #' like \code{\link{scale_fill_insper_d}} and \code{\link{scale_color_insper_c}}.
 #'
 #' Available palettes: main, reds, oranges, teals, grays, red_teal, red_teal_ext,
-#' diverging, bright, contrast, categorical, accent.
+#' diverging, bright, contrast, categorical, accent_red, accent_teal, and more.
 #'
 #' @family colors
 #' @seealso \code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_colors}}
 #' @export
 #' @examples
-#' # Show single palette
+#' # Show default palette
+#' show_insper_palette()
+#'
+#' # Show specific palettes
 #' show_insper_palette("reds")
 #' show_insper_palette("red_teal")
-#'
-#' # Show all palettes
-#' show_insper_palette()
-#' show_insper_palette("all")
-show_insper_palette <- function(palette = "all") {
+show_insper_palette <- function(palette = "main") {
   # Define variables to avoid R CMD check NOTE
   position <- hex <- NULL
-
-  if (palette == "all") {
-    # Show all palettes using existing function
-    return(show_palette_types())
-  }
 
   # Validate palette name
   if (!palette %in% names(insper_palettes)) {

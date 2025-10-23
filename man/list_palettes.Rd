@@ -5,7 +5,7 @@
 \title{List Available Insper Color Palettes}
 \usage{
 list_palettes(
-  type = c("all", "sequential", "diverging", "qualitative"),
+  type = c("all", "sequential", "diverging", "qualitative", "accent"),
   names_only = FALSE
 )
 }

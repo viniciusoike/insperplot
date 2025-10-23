@@ -1,11 +1,11 @@
-test_that("show_insper_colors returns all colors when no args", {
+test_that("get_insper_colors returns all colors when no args", {
   cols <- get_insper_colors()
   expect_type(cols, "character")
   expect_true(length(cols) > 0)
   expect_true(all(grepl("^#|^gray", cols)))
 })
 
-test_that("show_insper_colors can extract specific colors", {
+test_that("get_insper_colors can extract specific colors", {
   red <- get_insper_colors("reds1")
   expect_length(red, 1)
   expect_equal(unname(red), "#E4002B")
@@ -17,9 +17,22 @@ test_that("show_insper_colors can extract specific colors", {
   expect_equal(unname(multiple[2]), "#009491")
 })
 
-test_that("show_insper_colors returns named vector", {
+test_that("get_insper_colors returns named vector", {
   cols <- get_insper_colors("reds1", "teals1")
   expect_named(cols, c("reds1", "teals1"))
+})
+
+test_that("show_insper_colors creates a ggplot", {
+  skip_if_not_installed("ggplot2")
+  p <- show_insper_colors()
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("show_insper_colors accepts color families", {
+  skip_if_not_installed("ggplot2")
+  expect_s3_class(show_insper_colors("reds"), "ggplot")
+  expect_s3_class(show_insper_colors("grays"), "ggplot")
+  expect_s3_class(show_insper_colors("all"), "ggplot")
 })
 
 test_that("insper_pal returns valid palettes", {
@@ -59,7 +72,7 @@ test_that("insper_pal n parameter defaults to palette length", {
   expect_equal(pal1, pal2)
 })
 
-test_that("show_insper_palette creates a ggplot", {
+test_that("show_insper_palette creates a ggplot with default palette", {
   skip_if_not_installed("ggplot2")
   p <- show_insper_palette()
   expect_s3_class(p, "ggplot")
@@ -76,10 +89,4 @@ test_that("show_insper_palette accepts palette names", {
 
 test_that("show_insper_palette errors on invalid palette", {
   expect_error(show_insper_palette("invalid"), "not found")
-})
-
-test_that("show_insper_palette shows all colors by default", {
-  skip_if_not_installed("ggplot2")
-  p <- show_insper_palette("all")
-  expect_s3_class(p, "ggplot")
 })

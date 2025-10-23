@@ -8,29 +8,39 @@ Fixed architectural inconsistencies in color/palette system to provide a single 
 
 **Breaking change (minor):**
 - `show_insper_colors()` now returns a **ggplot visualization** instead of hex codes
+  - Restored superior grid-based layout from previous version for better readability
   - **Migration:** Use `get_insper_colors()` for extraction (new simplified function)
   - Old: `colors <- show_insper_colors("reds1", "teals1")`
   - New: `colors <- get_insper_colors("reds1", "teals1")`
 
+- `show_insper_palette()` default changed from `"all"` to `"main"`
+  - The `"all"` option has been removed (use `list_palettes()` to see all available palettes)
+  - Shows the main Insper brand palette by default
+
 **Fixed:**
 - `show_insper_palette()` now correctly displays palette colors (not individual colors)
-- Now works with all 12 palettes: `reds`, `oranges`, `teals`, `grays`, `red_teal`, `red_teal_ext`, `diverging`, `main`, `bright`, `contrast`, `categorical`, `accent`
-- Example: `show_insper_palette("reds")` shows the 5-color red gradient palette
+- `list_palettes()` updated to include all palettes in the package:
+  - Added: `accent_red`, `accent_teal`, `categorical_ito`, `categorical_tab`, `categorical_set`
+  - Removed: non-existent `accent` palette
+  - New type: `"accent"` for accent palettes
+- `show_insper_colors()` now uses grid layout for better organization and readability
+- Now works with all 15 palettes: `reds`, `oranges`, `teals`, `grays`, `red_teal`, `red_teal_ext`, `diverging`, `main`, `bright`, `contrast`, `categorical`, `accent_red`, `accent_teal`, `categorical_ito`, `categorical_tab`, `categorical_set`
 
 **Improved:**
 - Unified data structure - single source of truth in `data-raw/create_colors_and_palettes.R`
 - Created `insper_individual_colors` and `insper_palettes` internal data objects
 - Eliminated duplicate color definitions
+- Better visual presentation of colors in grid layout
 
 ## Function Clarifications
 
-| Function | Purpose | Returns |
-|----------|---------|---------|
-| `get_insper_colors()` | Extract individual colors by name | Named hex vector |
-| `show_insper_colors()` | Visualize all individual colors | ggplot object |
-| `insper_pal()` | Extract palette colors (for use in scales) | Hex vector |
-| `show_insper_palette()` | Visualize palettes | ggplot object |
-| `list_palettes()` | List palette metadata | data.frame |
+| Function | Purpose | Returns | Default |
+|----------|---------|---------|---------|
+| `get_insper_colors()` | Extract individual colors by name | Named hex vector | All colors |
+| `show_insper_colors()` | Visualize all individual colors | ggplot object (grid) | All colors |
+| `insper_pal()` | Extract palette colors (for use in scales) | Hex vector | "main" palette |
+| `show_insper_palette()` | Visualize palettes | ggplot object (gradient) | "main" palette |
+| `list_palettes()` | List palette metadata | data.frame | All palettes |
 
 All existing scale functions (`scale_fill_insper_d()`, `scale_color_insper_c()`, etc.) continue to work unchanged.
 

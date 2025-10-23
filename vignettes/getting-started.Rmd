@@ -131,13 +131,13 @@ show_insper_colors("reds")
 ### Working with Palettes
 
 ```{r palette-viz, fig.height=4}
-# Show single palette
+# Show specific palette
 show_insper_palette("reds")
 
-# Show all palettes
+# Show default "main" palette
 show_insper_palette()
 
-# List palette info
+# List all available palettes
 list_palettes()
 ```
 
