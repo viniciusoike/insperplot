@@ -12,15 +12,16 @@ insper_histogram(
   bin_method = c("sturges", "fd", "scott", "manual"),
   fill_color = get_insper_colors("reds1"),
   border_color = "white",
-  zero = TRUE
+  zero = TRUE,
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (numeric)}
+\item{x}{Variable for x-axis (numeric)}
 
-\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
+\item{fill}{Variable for fill aesthetic (optional)}
 
 \item{bins}{Numeric. Number of bins. Only used when bin_method = "manual"}
 
@@ -33,6 +34,8 @@ Default is Insper red.}
 \item{border_color}{Character. Color for bar borders. Default is "white"}
 
 \item{zero}{Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_histogram()}}
 }
 \value{
 A ggplot2 object
@@ -75,7 +78,6 @@ Other plots:
 \code{\link{insper_boxplot}()},
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

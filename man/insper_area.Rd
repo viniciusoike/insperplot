@@ -16,17 +16,18 @@ insper_area(
   line_color = get_insper_colors("teals3"),
   line_width = 0.8,
   line_alpha = 1,
-  zero = FALSE
+  zero = FALSE,
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)}
+\item{x}{Time variable (numeric, Date, or POSIXct)}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Value variable}
+\item{y}{Value variable}
 
-\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
+\item{fill}{Variable for fill aesthetic (optional)}
 
 \item{stacked}{Logical. If TRUE and fill is provided, creates stacked areas.
 Default is FALSE}
@@ -46,6 +47,8 @@ Default is darker Insper teal}
 \item{line_alpha}{Numeric. Transparency of line (0-1). Default is 1}
 
 \item{zero}{Logical. If TRUE, adds a horizontal line at y = 0. Default is FALSE}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_area()}}
 }
 \value{
 A ggplot2 object
@@ -89,7 +92,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

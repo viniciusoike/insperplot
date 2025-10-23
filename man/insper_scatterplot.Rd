@@ -19,11 +19,11 @@ insper_scatterplot(
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis}
+\item{x}{Variable for x-axis}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Variable for y-axis}
+\item{y}{Variable for y-axis}
 
-\item{color}{<[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)}
+\item{color}{Variable for color aesthetic (optional)}
 
 \item{add_smooth}{Logical. If TRUE, adds a regression line. Default is FALSE}
 
@@ -77,7 +77,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}
 }

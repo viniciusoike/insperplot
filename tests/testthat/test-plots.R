@@ -165,31 +165,6 @@ test_that("plot functions work without title/subtitle/caption (use labs() instea
 
 # Tests for new plot functions
 
-test_that("insper_lollipop creates plot", {
-  skip_if_not_installed("ggplot2")
-  df <- data.frame(category = letters[1:5], value = 1:5)
-  p <- insper_lollipop(df, x = category, y = value)
-  expect_s3_class(p, "ggplot")
-})
-
-test_that("insper_lollipop handles color aesthetic", {
-  skip_if_not_installed("ggplot2")
-  df <- data.frame(category = letters[1:5], value = 1:5, grp = rep(c("A", "B"), length.out = 5))
-  p <- insper_lollipop(df, x = category, y = value, color = grp)
-  expect_s3_class(p, "ggplot")
-})
-
-test_that("insper_lollipop sorted parameter works", {
-  skip_if_not_installed("ggplot2")
-  df <- data.frame(category = letters[1:5], value = c(3, 1, 4, 2, 5))
-  p1 <- insper_lollipop(df, x = category, y = value, sorted = TRUE)
-  expect_s3_class(p1, "ggplot")
-
-  # Users can add coord_flip() for horizontal orientation
-  p2 <- insper_lollipop(df, x = category, y = value) + ggplot2::coord_flip()
-  expect_s3_class(p2, "ggplot")
-})
-
 test_that("insper_area creates plot", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))

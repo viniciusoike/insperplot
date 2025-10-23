@@ -1,3 +1,59 @@
+# insperplot 1.2.0
+
+## Breaking Changes
+
+### Removed Functions
+
+**REMOVED:**
+- `insper_lollipop()` - poorly implemented function that was difficult to use effectively
+  - Users can create lollipop charts manually using `geom_segment()` + `geom_point()`
+  - No direct replacement provided due to unclear use cases
+
+## Improvements
+
+### Enhanced Plot Function Flexibility
+
+All `insper_*` plot functions now accept `...` parameter to pass additional arguments to their underlying geom layers:
+
+- `insper_timeseries()` passes `...` to `geom_line()`
+- `insper_boxplot()` passes `...` to `geom_boxplot()`
+- `insper_heatmap()` passes `...` to `geom_tile()`
+- `insper_area()` passes `...` to `geom_area()`
+- `insper_violin()` passes `...` to `geom_violin()`
+- `insper_histogram()` passes `...` to `geom_histogram()`
+- `insper_density()` passes `...` to `geom_density()`
+
+**Example usage:**
+```r
+# Custom line type
+insper_timeseries(data, x = date, y = value, linetype = "dashed")
+
+# Custom position adjustment
+insper_histogram(data, x = value, position = "dodge")
+
+# Custom aesthetics
+insper_density(data, x = value, size = 2)
+```
+
+### Better Defaults
+
+- `insper_heatmap()` now defaults to `show_values = FALSE` for cleaner visualizations
+  - Set `show_values = TRUE` to display values on tiles when needed
+
+### Documentation Improvements
+
+- Removed 25 instances of `<[data-masked][ggplot2::aes_eval]>` tags from documentation
+  - These tags were internal to ggplot2 and added no value for users
+  - Function documentation is now cleaner and more readable
+
+### Example Improvements
+
+- `insper_boxplot()` and `insper_violin()` examples now use `iris` dataset instead of `mtcars`
+  - The `iris` dataset has a natural categorical variable (`Species`) that better demonstrates these plot types
+  - Removed references to non-existent `flip` parameter from examples
+
+---
+
 # insperplot 1.1.0
 
 ## Breaking Changes

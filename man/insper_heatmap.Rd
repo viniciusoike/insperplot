@@ -6,10 +6,11 @@
 \usage{
 insper_heatmap(
   data,
-  show_values = TRUE,
+  show_values = FALSE,
   value_color = "white",
   value_size = 3,
-  palette = "diverging"
+  palette = "diverging",
+  ...
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ correlation matrix}
 \item{value_size}{Numeric. Size of value text. Default is 3}
 
 \item{palette}{Character. Palette name for fill scale. Default is "diverging"}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_tile()}}
 }
 \value{
 A ggplot2 object
@@ -62,7 +65,6 @@ Other plots:
 \code{\link{insper_boxplot}()},
 \code{\link{insper_density}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

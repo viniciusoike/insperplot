@@ -69,7 +69,6 @@ reference:
   - insper_scatterplot
   - insper_timeseries
   - insper_area
-  - insper_lollipop
   - insper_boxplot
   - insper_violin
   - insper_heatmap

@@ -11,17 +11,18 @@ insper_boxplot(
   fill = NULL,
   add_jitter = NULL,
   add_notch = FALSE,
-  box_alpha = 0.8
+  box_alpha = 0.8,
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)}
+\item{x}{Variable for x-axis (categorical)}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)}
+\item{y}{Variable for y-axis (numeric)}
 
-\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
+\item{fill}{Variable for fill aesthetic (optional)}
 
 \item{add_jitter}{Logical. If TRUE, adds jittered points. If NULL (default),
 automatically enables jitter when the largest group has <100 observations.}
@@ -29,6 +30,8 @@ automatically enables jitter when the largest group has <100 observations.}
 \item{add_notch}{Logical. If TRUE, creates notched boxplot. Default is FALSE}
 
 \item{box_alpha}{Numeric. Transparency of boxes (0-1). Default is 0.8}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_boxplot()}}
 }
 \value{
 A ggplot2 object
@@ -40,17 +43,14 @@ using Insper's visual identity.
 \examples{
 \dontrun{
 # Simple boxplot
-insper_boxplot(mtcars, x = factor(cyl), y = mpg)
+insper_boxplot(iris, x = Species, y = Sepal.Length)
 
 # With fill aesthetic
-insper_boxplot(mtcars, x = factor(cyl), y = mpg, fill = factor(cyl))
+insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species)
 
 # Notched boxplot without jitter
-insper_boxplot(mtcars, x = factor(cyl), y = mpg,
+insper_boxplot(iris, x = Species, y = Sepal.Length,
                add_notch = TRUE, add_jitter = FALSE)
-
-# Vertical boxplot
-insper_boxplot(mtcars, x = factor(cyl), y = mpg, flip = FALSE)
 }
 
 }
@@ -63,7 +63,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

@@ -13,15 +13,16 @@ insper_density(
   alpha = 0.6,
   bandwidth = NULL,
   adjust = 1,
-  kernel = "gaussian"
+  kernel = "gaussian",
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (numeric)}
+\item{x}{Variable for x-axis (numeric)}
 
-\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill/group aesthetic (optional)}
+\item{fill}{Variable for fill/group aesthetic (optional)}
 
 \item{fill_color}{Character. Hex color for density area when not using fill aesthetic.
 Default is Insper teal.}
@@ -35,6 +36,8 @@ Default is Insper teal.}
 \item{adjust}{Numeric. Adjustment multiplier for bandwidth. Default is 1.}
 
 \item{kernel}{Character. Kernel for density estimation. Default is "gaussian".}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_density()}}
 }
 \value{
 A ggplot2 object
@@ -65,7 +68,6 @@ Other plots:
 \code{\link{insper_boxplot}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

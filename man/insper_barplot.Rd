@@ -23,11 +23,11 @@ insper_barplot(
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Column name for x-axis}
+\item{x}{Column name for x-axis}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Column name for y-axis}
+\item{y}{Column name for y-axis}
 
-\item{fill_var}{<[`data-masked`][ggplot2::aes_eval]> Column name for fill aesthetic (creates grouped/stacked bars).
+\item{fill_var}{Column name for fill aesthetic (creates grouped/stacked bars).
 If NULL, uses single_color for all bars.}
 
 \item{single_color}{Character. Hex color code for bars when not using fill_var.
@@ -89,7 +89,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

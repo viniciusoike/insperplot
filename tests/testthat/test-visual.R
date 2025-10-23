@@ -123,11 +123,6 @@ test_that("insper_boxplot renders correctly", {
   vdiffr::expect_doppelganger("boxplot_basic", p)
 })
 
-test_that("insper_lollipop renders correctly", {
-  p <- insper_lollipop(test_df, x = category, y = value)
-  vdiffr::expect_doppelganger("lollipop_basic", p)
-})
-
 test_that("insper_area renders correctly", {
   area_data <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
   p <- insper_area(area_data, x = time, y = value)
