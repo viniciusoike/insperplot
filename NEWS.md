@@ -1,3 +1,61 @@
+# insperplot 1.1.0
+
+## Breaking Changes
+
+This release removes several utility functions to simplify the package API and enforce consistent naming conventions. All `insper_*` exported functions now create plots, maintaining a consistent interface.
+
+### Format Functions - Consolidated
+
+**REMOVED:**
+- `format_brl()` - consolidated into `format_num_br()`
+- `format_percent_br()` - consolidated into `format_num_br()`
+
+**UPDATED:**
+- `format_num_br()` now accepts `percent` and `currency` parameters for flexible formatting
+- Uses `scales::number()` internally (more powerful and consistent)
+- Supports additional arguments via `...` parameter
+
+**Migration guide:**
+```r
+# Old
+format_brl(1234.56)
+format_brl(1234.56, symbol = FALSE)
+format_percent_br(0.123)
+format_percent_br(0.123, digits = 2)
+
+# New
+format_num_br(1234.56, currency = TRUE, digits = 2)
+format_num_br(1234.56, currency = TRUE, prefix = "", digits = 2)  # no symbol
+format_num_br(0.123, percent = TRUE, digits = 1)
+format_num_br(0.123, percent = TRUE, digits = 2)
+```
+
+### Functions Removed from Public API
+
+**No longer exported:**
+- `insper_pal()` - now internal-only, used by scale functions
+  - Users should use `scale_color_insper_d()`, `scale_fill_insper_d()`, etc.
+  - To explore palettes: use `list_palettes()` and `show_insper_palette()`
+
+**Completely removed:**
+- `insper_caption()` - build captions with `paste()`, `glue::glue()`, or `labs(caption = ...)`
+- `show_palette_types()` - use `list_palettes()` to see all palettes, or loop with `show_insper_palette()`
+
+### Dependency Changes
+
+**Removed:**
+- `lubridate` - no longer needed after removing `insper_caption()`
+
+## Rationale
+
+These changes enforce consistent API design:
+- All `insper_*` exported functions now create plots (consistent interface)
+- Utility functions consolidated to reduce surface area
+- Palette discovery uses standardized `list_palettes()` + `show_insper_palette()` pattern
+- Cleaner package with fewer exported functions (better maintainability)
+
+---
+
 # insperplot 1.0.1
 
 ## Bug Fixes

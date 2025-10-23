@@ -54,7 +54,6 @@ Other colors:
 \code{\link{get_insper_colors}()},
 \code{\link{insper_pal}()},
 \code{\link{show_insper_colors}()},
-\code{\link{show_insper_palette}()},
-\code{\link{show_palette_types}()}
+\code{\link{show_insper_palette}()}
 }
 \concept{colors}

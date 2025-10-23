@@ -229,105 +229,59 @@ save_insper_plot <- function(
   message("Plot saved: ", filename)
 }
 
-#' Insper Caption
-#'
-#' Standardized caption formatting with institutional attribution
-#'
-#' @param text Caption text
-#' @param source Data source
-#' @param date Date of analysis
-#' @param lang Language for labels ("pt" for Portuguese, "en" for English). Default is "pt"
-#' @return Formatted caption string
-#' @family utilities
-#' @importFrom lubridate month
-#' @export
-insper_caption <- function(
-  text = NULL,
-  source = NULL,
-  date = NULL,
-  lang = "pt"
-) {
-  caption_parts <- c()
-
-  if (!is.null(text)) {
-    caption_parts <- c(caption_parts, text)
-  }
-
-  if (!is.null(source)) {
-    prefix_source <- ifelse(lang == "pt", "Fonte:", "Source:")
-    caption_parts <- c(caption_parts, paste(prefix_source, source))
-  }
-
-  if (!is.null(date)) {
-    if (!inherits(date, "Date")) {
-      date = Sys.Date()
-      cli::cli_warn(
-        "Invalid date supplied. Using current day with {.fun Sys.Date()}."
-      )
-    }
-    caption_parts <- c(caption_parts, paste("Insper |", format(date, "%B %Y")))
-  }
-
-  return(paste(caption_parts, collapse = " | "))
-}
-
-#' Format Brazilian Currency
-#'
-#' Format numbers as Brazilian Real currency
-#'
-#' @param x Numeric vector
-#' @param symbol Include R$ symbol
-#' @return Formatted character vector
-#' @family utilities
-#' @export
-format_brl <- function(x, symbol = TRUE) {
-  formatted <- scales::comma(x, big.mark = ".", decimal.mark = ",")
-
-  if (symbol) {
-    formatted <- paste("R$", formatted)
-  }
-
-  return(formatted)
-}
-
-#' Format Brazilian Percentage
-#'
-#' Format numbers as Brazilian-style percentages
-#'
-#' @param x Numeric vector (proportion, not percentage)
-#' @param digits Number of decimal places
-#' @return Formatted character vector
-#' @family utilities
-#' @export
-format_percent_br <- function(x, digits = 1) {
-  formatted <- scales::percent(x, accuracy = 10^(-digits), decimal.mark = ",")
-
-  return(formatted)
-}
-
-
 #' Format Brazilian Numbers
 #'
-#' Format numbers in Brazilian style with decimal comma and thousand separator
+#' Format numbers in Brazilian style with decimal comma and thousand separator.
+#' Supports currency and percentage formatting.
 #'
 #' @param x Numeric vector
-#' @param digits Number of decimal places
+#' @param digits Number of decimal places (default 0)
+#' @param percent Logical. If TRUE, formats as percentage (multiplies by 100, adds % suffix)
+#' @param currency Logical. If TRUE, formats as Brazilian Real currency (adds R$ prefix)
+#' @param ... Additional arguments passed to \code{\link[scales]{number}}
 #' @return Formatted character vector
 #' @family utilities
 #' @export
-format_num_br <- function(x, digits = NULL) {
-  if (is.null(digits)) {
-    formatted <- scales::comma(x, big.mark = ".", decimal.mark = ",")
-  } else {
-    formatted <- scales::comma(
+#' @examples
+#' # Basic number formatting
+#' format_num_br(1234.56, digits = 2)
+#'
+#' # Currency formatting
+#' format_num_br(1234.56, currency = TRUE, digits = 2)
+#'
+#' # Percentage formatting
+#' format_num_br(0.1234, percent = TRUE, digits = 1)
+#' format_num_br(0.1234, percent = TRUE, digits = 2)
+format_num_br <- function(x, digits = 0, percent = FALSE, currency = FALSE, ...) {
+  if (percent) {
+    return(scales::number(
+      x * 100,
+      accuracy = 10^(-digits),
+      big.mark = ".",
+      decimal.mark = ",",
+      suffix = "%",
+      ...
+    ))
+  }
+
+  if (currency) {
+    return(scales::number(
       x,
       accuracy = 10^(-digits),
       big.mark = ".",
-      decimal.mark = ","
-    )
+      decimal.mark = ",",
+      prefix = "R$ ",
+      ...
+    ))
   }
 
-  return(formatted)
+  scales::number(
+    x,
+    accuracy = 10^(-digits),
+    big.mark = ".",
+    decimal.mark = ",",
+    ...
+  )
 }
 
 #' Import Insper Fonts from Google Fonts

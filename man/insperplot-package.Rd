@@ -29,9 +29,10 @@ Pesquisa.
 
 **Colors:**
 \itemize{
-  \item \code{\link{show_insper_colors}} - Extract Insper brand colors
-  \item \code{\link{insper_pal}} - Get color palettes
+  \item \code{\link{get_insper_colors}} - Extract individual Insper brand colors
+  \item \code{\link{show_insper_colors}} - Visualize Insper brand colors
   \item \code{\link{show_insper_palette}} - Visualize color palettes
+  \item \code{\link{list_palettes}} - List available color palettes
 }
 
 **Scales:**
@@ -51,22 +52,20 @@ Pesquisa.
 **Utilities:**
 \itemize{
   \item \code{\link{save_insper_plot}} - Save plots with institutional defaults
-  \item \code{\link{insper_caption}} - Create standardized captions
-  \item \code{\link{format_brl}} - Format Brazilian currency
-  \item \code{\link{format_percent_br}} - Format Brazilian percentages
-  \item \code{\link{format_num_br}} - Format Brazilian numbers
+  \item \code{\link{format_num_br}} - Format Brazilian numbers (supports currency and percentages)
 }
 }
 
 \section{Color Palettes}{
 
-The package includes several pre-defined palettes:
+The package includes 15 pre-defined palettes:
 \itemize{
-  \item **main** - Primary Insper colors
+  \item **main** - Primary Insper brand colors
   \item **reds, oranges, teals, grays** - Sequential single-color gradients
   \item **diverging, red_teal, red_teal_ext** - Diverging palettes for data with a meaningful center
-  \item **bright, contrast** - Qualitative palettes for categorical data
-  \item **categorical, accent** - Additional color options
+  \item **bright, contrast, categorical** - Qualitative palettes for categorical data
+  \item **accent_red, accent_teal** - Accent palettes for emphasis
+  \item **categorical_ito, categorical_tab, categorical_set** - Colorblind-safe categorical options
 }
 
 Use \code{\link{list_palettes}()} to see all available palettes with detailed information.

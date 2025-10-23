@@ -53,9 +53,7 @@ reference:
   desc: Access Insper brand colors and palettes
   contents:
   - show_insper_colors
-  - insper_pal
   - show_insper_palette
-  - show_palette_types
   - list_palettes
   - get_insper_colors
 
@@ -82,9 +80,6 @@ reference:
   desc: Helper functions for formatting and saving plots
   contents:
   - save_insper_plot
-  - insper_caption
-  - format_brl
-  - format_percent_br
   - format_num_br
 
 - title: Data

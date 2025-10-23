@@ -59,11 +59,8 @@ setup_insper_fonts(check_only = TRUE)
 
 Other utilities: 
 \code{\link{check_insper_fonts}()},
-\code{\link{format_brl}()},
 \code{\link{format_num_br}()},
-\code{\link{format_percent_br}()},
 \code{\link{import_insper_fonts}()},
-\code{\link{insper_caption}()},
 \code{\link{save_insper_plot}()},
 \code{\link{use_ragg_device}()}
 }
