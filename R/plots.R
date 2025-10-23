@@ -4,9 +4,9 @@
 #' visual identity. It supports grouped bars, text labels, and automatic ordering.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Column name for x-axis
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Column name for y-axis
-#' @param fill_var <[`data-masked`][ggplot2::aes_eval]> Column name for fill aesthetic (creates grouped/stacked bars).
+#' @param x Column name for x-axis
+#' @param y Column name for y-axis
+#' @param fill_var Column name for fill aesthetic (creates grouped/stacked bars).
 #'   If NULL, uses single_color for all bars.
 #' @param single_color Character. Hex color code for bars when not using fill_var.
 #'   Default is Insper red.
@@ -184,9 +184,9 @@ insper_barplot <- function(
 #' Insper's visual identity.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis
-#' @param color <[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)
+#' @param x Variable for x-axis
+#' @param y Variable for y-axis
+#' @param color Variable for color aesthetic (optional)
 #' @param add_smooth Logical. If TRUE, adds a regression line. Default is FALSE
 #' @param smooth_method Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"
 #' @param point_size Numeric. Size of points. Default is 2
@@ -290,9 +290,9 @@ insper_scatterplot <- function(
 #' visual identity. Automatically handles Date and POSIXct x-axis variables.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Value variable
-#' @param group <[`data-masked`][ggplot2::aes_eval]> Grouping variable for multiple lines (optional)
+#' @param x Time variable (numeric, Date, or POSIXct)
+#' @param y Value variable
+#' @param group Grouping variable for multiple lines (optional)
 #' @param line_width Numeric. Width of lines. Default is 1.2
 #' @param add_points Logical. If TRUE, adds points to lines. Default is FALSE
 #' @return A ggplot2 object
@@ -378,9 +378,9 @@ insper_timeseries <- function(
 #' using Insper's visual identity.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
-#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param x Variable for x-axis (categorical)
+#' @param y Variable for y-axis (numeric)
+#' @param fill Variable for fill aesthetic (optional)
 #' @param add_jitter Logical. If TRUE, adds jittered points. If NULL (default),
 #'   automatically enables jitter when the largest group has <100 observations.
 #' @param add_notch Logical. If TRUE, creates notched boxplot. Default is FALSE
@@ -510,7 +510,7 @@ insper_boxplot <- function(
 #' @export
 insper_heatmap <- function(
   data,
-  show_values = TRUE,
+  show_values = FALSE,
   value_color = "white",
   value_size = 3,
   palette = "diverging"
@@ -581,9 +581,9 @@ insper_heatmap <- function(
 #' Insper's visual identity. Ideal for displaying ranked categorical data.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
-#' @param color <[`data-masked`][ggplot2::aes_eval]> Variable for color aesthetic (optional)
+#' @param x Variable for x-axis (categorical)
+#' @param y Variable for y-axis (numeric)
+#' @param color Variable for color aesthetic (optional)
 #' @param sorted Logical. If TRUE, sorts by y value. Default is FALSE
 #' @param point_size Numeric. Size of points. Default is 4
 #' @param line_width Numeric. Width of segments. Default is 1
@@ -671,9 +671,9 @@ insper_lollipop <- function(
 #' Supports both single and grouped/stacked areas.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Value variable
-#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param x Time variable (numeric, Date, or POSIXct)
+#' @param y Value variable
+#' @param fill Variable for fill aesthetic (optional)
 #' @param stacked Logical. If TRUE and fill is provided, creates stacked areas.
 #'   Default is FALSE
 #' @param area_alpha Numeric. Transparency of areas (0-1). Default is 1
@@ -796,9 +796,9 @@ insper_area <- function(
 #' Optionally overlay boxplots and/or jittered points.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)
-#' @param y <[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)
-#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param x Variable for x-axis (categorical)
+#' @param y Variable for y-axis (numeric)
+#' @param fill Variable for fill aesthetic (optional)
 #' @param show_boxplot Logical. If TRUE, overlays a boxplot. Default is FALSE
 #' @param show_points Logical. If TRUE, adds jittered points. Default is FALSE
 #' @param violin_alpha Numeric. Transparency of violins (0-1). Default is 0.7
@@ -884,8 +884,8 @@ insper_violin <- function(
 #' Implements Sturges, Freedman-Diaconis, and Scott algorithms for optimal bin width.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (numeric)
-#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)
+#' @param x Variable for x-axis (numeric)
+#' @param fill Variable for fill aesthetic (optional)
 #' @param bins Numeric. Number of bins. Only used when bin_method = "manual"
 #' @param bin_method Character. Bin selection method: "sturges", "fd" (Freedman-Diaconis),
 #'   "scott", or "manual". Default is "sturges"
@@ -1013,8 +1013,8 @@ insper_histogram <- function(
 #' Supports grouped densities with automatic color assignment.
 #'
 #' @param data A data frame containing the data to plot
-#' @param x <[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (numeric)
-#' @param fill <[`data-masked`][ggplot2::aes_eval]> Variable for fill/group aesthetic (optional)
+#' @param x Variable for x-axis (numeric)
+#' @param fill Variable for fill/group aesthetic (optional)
 #' @param fill_color Character. Hex color for density area when not using fill aesthetic.
 #'   Default is Insper teal.
 #' @param line_color Character. Color for density line. Default is darker teal.

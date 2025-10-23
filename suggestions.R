@@ -1,63 +1,37 @@
-library(ggplot2)
 library(insperplot)
+library(ggplot2)
 library(dplyr)
 
-# The format functions are a bit too specific for my taste
-# We should have only one function that can handle all formats
+# Very important documentation change
+# All insper_ function have <[`data-masked`][ggplot2::aes_eval]> in their documentation
+# This adds zero value to the documentation, and it's not clear what it does.
+# They should all be removed. This tag only makes sense inside the ggplot2 package.
 
-# Should be a wrapper around scales::number
-# Something like this
-format_num_br <- function(
-  x,
-  digits = 0,
-  percent = FALSE,
-  curreny = FALSE,
-  ...
-) {
-  if (percent) {
-    scales::number(
-      x * 100,
-      accuracy = 10^(-digits),
-      big.mark = ".",
-      decimal.mark = ",",
-      suffix = "%",
-      ...
-    )
-  }
+# Very important usability change!
+# All insper_ functions should support ...
+# This should pass arguments to the main geom_* function
 
-  if (currency) {
-    scales::number(
-      x,
-      accuracy = 10^(-digits),
-      big.mark = ".",
-      decimal.mark = ",",
-      prefix = "R$",
-      ...
-    )
-  }
+# Ex: insper_histogram(...) should pass arguments to geom_histogram()
+# Ex: insper_area(...) should pass arguments to geom_area()
+# Ex: insper_boxplot(...) should pass arguments to geom_boxplot()
+# Ex: insper_timeseries(...) should pass arguments to geom_line()
 
-  scales::number(
-    x,
-    accuracy = 10^(-digits),
-    big.mark = ".",
-    decimal.mark = ",",
-    ...
-  )
-}
+# The default should be show_value = FALSE
+insper_heatmap(mtcars, wt, mpg, show_value = FALSE)
 
-# Older functions should be removed
-# format_percent_br()
-# format_brl()
+# This function doesn't work at all.
+insper_density(mtcars, wt)
 
-# These functions break the syntax format of the pacakge
-# all insper_ functions are used to make plots
-# These functions don't make plots
-insper_pal()
-insper_caption()
+# This function is very poorly implemented, the resuling plot is unaesthetic
+# and useless in several use cases.
+insper_lollipop(mtcars, cyl, mpg)
+# insper_lollipop() has to either make stronger assumptions about the shape
+# of the data or has to be removed.
 
-# Also, I'm not sure this function is adding much value to the user
-# Maybe consider removing it
-insper_caption(source = "IBGE", date = as.Date("2024-02-01"), text = "AAA")
+# I think this function should be removed. We can think of a better implementation
+# in the future.
 
-# We have too many "discovery" functions
-# Do we need show_palette_types()?
+# The examples of insper_boxplot() and insper_violin() should use iris and not
+# mtcars. The iris data set already has a Species column which is a factor
+# insper_boxplot()
+# insper_violin()
