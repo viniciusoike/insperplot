@@ -223,7 +223,7 @@ test_that("insper_area custom fill_color works", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
   p <- insper_area(df, x = time, y = value,
-                   fill_color = show_insper_colors("reds1"))
+                   fill_color = get_insper_colors("reds1"))
   expect_s3_class(p, "ggplot")
 })
 
@@ -231,7 +231,7 @@ test_that("insper_area custom line parameters work", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
   p <- insper_area(df, x = time, y = value,
-                   line_color = show_insper_colors("oranges1"),
+                   line_color = get_insper_colors("oranges1"),
                    line_width = 2,
                    line_alpha = 0.5)
   expect_s3_class(p, "ggplot")

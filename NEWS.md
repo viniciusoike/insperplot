@@ -1,3 +1,41 @@
+# insperplot 1.0.1
+
+## Bug Fixes
+
+### Color & Palette System Refactor
+
+Fixed architectural inconsistencies in color/palette system to provide a single source of truth:
+
+**Breaking change (minor):**
+- `show_insper_colors()` now returns a **ggplot visualization** instead of hex codes
+  - **Migration:** Use `get_insper_colors()` for extraction (new simplified function)
+  - Old: `colors <- show_insper_colors("reds1", "teals1")`
+  - New: `colors <- get_insper_colors("reds1", "teals1")`
+
+**Fixed:**
+- `show_insper_palette()` now correctly displays palette colors (not individual colors)
+- Now works with all 12 palettes: `reds`, `oranges`, `teals`, `grays`, `red_teal`, `red_teal_ext`, `diverging`, `main`, `bright`, `contrast`, `categorical`, `accent`
+- Example: `show_insper_palette("reds")` shows the 5-color red gradient palette
+
+**Improved:**
+- Unified data structure - single source of truth in `data-raw/create_colors_and_palettes.R`
+- Created `insper_individual_colors` and `insper_palettes` internal data objects
+- Eliminated duplicate color definitions
+
+## Function Clarifications
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `get_insper_colors()` | Extract individual colors by name | Named hex vector |
+| `show_insper_colors()` | Visualize all individual colors | ggplot object |
+| `insper_pal()` | Extract palette colors (for use in scales) | Hex vector |
+| `show_insper_palette()` | Visualize palettes | ggplot object |
+| `list_palettes()` | List palette metadata | data.frame |
+
+All existing scale functions (`scale_fill_insper_d()`, `scale_color_insper_c()`, etc.) continue to work unchanged.
+
+---
+
 # insperplot 1.0.0
 
 ## Major Release: Stable API

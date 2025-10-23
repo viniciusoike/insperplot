@@ -97,73 +97,58 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
 }
 
 
-#' Get Colors from Insper Palettes
+#' Extract Individual Insper Colors
 #'
-#' Interactive function to explore and extract colors from Insper palettes.
-#' This is a more user-friendly alternative to `insper_pal()` with additional
-#' features for discovery and exploration.
+#' Extract hex codes for individual named colors (e.g., "reds1", "teals2").
+#' For palette extraction, use \code{\link{insper_pal}} instead.
 #'
-#' @param palette Character. Name of the palette. Use `list_palettes()` to see
-#'   available options. If NULL, returns information about all palettes.
-#' @param n Integer. Number of colors to return. If NULL, returns all colors
-#'   from the palette. For sequential palettes, colors are interpolated if n
-#'   exceeds the palette size.
-#' @param show_hex Logical. If TRUE (default), displays hex codes alongside
-#'   color names.
-#' @param reverse Logical. If TRUE, reverses the palette order. Default is FALSE.
+#' @param ... Character names of colors. If none provided, returns all individual colors.
+#' @return Named character vector of hex codes
 #'
-#' @return Named character vector of hex color codes.
+#' @details
+#' This function extracts individual named colors from the Insper color system.
+#' To see what colors are available, use \code{\link{show_insper_colors}}.
+#' To extract palette colors (for scales), use \code{\link{insper_pal}}.
+#'
+#' Available individual colors:
+#' \itemize{
+#'   \item Basic: white, off_white, black
+#'   \item Grays: gray_light, gray_med, gray_meddark, gray_dark
+#'   \item Reds: reds1 (primary), reds2, reds3
+#'   \item Oranges: oranges1, oranges2, oranges3
+#'   \item Magentas: magentas1, magentas2, magentas3
+#'   \item Teals: teals1, teals2, teals3
+#' }
 #'
 #' @family colors
-#' @seealso \code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_palette}}
+#' @seealso \code{\link{show_insper_colors}}, \code{\link{insper_pal}}, \code{\link{list_palettes}}
 #' @export
 #' @examples
-#' # Explore all palettes
-#' get_insper_colors()
+#' # Get specific colors by name
+#' get_insper_colors("reds1", "teals1")
 #'
-#' # Get colors from a specific palette
-#' get_insper_colors("reds")
+#' # Get all individual colors
+#' all_colors <- get_insper_colors()
+#' head(all_colors)
 #'
-#' # Get first 3 colors
-#' get_insper_colors("main", n = 3)
-#'
-#' # Reverse palette
-#' get_insper_colors("red_teal", reverse = TRUE)
-get_insper_colors <- function(palette = NULL, n = NULL, show_hex = TRUE, reverse = FALSE) {
-
-  if (is.null(palette)) {
-    # Show overview of all palettes
-    cli::cli_h2("Insper Color Palettes")
-    cli::cli_text("Use {.fn list_palettes} for detailed information")
-    cli::cli_text("")
-
-    pal_info <- list_palettes()
-
-    for (pal_type in c("sequential", "diverging", "qualitative")) {
-      type_pals <- pal_info[pal_info$type == pal_type, ]
-      cli::cli_h3(tools::toTitleCase(pal_type))
-      for (i in 1:nrow(type_pals)) {
-        cli::cli_li("{.strong {type_pals$name[i]}}: {type_pals$recommended_use[i]} ({type_pals$n_colors[i]} colors)")
-      }
-      cli::cli_text("")
+#' # Use in plots
+#' library(ggplot2)
+#' ggplot(mtcars, aes(wt, mpg)) +
+#'   geom_point(color = get_insper_colors("teals1"))
+get_insper_colors <- function(...) {
+  if (length(list(...)) == 0) {
+    return(insper_individual_colors)
+  } else {
+    requested <- c(...)
+    missing <- setdiff(requested, names(insper_individual_colors))
+    if (length(missing) > 0) {
+      cli::cli_abort(c(
+        "x" = "Colors not found: {.val {missing}}",
+        "i" = "Use {.fn show_insper_colors} to see available colors"
+      ))
     }
-
-    cli::cli_alert_info("Get colors with: {.code get_insper_colors('palette_name')}")
-    return(invisible(NULL))
+    return(insper_individual_colors[requested])
   }
-
-  # Get palette colors
-  colors <- insper_pal(palette, n = n, reverse = reverse)
-
-  if (show_hex) {
-    # Print colors with hex codes
-    cli::cli_h3("Palette: {palette}")
-    for (i in seq_along(colors)) {
-      cli::cli_li("{.strong Color {i}}: {colors[i]}")
-    }
-  }
-
-  invisible(colors)
 }
 
 

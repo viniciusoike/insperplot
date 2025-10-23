@@ -91,7 +91,7 @@ paulista <- subset(spo_metro, name_station == "Paulista")
 
 # With theme_insper()
 ggplot(paulista, aes(x = date, y = value)) +
-  geom_line(color = show_insper_colors("teals1"), linewidth = 0.8) +
+  geom_line(color = get_insper_colors("teals1"), linewidth = 0.8) +
   theme_insper() +
   labs(
     title = "The Covid-19 Lockdown Impacts on Paulista Station",
@@ -106,40 +106,39 @@ ggplot(paulista, aes(x = date, y = value)) +
 
 The colors used in insperplot are based on Insper's [brandkit](https://github.com/Insper/Cores-Marca-Insper). There are
 
-### Extracting Colors
+### Extracting Individual Colors
 
-Use `show_insper_colors()` to access Insper's brand colors.
+Use `get_insper_colors()` to extract individual colors by name:
 
-```{r colors, eval = FALSE}
-# Get primary Insper red
-show_insper_colors("reds1")
+```{r colors-extract}
+# Get specific colors
+get_insper_colors("reds1", "teals1")
 
-# Get multiple colors
-show_insper_colors("reds1", "teals1", "oranges1")
-
-# View all available colors
-show_insper_colors()
+# Get all individual colors
+all_colors <- get_insper_colors()
+head(all_colors)
 ```
 
-### Visualizing Palettes
+### Visualizing Individual Colors
+
+Use `show_insper_colors()` to see what colors are available:
+
+```{r colors-viz, fig.height=3}
+show_insper_colors()
+show_insper_colors("reds")
+```
+
+### Working with Palettes
 
 ```{r palette-viz, fig.height=4}
-# Show all colors
+# Show single palette
+show_insper_palette("reds")
+
+# Show all palettes
 show_insper_palette()
 
-# Show specific color families
-show_insper_palette("reds")
-show_insper_palette("teals")
-```
-
-### Discovering Palettes
-
-```{r palette-discovery}
-# List all palettes with metadata
+# List palette info
 list_palettes()
-
-# Interactive palette explorer
-get_insper_colors("main")
 ```
 
 ## Plot Gallery: All 8 Functions
@@ -263,7 +262,7 @@ library(scales)
 # For axis labels in plots
 ggplot(spo_metro |> filter(name_station == "Paulista"),
        aes(x = date, y = value)) +
-  geom_line(color = show_insper_colors("teals1"), linewidth = 1.2) +
+  geom_line(color = get_insper_colors("teals1"), linewidth = 1.2) +
   scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",")) +
   theme_insper() +
   labs(

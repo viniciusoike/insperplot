@@ -1,24 +1,24 @@
 test_that("show_insper_colors returns all colors when no args", {
-  cols <- show_insper_colors()
+  cols <- get_insper_colors()
   expect_type(cols, "character")
   expect_true(length(cols) > 0)
   expect_true(all(grepl("^#|^gray", cols)))
 })
 
 test_that("show_insper_colors can extract specific colors", {
-  red <- show_insper_colors("reds1")
+  red <- get_insper_colors("reds1")
   expect_length(red, 1)
   expect_equal(unname(red), "#E4002B")
 
   # Test multiple colors
-  multiple <- show_insper_colors("reds1", "teals1")
+  multiple <- get_insper_colors("reds1", "teals1")
   expect_length(multiple, 2)
   expect_equal(unname(multiple[1]), "#E4002B")
   expect_equal(unname(multiple[2]), "#009491")
 })
 
 test_that("show_insper_colors returns named vector", {
-  cols <- show_insper_colors("reds1", "teals1")
+  cols <- get_insper_colors("reds1", "teals1")
   expect_named(cols, c("reds1", "teals1"))
 })
 
@@ -75,7 +75,7 @@ test_that("show_insper_palette accepts palette names", {
 })
 
 test_that("show_insper_palette errors on invalid palette", {
-  expect_error(show_insper_palette("invalid"), "Invalid palette")
+  expect_error(show_insper_palette("invalid"), "not found")
 })
 
 test_that("show_insper_palette shows all colors by default", {

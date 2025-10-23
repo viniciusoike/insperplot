@@ -72,25 +72,55 @@ install.packages("ragg")
 - Set **Backend** to **AGG**
 - Restart R session
 
-### Why This Setup?
-
-- ✓ No DPI conflicts (unlike showtext approach)
-- ✓ No per-session font loading overhead
-- ✓ Better rendering quality and performance
-- ✓ Cross-platform consistency
-- ✓ Modern best practice (2025)
-
 **Note:** If fonts are unavailable, plots automatically fall back to system defaults (serif/sans).
+
+**Note:** Positron users can skip this step since it uses ragg by default.
 
 ## Quick Start
 
-```{r example, eval=FALSE}
+`insperplot` is built upon Insper's brand colors. To improve functionality, additional palettes were created based on these basic colors.
+
+```{r, echo = FALSE}
+library(treemapify)
+library(insperplot)
+library(ggplot2)
+
+df <- data.frame(
+  group = letters[1:3],
+  y = c(3, 5, 2)
+)
+
+colors_insper <- get_insper_colors("main", show_hex = FALSE)
+
+df <- data.frame(
+  x = letters[1:length(colors_insper)],
+  y = 1 / c(1, 2, 3, 5, 8, 13),
+  fill = colors_insper
+)
+
+ggplot(df, aes(x = x, y = y, area = y, fill = fill)) +
+  geom_treemap() +
+  geom_treemap_text(aes(label = fill)) +
+  scale_fill_insper_d(reverse = TRUE) +
+  guides(fill = "none") +
+  labs(title = "Basic Insper colors") +
+  theme_insper() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+To use `insperplot` we recommend using `ggplot2`. The basic functions of the package are `theme_insper()` and the `scale_*_insper_*()` functions.
+
+```{r example}
 library(insperplot)
 library(ggplot2)
 
 # Create a basic plot with Insper theme
-ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point(color = show_insper_colors("reds1"), size = 3) +
+ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
+  geom_point(color = "#ffffff", size = 3, shape = 21, alpha = 0.9) +
+  scale_fill_insper_d() +
   theme_insper() +
   labs(
     title = "Fuel Efficiency vs Weight",
@@ -98,16 +128,13 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     x = "Weight (1000 lbs)",
     y = "Miles per Gallon"
   )
+```
 
-# Use Insper color palettes
-ggplot(mtcars, aes(x = factor(cyl), fill = factor(cyl))) +
-  geom_bar() +
-  scale_fill_insper_d(palette = "reds") +
-  theme_insper() +
-  labs(title = "Distribution by Cylinders", fill = "Cylinders")
 
+
+```{r}
 # View available colors
-show_insper_palette()
+show_insper_colors()
 ```
 
 ## Features

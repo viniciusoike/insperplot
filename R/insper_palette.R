@@ -14,11 +14,11 @@
 #' insper_pal("red_teal")
 insper_pal <- function(palette = "main", n = NULL, type = "discrete", reverse = FALSE) {
 
-  if (!palette %in% names(insper_colors)) {
-    cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_colors)}}")
+  if (!palette %in% names(insper_palettes)) {
+    cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_palettes)}}")
   }
 
-  pal <- insper_colors[[palette]]
+  pal <- insper_palettes[[palette]]
 
   if (reverse) pal <- rev(pal)
 

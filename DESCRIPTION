@@ -1,7 +1,7 @@
 Package: insperplot
 Type: Package
 Title: Insper Themed ggplot2 Extensions
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person(
       "Vinicius", "Reginatto",

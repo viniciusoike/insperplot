@@ -40,7 +40,7 @@
 #'
 #' # Custom color and label formatting
 #' insper_barplot(mtcars, x = cyl, y = mpg,
-#'                single_color = show_insper_colors("teals1"),
+#'                single_color = get_insper_colors("teals1"),
 #'                label_formatter = format_num_br)
 #' }
 #'
@@ -53,7 +53,7 @@ insper_barplot <- function(
   x,
   y,
   fill_var = NULL,
-  single_color = show_insper_colors("reds1"),
+  single_color = get_insper_colors("reds1"),
   position = "dodge",
   zero = TRUE,
   text = FALSE,
@@ -254,7 +254,7 @@ insper_scatterplot <- function(
   if (!has_color) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_point(
-        color = show_insper_colors("teals1"),
+        color = get_insper_colors("teals1"),
         size = point_size,
         alpha = point_alpha,
         ...
@@ -273,8 +273,8 @@ insper_scatterplot <- function(
     p <- p +
       ggplot2::geom_smooth(
         method = smooth_method,
-        color = show_insper_colors("oranges1"),
-        fill = show_insper_colors("oranges1"),
+        color = get_insper_colors("oranges1"),
+        fill = get_insper_colors("oranges1"),
         alpha = 0.2
       )
   }
@@ -342,13 +342,13 @@ insper_timeseries <- function(
   if (!has_group) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_line(
-        color = show_insper_colors("teals1"),
+        color = get_insper_colors("teals1"),
         linewidth = line_width
       )
 
     if (add_points) {
       p <- p +
-        ggplot2::geom_point(color = show_insper_colors("teals1"), size = 1)
+        ggplot2::geom_point(color = get_insper_colors("teals1"), size = 1)
     }
   } else {
     p <- ggplot2::ggplot(
@@ -443,7 +443,7 @@ insper_boxplot <- function(
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_boxplot(
-        fill = show_insper_colors("teals2"),
+        fill = get_insper_colors("teals2"),
         alpha = box_alpha,
         notch = add_notch
       )
@@ -462,7 +462,7 @@ insper_boxplot <- function(
       ggplot2::geom_jitter(
         width = 0.2,
         alpha = 0.5,
-        color = show_insper_colors("gray_med")
+        color = get_insper_colors("gray_med")
       )
   }
 
@@ -640,11 +640,11 @@ insper_lollipop <- function(
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_segment(
         ggplot2::aes(xend = {{ x }}, yend = 0),
-        color = show_insper_colors("teals1"),
+        color = get_insper_colors("teals1"),
         linewidth = line_width
       ) +
       ggplot2::geom_point(
-        color = show_insper_colors("reds1"),
+        color = get_insper_colors("reds1"),
         size = point_size
       )
   } else {
@@ -706,8 +706,8 @@ insper_lollipop <- function(
 #'
 #' # Custom colors and line width
 #' insper_area(df, x = time, y = value,
-#'             fill_color = show_insper_colors("reds1"),
-#'             line_color = show_insper_colors("reds3"),
+#'             fill_color = get_insper_colors("reds1"),
+#'             line_color = get_insper_colors("reds3"),
 #'             line_width = 1.5,
 #'             zero = TRUE)
 #' }
@@ -722,9 +722,9 @@ insper_area <- function(
   fill = NULL,
   stacked = FALSE,
   area_alpha = 0.9,
-  fill_color = show_insper_colors("teals1"),
+  fill_color = get_insper_colors("teals1"),
   add_line = TRUE,
-  line_color = show_insper_colors("teals3"),
+  line_color = get_insper_colors("teals3"),
   line_width = 0.8,
   line_alpha = 1,
   zero = FALSE
@@ -845,7 +845,7 @@ insper_violin <- function(
   if (!has_fill) {
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_violin(
-        fill = show_insper_colors("teals2"),
+        fill = get_insper_colors("teals2"),
         alpha = violin_alpha
       )
   } else {
@@ -868,7 +868,7 @@ insper_violin <- function(
       ggplot2::geom_jitter(
         width = 0.1,
         alpha = 0.5,
-        color = show_insper_colors("gray_med")
+        color = get_insper_colors("gray_med")
       )
   }
 
@@ -929,7 +929,7 @@ insper_histogram <- function(
   fill = NULL,
   bins = NULL,
   bin_method = c("sturges", "fd", "scott", "manual"),
-  fill_color = show_insper_colors("reds1"),
+  fill_color = get_insper_colors("reds1"),
   border_color = "white",
   zero = TRUE
 ) {
@@ -1043,8 +1043,8 @@ insper_density <- function(
   data,
   x,
   fill = NULL,
-  fill_color = show_insper_colors("teals1"),
-  line_color = show_insper_colors("teals3"),
+  fill_color = get_insper_colors("teals1"),
+  line_color = get_insper_colors("teals3"),
   alpha = 0.6,
   bandwidth = NULL,
   adjust = 1,

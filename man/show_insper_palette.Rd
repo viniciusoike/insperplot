@@ -2,26 +2,39 @@
 % Please edit documentation in R/utils.R
 \name{show_insper_palette}
 \alias{show_insper_palette}
-\title{Show Insper Color Palette}
+\title{Visualize Insper Color Palettes}
 \usage{
 show_insper_palette(palette = "all")
 }
 \arguments{
-\item{palette}{Character string specifying palette subset ("all", "grays", "reds", "oranges", "magentas", "teals", "main")}
+\item{palette}{Character. Name of palette or "all". Use \code{\link{list_palettes}}
+to see available options. Default "all".}
 }
 \value{
-A ggplot2 object showing the color palette
+A ggplot2 object
 }
 \description{
-Display the Insper color palette visually
+Display color palettes used by scale_*_insper_*() functions.
+To see individual colors, use \code{\link{show_insper_colors}}.
+}
+\details{
+This function visualizes the palettes that are used by ggplot2 scale functions
+like \code{\link{scale_fill_insper_d}} and \code{\link{scale_color_insper_c}}.
+
+Available palettes: main, reds, oranges, teals, grays, red_teal, red_teal_ext,
+diverging, bright, contrast, categorical, accent.
 }
 \examples{
-show_insper_palette()
+# Show single palette
 show_insper_palette("reds")
-show_insper_palette("main")
+show_insper_palette("red_teal")
+
+# Show all palettes
+show_insper_palette()
+show_insper_palette("all")
 }
 \seealso{
-\code{\link{show_insper_colors}}, \code{\link{insper_pal}}
+\code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_colors}}
 
 Other colors: 
 \code{\link{get_insper_colors}()},

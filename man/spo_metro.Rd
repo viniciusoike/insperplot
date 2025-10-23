@@ -58,7 +58,7 @@ spo_metro |>
   summarise(avg_entries = mean(value, na.rm = TRUE)) |>
   arrange(desc(avg_entries)) |>
   ggplot(aes(x = reorder(name_station, avg_entries), y = avg_entries)) +
-  geom_col(fill = show_insper_colors("teals1")) +
+  geom_col(fill = get_insper_colors("teals1")) +
   coord_flip() +
   theme_insper() +
   labs(

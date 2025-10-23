@@ -9,7 +9,7 @@ insper_barplot(
   x,
   y,
   fill_var = NULL,
-  single_color = show_insper_colors("reds1"),
+  single_color = get_insper_colors("reds1"),
   position = "dodge",
   zero = TRUE,
   text = FALSE,
@@ -75,7 +75,7 @@ insper_barplot(mtcars, x = cyl, y = mpg, text = TRUE)
 
 # Custom color and label formatting
 insper_barplot(mtcars, x = cyl, y = mpg,
-               single_color = show_insper_colors("teals1"),
+               single_color = get_insper_colors("teals1"),
                label_formatter = format_num_br)
 }
 

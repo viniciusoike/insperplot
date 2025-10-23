@@ -2,38 +2,42 @@
 % Please edit documentation in R/utils.R
 \name{show_insper_colors}
 \alias{show_insper_colors}
-\title{Show Insper Colors}
+\title{Visualize All Individual Insper Colors}
 \usage{
-show_insper_colors(...)
+show_insper_colors(color_family = "all")
 }
 \arguments{
-\item{...}{Character names of colors. If none provided, returns all colors.}
+\item{color_family}{Optional filter: "all", "reds", "oranges", "magentas",
+"teals", "grays", "basic". Default "all".}
 }
 \value{
-Named character vector of hex codes
+A ggplot2 object showing the colors
 }
 \description{
-Extract hex codes from the Insper color palette. This is a utility function
-for retrieving color values, NOT a plotting function.
+Display all individual named colors (reds1, teals1, etc.) as a visual grid.
+To extract colors by name for use in plots, use \code{\link{get_insper_colors}} instead.
+To see palettes, use \code{\link{show_insper_palette}}.
 }
-\note{
-This is a color extraction utility, not a plotting function. For creating
-  bar plots, use \code{\link{insper_barplot}} or \code{ggplot2::geom_col()}.
+\details{
+This function creates a visual display of individual colors available in the
+Insper color system. These are atomic color units (like reds1, teals2) that
+can be extracted using \code{\link{get_insper_colors}}.
+
+For palette visualization (collections of colors used in scales), use
+\code{\link{show_insper_palette}} instead.
 }
 \examples{
-# Get all colors
+# Show all individual colors
 show_insper_colors()
 
-# Get specific colors
-show_insper_colors("reds1", "teals1")
+# Show only reds
+show_insper_colors("reds")
 
-# Use in plots
-library(ggplot2)
-ggplot(mtcars, aes(wt, mpg)) +
-  geom_point(color = show_insper_colors("teals1"))
+# Show only grays
+show_insper_colors("grays")
 }
 \seealso{
-\code{\link{insper_pal}}, \code{\link{show_insper_palette}}
+\code{\link{get_insper_colors}}, \code{\link{show_insper_palette}}, \code{\link{list_palettes}}
 
 Other colors: 
 \code{\link{get_insper_colors}()},

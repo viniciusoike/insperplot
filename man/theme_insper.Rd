@@ -61,7 +61,7 @@ The theme applies Insper's visual identity through:
   \item Off-white background color for both plot and panel
   \item Horizontal legend positioned at the top
   \item Bold legend titles
-  \item Custom color scheme using show_insper_colors() function
+  \item Custom color scheme using get_insper_colors() function
   \item Consistent spacing and typography hierarchy
 }
 

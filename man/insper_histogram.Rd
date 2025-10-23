@@ -10,7 +10,7 @@ insper_histogram(
   fill = NULL,
   bins = NULL,
   bin_method = c("sturges", "fd", "scott", "manual"),
-  fill_color = show_insper_colors("reds1"),
+  fill_color = get_insper_colors("reds1"),
   border_color = "white",
   zero = TRUE
 )

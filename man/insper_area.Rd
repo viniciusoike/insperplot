@@ -11,9 +11,9 @@ insper_area(
   fill = NULL,
   stacked = FALSE,
   area_alpha = 0.9,
-  fill_color = show_insper_colors("teals1"),
+  fill_color = get_insper_colors("teals1"),
   add_line = TRUE,
-  line_color = show_insper_colors("teals3"),
+  line_color = get_insper_colors("teals3"),
   line_width = 0.8,
   line_alpha = 1,
   zero = FALSE
@@ -73,8 +73,8 @@ insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
 
 # Custom colors and line width
 insper_area(df, x = time, y = value,
-            fill_color = show_insper_colors("reds1"),
-            line_color = show_insper_colors("reds3"),
+            fill_color = get_insper_colors("reds1"),
+            line_color = get_insper_colors("reds3"),
             line_width = 1.5,
             zero = TRUE)
 }
