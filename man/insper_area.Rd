@@ -10,23 +10,24 @@ insper_area(
   y,
   fill = NULL,
   stacked = FALSE,
-  area_alpha = 1,
-  fill_color = show_insper_colors("teals1"),
+  area_alpha = 0.9,
+  fill_color = get_insper_colors("teals1"),
   add_line = TRUE,
-  line_color = show_insper_colors("teals3"),
-  line_width = 1,
+  line_color = get_insper_colors("teals3"),
+  line_width = 0.8,
   line_alpha = 1,
-  zero = FALSE
+  zero = FALSE,
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)}
+\item{x}{Time variable (numeric, Date, or POSIXct)}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Value variable}
+\item{y}{Value variable}
 
-\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
+\item{fill}{Variable for fill aesthetic (optional)}
 
 \item{stacked}{Logical. If TRUE and fill is provided, creates stacked areas.
 Default is FALSE}
@@ -46,6 +47,8 @@ Default is darker Insper teal}
 \item{line_alpha}{Numeric. Transparency of line (0-1). Default is 1}
 
 \item{zero}{Logical. If TRUE, adds a horizontal line at y = 0. Default is FALSE}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_area()}}
 }
 \value{
 A ggplot2 object
@@ -73,8 +76,8 @@ insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
 
 # Custom colors and line width
 insper_area(df, x = time, y = value,
-            fill_color = show_insper_colors("reds1"),
-            line_color = show_insper_colors("reds3"),
+            fill_color = get_insper_colors("reds1"),
+            line_color = get_insper_colors("reds3"),
             line_width = 1.5,
             zero = TRUE)
 }
@@ -89,7 +92,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()},
 \code{\link{insper_violin}()}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/insper_palette.R
 \name{insper_pal}
 \alias{insper_pal}
-\title{Get Insper Color Palette}
+\title{Get Insper Color Palette (Internal)}
 \usage{
 insper_pal(palette = "main", n = NULL, type = "discrete", reverse = FALSE)
 }
@@ -19,21 +19,27 @@ insper_pal(palette = "main", n = NULL, type = "discrete", reverse = FALSE)
 Vector of hex color codes
 }
 \description{
-Get Insper Color Palette
+Internal function used by scale_*_insper_*() functions to extract palette colors.
+Users should use \code{\link{list_palettes}} and \code{\link{show_insper_palette}}
+to explore palettes, and scale functions to apply them.
 }
 \examples{
-insper_pal("main")
-insper_pal("reds", n = 5)
-insper_pal("red_teal")
+\dontrun{
+# Internal function - not exported
+# Users should use scale functions instead
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point() +
+  scale_color_insper_d("main")
+}
 }
 \seealso{
-\code{\link{show_insper_colors}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
+\code{\link{list_palettes}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
 
 Other colors: 
 \code{\link{get_insper_colors}()},
 \code{\link{list_palettes}()},
 \code{\link{show_insper_colors}()},
-\code{\link{show_insper_palette}()},
-\code{\link{show_palette_types}()}
+\code{\link{show_insper_palette}()}
 }
 \concept{colors}
+\keyword{internal}

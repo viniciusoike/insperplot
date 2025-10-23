@@ -1,7 +1,3 @@
-# ==============================================================================
-# Data Preparation Script for insperplot Package
-# ==============================================================================
-#
 # This script downloads and prepares datasets for the insperplot package:
 #   - rec_buslines: Bus line information from Greater Recife
 #   - rec_passengers: Daily passenger counts from Greater Recife
@@ -16,7 +12,6 @@
 #
 # Author: Vinicius Reginatto
 # Last Updated: 2025-10-14
-# ==============================================================================
 
 library(dplyr)
 library(tidyr)
@@ -26,9 +21,7 @@ library(dataverse)
 # Configure Dataverse server
 Sys.setenv("DATAVERSE_SERVER" = "dataverse.datascience.insper.edu.br")
 
-# ==============================================================================
-# Helper Functions
-# ==============================================================================
+# Helper Functions -----------------------------------------------------------
 
 #' Download and Extract Data from Insper Dataverse
 #'
@@ -79,9 +72,7 @@ get_data <- function(name, dataset) {
   return(result)
 }
 
-# ==============================================================================
-# Download Recife Bus Data
-# ==============================================================================
+# Download Recife Bus Data ----------------------------------------------------
 
 # Bus lines: Information about all bus lines in Greater Recife
 # Source: Insper - Observatório Nacional de Mobilidade Sustentável
@@ -97,18 +88,11 @@ rec_passengers <- get_data(
   "10.60873/FK2/JEYM0J"
 )
 
-# ==============================================================================
-# Load São Paulo Metro Data
-# ==============================================================================
-
 # Metro Line 4 (Yellow Line) daily passenger entries by station
 # Source: São Paulo Metro Company (stored locally in data-raw/)
 spo_metro <- read_csv("data-raw/metro_sp_line_4_stations.csv")
 
-# ==============================================================================
-# Download Brazilian Macroeconomic Data
-# ==============================================================================
-
+# Download Brazilian Macroeconomic Data ---------------------------------------
 # Download time series from Brazilian Central Bank
 # Series codes:
 #   433: IPCA - Consumer Price Index (inflation)
@@ -129,12 +113,8 @@ macro_series <- rbcb::get_series(
 # Merge all series into single data frame by date
 macro_series <- purrr::reduce(macro_series, full_join, by = "date")
 
-# ==============================================================================
-# Save Datasets
-# ==============================================================================
+# Save Datasets ---------------------------------------------------------------
 
-# Save all datasets to data/ directory as .rda files
-# These will be available when users load the insperplot package
 usethis::use_data(
   rec_buslines,
   rec_passengers,

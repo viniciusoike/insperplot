@@ -59,10 +59,7 @@ ggplot(mtcars, aes(wt, mpg)) +
 
 Other utilities: 
 \code{\link{check_insper_fonts}()},
-\code{\link{format_brl}()},
 \code{\link{format_num_br}()},
-\code{\link{format_percent_br}()},
-\code{\link{insper_caption}()},
 \code{\link{save_insper_plot}()},
 \code{\link{setup_insper_fonts}()},
 \code{\link{use_ragg_device}()}

@@ -48,7 +48,7 @@
 #'
 #' # Plot inflation over time
 #' ggplot(macro_series, aes(x = date, y = ipca)) +
-#'   geom_line(color = show_insper_colors("reds1")) +
+#'   geom_line(color = get_insper_colors("reds1")) +
 #'   theme_insper() +
 #'   labs(
 #'     title = "Brazilian Inflation (IPCA)",
@@ -115,7 +115,7 @@
 #'   arrange(desc(n)) |>
 #'   head(10) |>
 #'   ggplot(aes(x = reorder(abbrev_company, n), y = n)) +
-#'   geom_col(fill = show_insper_colors("teals1")) +
+#'   geom_col(fill = get_insper_colors("teals1")) +
 #'   coord_flip() +
 #'   theme_insper() +
 #'   labs(
@@ -175,7 +175,7 @@
 #'   group_by(date) |>
 #'   summarise(total_passengers = sum(passengers, na.rm = TRUE)) |>
 #'   ggplot(aes(x = date, y = total_passengers)) +
-#'   geom_line(color = show_insper_colors("reds1")) +
+#'   geom_line(color = get_insper_colors("reds1")) +
 #'   theme_insper() +
 #'   labs(
 #'     title = "Daily Total Passengers - Greater Recife",
@@ -191,7 +191,7 @@
 #'   arrange(desc(avg_daily)) |>
 #'   head(10) |>
 #'   ggplot(aes(x = reorder(name_line, avg_daily), y = avg_daily)) +
-#'   geom_col(fill = show_insper_colors("teals1")) +
+#'   geom_col(fill = get_insper_colors("teals1")) +
 #'   coord_flip() +
 #'   theme_insper() +
 #'   labs(
@@ -254,7 +254,7 @@
 #'   summarise(avg_entries = mean(value, na.rm = TRUE)) |>
 #'   arrange(desc(avg_entries)) |>
 #'   ggplot(aes(x = reorder(name_station, avg_entries), y = avg_entries)) +
-#'   geom_col(fill = show_insper_colors("teals1")) +
+#'   geom_col(fill = get_insper_colors("teals1")) +
 #'   coord_flip() +
 #'   theme_insper() +
 #'   labs(

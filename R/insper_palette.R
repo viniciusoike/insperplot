@@ -1,4 +1,8 @@
-#' Get Insper Color Palette
+#' Get Insper Color Palette (Internal)
+#'
+#' Internal function used by scale_*_insper_*() functions to extract palette colors.
+#' Users should use \code{\link{list_palettes}} and \code{\link{show_insper_palette}}
+#' to explore palettes, and scale functions to apply them.
 #'
 #' @param palette Character string indicating palette name
 #' @param n Number of colors to return
@@ -6,42 +10,23 @@
 #' @param reverse Logical indicating whether to reverse palette
 #' @return Vector of hex color codes
 #' @family colors
-#' @seealso \code{\link{show_insper_colors}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
-#' @export
+#' @seealso \code{\link{list_palettes}}, \code{\link{show_insper_palette}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
+#' @keywords internal
 #' @examples
-#' insper_pal("main")
-#' insper_pal("reds", n = 5)
-#' insper_pal("red_teal")
+#' \dontrun{
+#' # Internal function - not exported
+#' # Users should use scale functions instead
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point() +
+#'   scale_color_insper_d("main")
+#' }
 insper_pal <- function(palette = "main", n = NULL, type = "discrete", reverse = FALSE) {
 
-  if (!palette %in% names(insper_colors)) {
-    cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_colors)}}")
+  if (!palette %in% names(insper_palettes)) {
+    cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_palettes)}}")
   }
 
-  # Deprecation warnings for old palette names
-  deprecated_palettes <- c(
-    "reds_seq" = "reds",
-    "oranges_seq" = "oranges",
-    "teals_seq" = "teals",
-    "grays_seq" = "grays",
-    "diverging_red_teal" = "red_teal",
-    "diverging_red_teal_extended" = "red_teal_ext",
-    "diverging_insper" = "diverging",
-    "qualitative_main" = "main",
-    "qualitative_bright" = "bright",
-    "qualitative_contrast" = "contrast"
-  )
-
-  if (palette %in% names(deprecated_palettes)) {
-    new_name <- deprecated_palettes[[palette]]
-    cli::cli_warn(c(
-      "!" = "Palette name {.val {palette}} is deprecated.",
-      "i" = "Use {.val {new_name}} instead.",
-      "i" = "Old names will be removed in v1.0.0"
-    ))
-  }
-
-  pal <- insper_colors[[palette]]
+  pal <- insper_palettes[[palette]]
 
   if (reverse) pal <- rev(pal)
 

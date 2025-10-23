@@ -11,23 +11,26 @@ insper_violin(
   fill = NULL,
   show_boxplot = FALSE,
   show_points = FALSE,
-  violin_alpha = 0.7
+  violin_alpha = 0.7,
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Variable for x-axis (categorical)}
+\item{x}{Variable for x-axis (categorical)}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Variable for y-axis (numeric)}
+\item{y}{Variable for y-axis (numeric)}
 
-\item{fill}{<[`data-masked`][ggplot2::aes_eval]> Variable for fill aesthetic (optional)}
+\item{fill}{Variable for fill aesthetic (optional)}
 
 \item{show_boxplot}{Logical. If TRUE, overlays a boxplot. Default is FALSE}
 
 \item{show_points}{Logical. If TRUE, adds jittered points. Default is FALSE}
 
 \item{violin_alpha}{Numeric. Transparency of violins (0-1). Default is 0.7}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_violin()}}
 }
 \value{
 A ggplot2 object
@@ -39,15 +42,15 @@ Optionally overlay boxplots and/or jittered points.
 \examples{
 \dontrun{
 # Simple violin plot
-insper_violin(mtcars, x = factor(cyl), y = mpg)
+insper_violin(iris, x = Species, y = Sepal.Length)
 
 # With fill aesthetic and points
-insper_violin(mtcars, x = factor(cyl), y = mpg,
-              fill = factor(cyl), show_points = TRUE)
+insper_violin(iris, x = Species, y = Sepal.Length,
+              fill = Species, show_points = TRUE)
 
-# Vertical violin without boxplot
-insper_violin(mtcars, x = factor(cyl), y = mpg,
-              show_boxplot = FALSE, flip = FALSE)
+# With boxplot overlay
+insper_violin(iris, x = Species, y = Sepal.Length,
+              show_boxplot = TRUE)
 }
 
 }
@@ -61,7 +64,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_timeseries}()}
 }

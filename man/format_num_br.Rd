@@ -4,26 +4,41 @@
 \alias{format_num_br}
 \title{Format Brazilian Numbers}
 \usage{
-format_num_br(x, digits = NULL)
+format_num_br(x, digits = 0, percent = FALSE, currency = FALSE, ...)
 }
 \arguments{
 \item{x}{Numeric vector}
 
-\item{digits}{Number of decimal places}
+\item{digits}{Number of decimal places (default 0)}
+
+\item{percent}{Logical. If TRUE, formats as percentage (multiplies by 100, adds % suffix)}
+
+\item{currency}{Logical. If TRUE, formats as Brazilian Real currency (adds R$ prefix)}
+
+\item{...}{Additional arguments passed to \code{\link[scales]{number}}}
 }
 \value{
 Formatted character vector
 }
 \description{
-Format numbers in Brazilian style with decimal comma and thousand separator
+Format numbers in Brazilian style with decimal comma and thousand separator.
+Supports currency and percentage formatting.
+}
+\examples{
+# Basic number formatting
+format_num_br(1234.56, digits = 2)
+
+# Currency formatting
+format_num_br(1234.56, currency = TRUE, digits = 2)
+
+# Percentage formatting
+format_num_br(0.1234, percent = TRUE, digits = 1)
+format_num_br(0.1234, percent = TRUE, digits = 2)
 }
 \seealso{
 Other utilities: 
 \code{\link{check_insper_fonts}()},
-\code{\link{format_brl}()},
-\code{\link{format_percent_br}()},
 \code{\link{import_insper_fonts}()},
-\code{\link{insper_caption}()},
 \code{\link{save_insper_plot}()},
 \code{\link{setup_insper_fonts}()},
 \code{\link{use_ragg_device}()}

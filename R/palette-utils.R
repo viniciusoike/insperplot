@@ -37,7 +37,7 @@
 #'
 #' # Get just the names
 #' list_palettes(names_only = TRUE)
-list_palettes <- function(type = c("all", "sequential", "diverging", "qualitative"),
+list_palettes <- function(type = c("all", "sequential", "diverging", "qualitative", "accent"),
                           names_only = FALSE) {
 
   type <- match.arg(type)
@@ -52,19 +52,27 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
       # Diverging
       "red_teal", "red_teal_ext", "diverging",
       # Qualitative
-      "bright", "contrast", "categorical", "accent"
+      "bright", "contrast", "categorical",
+      # Accent palettes
+      "accent_red", "accent_teal",
+      # Additional categorical palettes
+      "categorical_ito", "categorical_tab", "categorical_set"
     ),
     type = c(
       "qualitative",  # main
       rep("sequential", 4),
       rep("diverging", 3),
-      rep("qualitative", 4)
+      rep("qualitative", 3),
+      rep("accent", 2),
+      rep("qualitative", 3)
     ),
     n_colors = c(
       6,  # main
       5, 5, 5, 5,  # sequential
       5, 11, 5,  # diverging
-      6, 6, 8, 5  # qualitative
+      6, 6, 8,  # qualitative
+      6, 6,  # accent
+      8, 10, 9  # categorical variants
     ),
     recommended_use = c(
       "Primary brand colors for categorical data",
@@ -78,7 +86,11 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
       "Bright categorical colors (high contrast)",
       "High contrast categorical colors",
       "8-color categorical palette",
-      "Accent colors for highlights"
+      "Accent palette with red emphasis",
+      "Accent palette with teal emphasis",
+      "Okabe-Ito colorblind-safe palette",
+      "Tableau 10 categorical palette",
+      "ColorBrewer Set1 palette"
     ),
     stringsAsFactors = FALSE
   )
@@ -97,148 +109,56 @@ list_palettes <- function(type = c("all", "sequential", "diverging", "qualitativ
 }
 
 
-#' Get Colors from Insper Palettes
+#' Extract Individual Insper Colors
 #'
-#' Interactive function to explore and extract colors from Insper palettes.
-#' This is a more user-friendly alternative to `insper_pal()` with additional
-#' features for discovery and exploration.
+#' Extract hex codes for individual named colors (e.g., "reds1", "teals2").
+#' For palette extraction, use \code{\link{insper_pal}} instead.
 #'
-#' @param palette Character. Name of the palette. Use `list_palettes()` to see
-#'   available options. If NULL, returns information about all palettes.
-#' @param n Integer. Number of colors to return. If NULL, returns all colors
-#'   from the palette. For sequential palettes, colors are interpolated if n
-#'   exceeds the palette size.
-#' @param show_hex Logical. If TRUE (default), displays hex codes alongside
-#'   color names.
-#' @param reverse Logical. If TRUE, reverses the palette order. Default is FALSE.
+#' @param ... Character names of colors. If none provided, returns all individual colors.
+#' @return Named character vector of hex codes
 #'
-#' @return Named character vector of hex color codes.
+#' @details
+#' This function extracts individual named colors from the Insper color system.
+#' To see what colors are available, use \code{\link{show_insper_colors}}.
+#' To extract palette colors (for scales), use \code{\link{insper_pal}}.
 #'
-#' @family colors
-#' @seealso \code{\link{list_palettes}}, \code{\link{insper_pal}}, \code{\link{show_insper_palette}}
-#' @export
-#' @examples
-#' # Explore all palettes
-#' get_insper_colors()
-#'
-#' # Get colors from a specific palette
-#' get_insper_colors("reds")
-#'
-#' # Get first 3 colors
-#' get_insper_colors("main", n = 3)
-#'
-#' # Reverse palette
-#' get_insper_colors("red_teal", reverse = TRUE)
-get_insper_colors <- function(palette = NULL, n = NULL, show_hex = TRUE, reverse = FALSE) {
-
-  if (is.null(palette)) {
-    # Show overview of all palettes
-    cli::cli_h2("Insper Color Palettes")
-    cli::cli_text("Use {.fn list_palettes} for detailed information")
-    cli::cli_text("")
-
-    pal_info <- list_palettes()
-
-    for (pal_type in c("sequential", "diverging", "qualitative")) {
-      type_pals <- pal_info[pal_info$type == pal_type, ]
-      cli::cli_h3(tools::toTitleCase(pal_type))
-      for (i in 1:nrow(type_pals)) {
-        cli::cli_li("{.strong {type_pals$name[i]}}: {type_pals$recommended_use[i]} ({type_pals$n_colors[i]} colors)")
-      }
-      cli::cli_text("")
-    }
-
-    cli::cli_alert_info("Get colors with: {.code get_insper_colors('palette_name')}")
-    return(invisible(NULL))
-  }
-
-  # Get palette colors
-  colors <- insper_pal(palette, n = n, reverse = reverse)
-
-  if (show_hex) {
-    # Print colors with hex codes
-    cli::cli_h3("Palette: {palette}")
-    for (i in seq_along(colors)) {
-      cli::cli_li("{.strong Color {i}}: {colors[i]}")
-    }
-  }
-
-  invisible(colors)
-}
-
-
-#' Show All Palette Types with Examples
-#'
-#' Creates a visual display of all Insper palette types (sequential, diverging,
-#' and qualitative) with example plots showing recommended use cases.
-#'
-#' @param save_plot Logical. If TRUE, saves the plot to a file. Default is FALSE.
-#' @param filename Character. Filename for saving the plot. Only used if
-#'   `save_plot = TRUE`. Default is "insper_palettes.png".
-#'
-#' @return A ggplot2 object showing all palette types.
-#'
-#' @family colors
-#' @importFrom ggplot2 aes
-#' @export
-#' @examples
-#' \dontrun{
-#' # Display all palette types
-#' show_palette_types()
-#'
-#' # Save to file
-#' show_palette_types(save_plot = TRUE, filename = "my_palettes.png")
+#' Available individual colors:
+#' \itemize{
+#'   \item Basic: white, off_white, black
+#'   \item Grays: gray_light, gray_med, gray_meddark, gray_dark
+#'   \item Reds: reds1 (primary), reds2, reds3
+#'   \item Oranges: oranges1, oranges2, oranges3
+#'   \item Magentas: magentas1, magentas2, magentas3
+#'   \item Teals: teals1, teals2, teals3
 #' }
-show_palette_types <- function(save_plot = FALSE, filename = "insper_palettes.png") {
-  # Define variables to avoid R CMD check NOTE
-  position <- palette <- color <- NULL
-
-  # Get palette information
-  pal_info <- list_palettes()
-
-  # Create data for visualization
-  plot_data <- data.frame()
-
-  for (i in 1:nrow(pal_info)) {
-    pal_name <- pal_info$name[i]
-    pal_colors <- insper_pal(pal_name)
-
-    temp_df <- data.frame(
-      palette = pal_name,
-      type = pal_info$type[i],
-      color = pal_colors,
-      position = seq_along(pal_colors),
-      stringsAsFactors = FALSE
-    )
-
-    plot_data <- rbind(plot_data, temp_df)
+#'
+#' @family colors
+#' @seealso \code{\link{show_insper_colors}}, \code{\link{insper_pal}}, \code{\link{list_palettes}}
+#' @export
+#' @examples
+#' # Get specific colors by name
+#' get_insper_colors("reds1", "teals1")
+#'
+#' # Get all individual colors
+#' all_colors <- get_insper_colors()
+#' head(all_colors)
+#'
+#' # Use in plots
+#' library(ggplot2)
+#' ggplot(mtcars, aes(wt, mpg)) +
+#'   geom_point(color = get_insper_colors("teals1"))
+get_insper_colors <- function(...) {
+  if (length(list(...)) == 0) {
+    return(insper_individual_colors)
+  } else {
+    requested <- c(...)
+    missing <- setdiff(requested, names(insper_individual_colors))
+    if (length(missing) > 0) {
+      cli::cli_abort(c(
+        "x" = "Colors not found: {.val {missing}}",
+        "i" = "Use {.fn show_insper_colors} to see available colors"
+      ))
+    }
+    return(insper_individual_colors[requested])
   }
-
-  # Create plot
-  p <- ggplot2::ggplot(plot_data, ggplot2::aes(x = position, y = palette, fill = color)) +
-    ggplot2::geom_tile(color = "white", linewidth = 1) +
-    ggplot2::scale_fill_identity() +
-    ggplot2::facet_wrap(~type, scales = "free_y", ncol = 1) +
-    ggplot2::theme_minimal() +
-    ggplot2::labs(
-      title = "Insper Color Palettes",
-      subtitle = "Organized by type: Sequential, Diverging, and Qualitative",
-      x = NULL,
-      y = NULL
-    ) +
-    ggplot2::theme(
-      axis.text.x = ggplot2::element_blank(),
-      axis.ticks = ggplot2::element_blank(),
-      panel.grid = ggplot2::element_blank(),
-      strip.text = ggplot2::element_text(face = "bold", size = 12),
-      plot.title = ggplot2::element_text(face = "bold", size = 16),
-      plot.subtitle = ggplot2::element_text(size = 11, color = "gray40")
-    )
-
-  if (save_plot) {
-    ggplot2::ggsave(filename, p, width = 10, height = 12, dpi = 300)
-    message("Palette chart saved: ", filename)
-  }
-
-  return(p)
 }

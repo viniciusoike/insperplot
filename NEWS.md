@@ -1,3 +1,215 @@
+# insperplot 1.2.0
+
+## Breaking Changes
+
+### Removed Functions
+
+**REMOVED:**
+- `insper_lollipop()` - poorly implemented function that was difficult to use effectively
+  - Users can create lollipop charts manually using `geom_segment()` + `geom_point()`
+  - No direct replacement provided due to unclear use cases
+
+## Improvements
+
+### Enhanced Plot Function Flexibility
+
+All `insper_*` plot functions now accept `...` parameter to pass additional arguments to their underlying geom layers:
+
+- `insper_timeseries()` passes `...` to `geom_line()`
+- `insper_boxplot()` passes `...` to `geom_boxplot()`
+- `insper_heatmap()` passes `...` to `geom_tile()`
+- `insper_area()` passes `...` to `geom_area()`
+- `insper_violin()` passes `...` to `geom_violin()`
+- `insper_histogram()` passes `...` to `geom_histogram()`
+- `insper_density()` passes `...` to `geom_density()`
+
+**Example usage:**
+```r
+# Custom line type
+insper_timeseries(data, x = date, y = value, linetype = "dashed")
+
+# Custom position adjustment
+insper_histogram(data, x = value, position = "dodge")
+
+# Custom aesthetics
+insper_density(data, x = value, size = 2)
+```
+
+### Better Defaults
+
+- `insper_heatmap()` now defaults to `show_values = FALSE` for cleaner visualizations
+  - Set `show_values = TRUE` to display values on tiles when needed
+
+### Documentation Improvements
+
+- Removed 25 instances of `<[data-masked][ggplot2::aes_eval]>` tags from documentation
+  - These tags were internal to ggplot2 and added no value for users
+  - Function documentation is now cleaner and more readable
+
+### Example Improvements
+
+- `insper_boxplot()` and `insper_violin()` examples now use `iris` dataset instead of `mtcars`
+  - The `iris` dataset has a natural categorical variable (`Species`) that better demonstrates these plot types
+  - Removed references to non-existent `flip` parameter from examples
+
+---
+
+# insperplot 1.1.0
+
+## Breaking Changes
+
+This release removes several utility functions to simplify the package API and enforce consistent naming conventions. All `insper_*` exported functions now create plots, maintaining a consistent interface.
+
+### Format Functions - Consolidated
+
+**REMOVED:**
+- `format_brl()` - consolidated into `format_num_br()`
+- `format_percent_br()` - consolidated into `format_num_br()`
+
+**UPDATED:**
+- `format_num_br()` now accepts `percent` and `currency` parameters for flexible formatting
+- Uses `scales::number()` internally (more powerful and consistent)
+- Supports additional arguments via `...` parameter
+
+**Migration guide:**
+```r
+# Old
+format_brl(1234.56)
+format_brl(1234.56, symbol = FALSE)
+format_percent_br(0.123)
+format_percent_br(0.123, digits = 2)
+
+# New
+format_num_br(1234.56, currency = TRUE, digits = 2)
+format_num_br(1234.56, currency = TRUE, prefix = "", digits = 2)  # no symbol
+format_num_br(0.123, percent = TRUE, digits = 1)
+format_num_br(0.123, percent = TRUE, digits = 2)
+```
+
+### Functions Removed from Public API
+
+**No longer exported:**
+- `insper_pal()` - now internal-only, used by scale functions
+  - Users should use `scale_color_insper_d()`, `scale_fill_insper_d()`, etc.
+  - To explore palettes: use `list_palettes()` and `show_insper_palette()`
+
+**Completely removed:**
+- `insper_caption()` - build captions with `paste()`, `glue::glue()`, or `labs(caption = ...)`
+- `show_palette_types()` - use `list_palettes()` to see all palettes, or loop with `show_insper_palette()`
+
+### Dependency Changes
+
+**Removed:**
+- `lubridate` - no longer needed after removing `insper_caption()`
+
+## Rationale
+
+These changes enforce consistent API design:
+- All `insper_*` exported functions now create plots (consistent interface)
+- Utility functions consolidated to reduce surface area
+- Palette discovery uses standardized `list_palettes()` + `show_insper_palette()` pattern
+- Cleaner package with fewer exported functions (better maintainability)
+
+---
+
+# insperplot 1.0.1
+
+## Bug Fixes
+
+### Color & Palette System Refactor
+
+Fixed architectural inconsistencies in color/palette system to provide a single source of truth:
+
+**Breaking change (minor):**
+- `show_insper_colors()` now returns a **ggplot visualization** instead of hex codes
+  - Restored superior grid-based layout from previous version for better readability
+  - **Migration:** Use `get_insper_colors()` for extraction (new simplified function)
+  - Old: `colors <- show_insper_colors("reds1", "teals1")`
+  - New: `colors <- get_insper_colors("reds1", "teals1")`
+
+- `show_insper_palette()` default changed from `"all"` to `"main"`
+  - The `"all"` option has been removed (use `list_palettes()` to see all available palettes)
+  - Shows the main Insper brand palette by default
+
+**Fixed:**
+- `show_insper_palette()` now correctly displays palette colors (not individual colors)
+- `list_palettes()` updated to include all palettes in the package:
+  - Added: `accent_red`, `accent_teal`, `categorical_ito`, `categorical_tab`, `categorical_set`
+  - Removed: non-existent `accent` palette
+  - New type: `"accent"` for accent palettes
+- `show_insper_colors()` now uses grid layout for better organization and readability
+- Now works with all 15 palettes: `reds`, `oranges`, `teals`, `grays`, `red_teal`, `red_teal_ext`, `diverging`, `main`, `bright`, `contrast`, `categorical`, `accent_red`, `accent_teal`, `categorical_ito`, `categorical_tab`, `categorical_set`
+
+**Improved:**
+- Unified data structure - single source of truth in `data-raw/create_colors_and_palettes.R`
+- Created `insper_individual_colors` and `insper_palettes` internal data objects
+- Eliminated duplicate color definitions
+- Better visual presentation of colors in grid layout
+
+## Function Clarifications
+
+| Function | Purpose | Returns | Default |
+|----------|---------|---------|---------|
+| `get_insper_colors()` | Extract individual colors by name | Named hex vector | All colors |
+| `show_insper_colors()` | Visualize all individual colors | ggplot object (grid) | All colors |
+| `insper_pal()` | Extract palette colors (for use in scales) | Hex vector | "main" palette |
+| `show_insper_palette()` | Visualize palettes | ggplot object (gradient) | "main" palette |
+| `list_palettes()` | List palette metadata | data.frame | All palettes |
+
+All existing scale functions (`scale_fill_insper_d()`, `scale_color_insper_c()`, etc.) continue to work unchanged.
+
+---
+
+# insperplot 1.0.0
+
+## Major Release: Stable API
+
+This is the **first stable release** of insperplot! The package API is now frozen and follows [semantic versioning](https://semver.org/).
+
+**Lifecycle change:** Package status updated from "experimental" to **"stable"** ✨
+
+## Breaking Changes
+
+### Removed Deprecated Palette Names
+
+Old palette names that showed deprecation warnings in v0.9.x have been **completely removed**. You must now use the simplified names introduced in v0.9.0:
+
+**Removed palette names:**
+- ❌ `reds_seq`, `oranges_seq`, `teals_seq`, `grays_seq` → Use `reds`, `oranges`, `teals`, `grays`
+- ❌ `diverging_red_teal`, `diverging_red_teal_extended`, `diverging_insper` → Use `red_teal`, `red_teal_ext`, `diverging`
+- ❌ `qualitative_main`, `qualitative_bright`, `qualitative_contrast` → Use `main`, `bright`, `contrast`
+
+**Migration:**
+```r
+# OLD (will now error)
+scale_fill_insper_c(palette = "reds_seq")
+
+# NEW
+scale_fill_insper_c(palette = "reds")
+
+# List all available palettes
+list_palettes()
+```
+
+## Bug Fixes
+
+- Fixed vignette build errors caused by undefined variable references
+- Fixed font handling in vignettes to prevent failures when fonts unavailable
+- Updated all documentation to use current API (`show_insper_colors()` instead of removed `insper_col()`)
+- Moved example scripts from `tests/` to `inst/examples/` to prevent test execution issues
+
+## Documentation
+
+- Updated README with stable lifecycle badge
+- Clarified v1.0.0 breaking changes in NEWS
+- Package documentation is complete and production-ready
+
+## Acknowledgments
+
+Thank you to all users who provided feedback during the experimental phase (v0.1.0 - v0.9.1). The API is now stable and ready for production use!
+
+---
+
 # insperplot 0.9.1
 
 ## Enhancements

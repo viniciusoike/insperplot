@@ -10,21 +10,24 @@ insper_timeseries(
   y,
   group = NULL,
   line_width = 0.8,
-  add_points = FALSE
+  add_points = FALSE,
+  ...
 )
 }
 \arguments{
 \item{data}{A data frame containing the data to plot}
 
-\item{x}{<[`data-masked`][ggplot2::aes_eval]> Time variable (numeric, Date, or POSIXct)}
+\item{x}{Time variable (numeric, Date, or POSIXct)}
 
-\item{y}{<[`data-masked`][ggplot2::aes_eval]> Value variable}
+\item{y}{Value variable}
 
-\item{group}{<[`data-masked`][ggplot2::aes_eval]> Grouping variable for multiple lines (optional)}
+\item{group}{Grouping variable for multiple lines (optional)}
 
 \item{line_width}{Numeric. Width of lines. Default is 1.2}
 
 \item{add_points}{Logical. If TRUE, adds points to lines. Default is FALSE}
+
+\item{...}{Additional arguments passed to \code{ggplot2::geom_line()}}
 }
 \value{
 A ggplot2 object
@@ -63,7 +66,6 @@ Other plots:
 \code{\link{insper_density}()},
 \code{\link{insper_heatmap}()},
 \code{\link{insper_histogram}()},
-\code{\link{insper_lollipop}()},
 \code{\link{insper_scatterplot}()},
 \code{\link{insper_violin}()}
 }
