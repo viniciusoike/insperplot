@@ -9,6 +9,8 @@ insper_scatterplot(
   x,
   y,
   color = NULL,
+  fill = NULL,
+  palette = "categorical",
   add_smooth = FALSE,
   smooth_method = "lm",
   point_size = 2,
@@ -23,11 +25,26 @@ insper_scatterplot(
 
 \item{y}{Variable for y-axis}
 
-\item{color}{Variable for color aesthetic (optional)}
+\item{color}{Color aesthetic. Accepts either:
+\itemize{
+  \item A bare column name for variable mapping (e.g., \code{color = Species})
+  \item A quoted color string for static color (e.g., \code{color = "blue"})
+  \item \code{NULL} (default) to use default Insper teal
+}
+When mapping a variable, the appropriate scale is automatically applied.}
+
+\item{fill}{Fill aesthetic (for shapes 21-25 with fill interiors). Accepts either:
+\itemize{
+  \item A bare column name for variable mapping (e.g., \code{fill = Species})
+  \item A quoted color string for static fill (e.g., \code{fill = "lightblue"})
+  \item \code{NULL} (default) - no fill mapping
+}}
+
+\item{palette}{Character. Color palette for variable mappings. Default is "categorical".}
 
 \item{add_smooth}{Logical. If TRUE, adds a regression line. Default is FALSE}
 
-\item{smooth_method}{Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"}
+\item{smooth_method}{Character. Smoothing method ("lm", "loess", "gam", "glm"). Default is "lm"}
 
 \item{point_size}{Numeric. Size of points. Default is 2}
 
@@ -41,34 +58,55 @@ A ggplot2 object
 }
 \description{
 Create scatter plots with regression lines and confidence intervals using
-Insper's visual identity.
+Insper's visual identity. Supports both color and fill aesthetics for
+maximum flexibility with different point shapes.
+}
+\details{
+This function supports two types of point shapes:
+\itemize{
+  \item **Solid shapes (16-20)**: Only use \code{color} aesthetic for point color
+  \item **Outlined shapes (21-25)**: Use both \code{color} (outline) and \code{fill} (interior)
+}
+
+For outlined shapes, you can map different variables to color and fill, or use
+static colors for fine-grained control.
 }
 \examples{
 \dontrun{
-# Simple scatter plot
+# Simple scatter plot with default color
 insper_scatterplot(mtcars, x = wt, y = mpg)
 
-# Colored by variable
+# Static color
+insper_scatterplot(mtcars, x = wt, y = mpg, color = "blue")
+
+# Discrete variable mapping
 insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
+
+# Continuous variable mapping
+insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+
+# Custom palette
+insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl), palette = "bright")
 
 # With smooth line
 insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE)
 
-# With loess smoothing
-insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "loess")
-
-# Custom point shape
-insper_scatterplot(mtcars, x = wt, y = mpg, shape = 17)
-
-# Using shape 21 with both color and fill
+# Shape 21 with both color and fill (different variables)
 insper_scatterplot(mtcars, x = wt, y = mpg,
                    color = factor(cyl),
+                   fill = factor(gear),
                    shape = 21, stroke = 1.5)
+
+# Shape 21 with static color and mapped fill
+insper_scatterplot(mtcars, x = wt, y = mpg,
+                   color = "black",
+                   fill = factor(cyl),
+                   shape = 21)
 }
 
 }
 \seealso{
-\code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
+\code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
 
 Other plots: 
 \code{\link{insper_area}()},

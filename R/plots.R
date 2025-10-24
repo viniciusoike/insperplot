@@ -1,46 +1,67 @@
 #' Create a Bar Plot with Insper Styling
 #'
 #' This function creates a customized bar plot using ggplot2 with Insper's
-#' visual identity. It supports grouped bars, text labels, and automatic ordering.
+#' visual identity. Supports grouped bars, text labels, and automatic orientation.
 #'
 #' @param data A data frame containing the data to plot
 #' @param x Column name for x-axis
 #' @param y Column name for y-axis
-#' @param fill_var Column name for fill aesthetic (creates grouped/stacked bars).
-#'   If NULL, uses single_color for all bars.
-#' @param single_color Character. Hex color code for bars when not using fill_var.
-#'   Default is Insper red.
+#' @param fill Fill aesthetic. Accepts either:
+#'   \itemize{
+#'     \item A bare column name for variable mapping (e.g., \code{fill = gear})
+#'     \item A quoted color string for static fill (e.g., \code{fill = "blue"})
+#'     \item \code{NULL} (default) to use default Insper red
+#'   }
+#'   When mapping a variable, creates grouped or stacked bars based on \code{position}.
 #' @param position Position adjustment for bars. Options: "dodge", "stack",
 #'   "fill", "identity". Default is "dodge"
+#' @param palette Character. Color palette for variable mappings. Default is "categorical".
 #' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE
 #' @param text Logical. If TRUE, adds value labels on bars. Default is FALSE
-#' @param palette Character. Color palette name for grouped bars.
-#'   Default is "categorical"
 #' @param text_size Numeric. Size of text labels. Default is 4
 #' @param text_color Character. Color of text labels. Default is "black"
 #' @param label_formatter Function. Formatter for text labels. Default is scales::comma
-#' @param ... Additional arguments passed to scale_fill_insper_d()
+#' @param ... Additional arguments passed to \code{ggplot2::geom_col()},
+#'   allowing custom aesthetics like width, alpha, etc.
 #'
 #' @return A ggplot2 object
 #'
+#' @details
+#' The function automatically detects bar orientation based on variable types:
+#' \itemize{
+#'   \item **Vertical bars**: When x is categorical and y is numeric (default)
+#'   \item **Horizontal bars**: When x is numeric and y is categorical
+#' }
+#'
+#' Text labels and zero lines automatically adjust to the detected orientation.
+#'
 #' @examples
 #' \dontrun{
-#' # Simple bar plot (categorical x, numeric y)
+#' # Simple bar plot with default color
 #' insper_barplot(mtcars, x = cyl, y = mpg)
 #'
-#' # Bar plot with swapped axes (numeric x, categorical y)
-#' df <- data.frame(category = letters[1:5], value = c(3, 5, 2, 8, 4))
-#' insper_barplot(df, x = value, y = category)
+#' # Static fill color
+#' insper_barplot(mtcars, x = cyl, y = mpg, fill = "steelblue")
 #'
-#' # Grouped bar plot
-#' insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
+#' # Grouped bar plot (variable mapping)
+#' insper_barplot(mtcars, x = cyl, y = mpg, fill = gear)
+#'
+#' # Stacked bars
+#' insper_barplot(mtcars, x = cyl, y = mpg, fill = gear, position = "stack")
 #'
 #' # With text labels
 #' insper_barplot(mtcars, x = cyl, y = mpg, text = TRUE)
 #'
+#' # Horizontal bars (numeric x, categorical y)
+#' df <- data.frame(category = letters[1:5], value = c(3, 5, 2, 8, 4))
+#' insper_barplot(df, x = value, y = category)
+#'
+#' # Custom palette
+#' insper_barplot(mtcars, x = cyl, y = mpg, fill = gear, palette = "bright")
+#'
 #' # Custom color and label formatting
 #' insper_barplot(mtcars, x = cyl, y = mpg,
-#'                single_color = get_insper_colors("teals1"),
+#'                fill = "#009491",
 #'                label_formatter = format_num_br)
 #' }
 #'
@@ -52,12 +73,11 @@ insper_barplot <- function(
   data,
   x,
   y,
-  fill_var = NULL,
-  single_color = get_insper_colors("reds1"),
+  fill = NULL,
   position = "dodge",
+  palette = "categorical",
   zero = TRUE,
   text = FALSE,
-  palette = "categorical",
   text_size = 4,
   text_color = "black",
   label_formatter = scales::comma,
@@ -79,22 +99,34 @@ insper_barplot <- function(
     ))
   }
 
-  # Check if fill_var was provided using rlang
-  has_fill <- !rlang::quo_is_null(rlang::enquo(fill_var))
+  # Smart detection for fill
+  fill_quo <- rlang::enquo(fill)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
 
-  # Initialize plot
-  if (!has_fill) {
-    # Single color bars
+  # Warn if palette specified with static fill
+  warn_palette_ignored(fill_type, palette, "fill")
+
+  # Initialize plot based on fill type
+  if (fill_type$type == "missing") {
+    # Default: Insper red
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_col(fill = single_color)
+      ggplot2::geom_col(fill = get_insper_colors("reds1"), position = position, ...)
+
+  } else if (fill_type$type == "static_color") {
+    # User-specified static color
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+      ggplot2::geom_col(fill = fill_type$value, position = position, ...)
+
   } else {
-    # Grouped bars with fill aesthetic
+    # Variable mapping - grouped/stacked bars
+    # Note: Bar plots are inherently discrete (grouping by categories)
+    # So we always use discrete scale regardless of variable type
     p <- ggplot2::ggplot(
       data,
-      ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill_var }})
+      ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
-      ggplot2::geom_col(position = position) +
-      scale_fill_insper_d(palette = palette, ...)
+      ggplot2::geom_col(position = position, ...) +
+      scale_fill_insper_d(palette = palette)
   }
 
   # Detect orientation by checking if x or y is numeric in the data
@@ -103,8 +135,8 @@ insper_barplot <- function(
   y_quo <- rlang::enquo(y)
 
   # Evaluate in the data context
-  x_vals <- rlang::eval_tidy(x_quo, data)
-  y_vals <- rlang::eval_tidy(y_quo, data)
+  x_vals <- rlang::eval_tidy(x_quo, rlang::as_data_mask(data))
+  y_vals <- rlang::eval_tidy(y_quo, rlang::as_data_mask(data))
 
   # Check if numeric (not factor, character, or other discrete types)
   x_is_numeric <- is.numeric(x_vals) && !is.factor(x_vals)
@@ -131,8 +163,8 @@ insper_barplot <- function(
     text_vjust <- if (is_horizontal) 0.5 else -0.5
     text_hjust <- if (is_horizontal) -0.1 else 0.5
 
-    if (!has_fill) {
-      # Simple text labels
+    if (fill_type$type != "variable_mapping") {
+      # Simple text labels (no grouping)
       p <- p +
         ggplot2::geom_text(
           ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
@@ -173,7 +205,7 @@ insper_barplot <- function(
       )
   }
 
-  p <- p + theme_insper() + theme(panel.grid.major.x = element_blank())
+  p <- p + theme_insper() + ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
 
   return(p)
 }
@@ -181,51 +213,87 @@ insper_barplot <- function(
 #' Insper Scatter Plot
 #'
 #' Create scatter plots with regression lines and confidence intervals using
-#' Insper's visual identity.
+#' Insper's visual identity. Supports both color and fill aesthetics for
+#' maximum flexibility with different point shapes.
 #'
 #' @param data A data frame containing the data to plot
 #' @param x Variable for x-axis
 #' @param y Variable for y-axis
-#' @param color Variable for color aesthetic (optional)
+#' @param color Color aesthetic. Accepts either:
+#'   \itemize{
+#'     \item A bare column name for variable mapping (e.g., \code{color = Species})
+#'     \item A quoted color string for static color (e.g., \code{color = "blue"})
+#'     \item \code{NULL} (default) to use default Insper teal
+#'   }
+#'   When mapping a variable, the appropriate scale is automatically applied.
+#' @param fill Fill aesthetic (for shapes 21-25 with fill interiors). Accepts either:
+#'   \itemize{
+#'     \item A bare column name for variable mapping (e.g., \code{fill = Species})
+#'     \item A quoted color string for static fill (e.g., \code{fill = "lightblue"})
+#'     \item \code{NULL} (default) - no fill mapping
+#'   }
+#' @param palette Character. Color palette for variable mappings. Default is "categorical".
 #' @param add_smooth Logical. If TRUE, adds a regression line. Default is FALSE
-#' @param smooth_method Character. Smoothing method ("lm", "loess", "gam"). Default is "lm"
+#' @param smooth_method Character. Smoothing method ("lm", "loess", "gam", "glm"). Default is "lm"
 #' @param point_size Numeric. Size of points. Default is 2
 #' @param point_alpha Numeric. Transparency of points (0-1). Default is 1
 #' @param ... Additional arguments passed to \code{ggplot2::geom_point()},
 #'   allowing custom aesthetics like shape, stroke, etc.
 #' @return A ggplot2 object
 #'
+#' @details
+#' This function supports two types of point shapes:
+#' \itemize{
+#'   \item **Solid shapes (16-20)**: Only use \code{color} aesthetic for point color
+#'   \item **Outlined shapes (21-25)**: Use both \code{color} (outline) and \code{fill} (interior)
+#' }
+#'
+#' For outlined shapes, you can map different variables to color and fill, or use
+#' static colors for fine-grained control.
+#'
 #' @examples
 #' \dontrun{
-#' # Simple scatter plot
+#' # Simple scatter plot with default color
 #' insper_scatterplot(mtcars, x = wt, y = mpg)
 #'
-#' # Colored by variable
+#' # Static color
+#' insper_scatterplot(mtcars, x = wt, y = mpg, color = "blue")
+#'
+#' # Discrete variable mapping
 #' insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
+#'
+#' # Continuous variable mapping
+#' insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+#'
+#' # Custom palette
+#' insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl), palette = "bright")
 #'
 #' # With smooth line
 #' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE)
 #'
-#' # With loess smoothing
-#' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "loess")
-#'
-#' # Custom point shape
-#' insper_scatterplot(mtcars, x = wt, y = mpg, shape = 17)
-#'
-#' # Using shape 21 with both color and fill
+#' # Shape 21 with both color and fill (different variables)
 #' insper_scatterplot(mtcars, x = wt, y = mpg,
 #'                    color = factor(cyl),
+#'                    fill = factor(gear),
 #'                    shape = 21, stroke = 1.5)
+#'
+#' # Shape 21 with static color and mapped fill
+#' insper_scatterplot(mtcars, x = wt, y = mpg,
+#'                    color = "black",
+#'                    fill = factor(cyl),
+#'                    shape = 21)
 #' }
 #'
 #' @family plots
-#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}, \code{\link{scale_fill_insper_d}}
 #' @export
 insper_scatterplot <- function(
   data,
   x,
   y,
   color = NULL,
+  fill = NULL,
+  palette = "categorical",
   add_smooth = FALSE,
   smooth_method = "lm",
   point_size = 2,
@@ -247,25 +315,119 @@ insper_scatterplot <- function(
     ))
   }
 
-  # Check if color was provided using rlang
-  has_color <- !rlang::quo_is_null(rlang::enquo(color))
+  # Smart detection for color and fill
+  color_quo <- rlang::enquo(color)
+  fill_quo <- rlang::enquo(fill)
 
-  # Initialize plot
-  if (!has_color) {
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+  color_type <- detect_aesthetic_type(color_quo, "color", data)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
+
+  # Warn if palette specified with static aesthetics
+  if (color_type$type == "static_color" && fill_type$type == "static_color") {
+    warn_palette_ignored(color_type, palette, "color")
+  }
+
+  # Build base plot
+  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }}))
+
+  # Determine which aesthetics to map
+  has_color_mapping <- color_type$type == "variable_mapping"
+  has_fill_mapping <- fill_type$type == "variable_mapping"
+
+  # Build aesthetic mapping
+  if (has_color_mapping && has_fill_mapping) {
+    # Both color and fill are variable mappings
+    p <- p +
       ggplot2::geom_point(
-        color = get_insper_colors("teals1"),
+        ggplot2::aes(color = {{ color }}, fill = {{ fill }}),
         size = point_size,
         alpha = point_alpha,
         ...
       )
+
+    # Add scales based on variable types
+    if (color_type$is_continuous) {
+      p <- p + scale_color_insper_c(palette = palette)
+    } else {
+      p <- p + scale_color_insper_d(palette = palette)
+    }
+
+    if (fill_type$is_continuous) {
+      p <- p + scale_fill_insper_c(palette = palette)
+    } else {
+      p <- p + scale_fill_insper_d(palette = palette)
+    }
+
+  } else if (has_color_mapping) {
+    # Only color is variable mapping
+    geom_params <- list(size = point_size, alpha = point_alpha)
+    if (fill_type$type == "static_color") {
+      geom_params$fill <- fill_type$value
+    }
+
+    p <- p +
+      ggplot2::geom_point(
+        ggplot2::aes(color = {{ color }}),
+        size = geom_params$size,
+        alpha = geom_params$alpha,
+        fill = geom_params$fill,
+        ...
+      )
+
+    # Add appropriate color scale
+    if (color_type$is_continuous) {
+      p <- p + scale_color_insper_c(palette = palette)
+    } else {
+      p <- p + scale_color_insper_d(palette = palette)
+    }
+
+  } else if (has_fill_mapping) {
+    # Only fill is variable mapping
+    geom_params <- list(size = point_size, alpha = point_alpha)
+    if (color_type$type == "static_color") {
+      geom_params$color <- color_type$value
+    } else {
+      geom_params$color <- get_insper_colors("teals3")  # Default outline for filled shapes
+    }
+
+    p <- p +
+      ggplot2::geom_point(
+        ggplot2::aes(fill = {{ fill }}),
+        size = geom_params$size,
+        alpha = geom_params$alpha,
+        color = geom_params$color,
+        ...
+      )
+
+    # Add appropriate fill scale
+    if (fill_type$is_continuous) {
+      p <- p + scale_fill_insper_c(palette = palette)
+    } else {
+      p <- p + scale_fill_insper_d(palette = palette)
+    }
+
   } else {
-    p <- ggplot2::ggplot(
-      data,
-      ggplot2::aes(x = {{ x }}, y = {{ y }}, color = {{ color }})
-    ) +
-      ggplot2::geom_point(size = point_size, alpha = point_alpha, ...) +
-      scale_color_insper_d()
+    # Neither is variable mapping - use static colors
+    geom_params <- list(size = point_size, alpha = point_alpha)
+
+    if (color_type$type == "static_color") {
+      geom_params$color <- color_type$value
+    } else {
+      geom_params$color <- get_insper_colors("teals1")  # Default
+    }
+
+    if (fill_type$type == "static_color") {
+      geom_params$fill <- fill_type$value
+    }
+
+    p <- p +
+      ggplot2::geom_point(
+        color = geom_params$color,
+        fill = geom_params$fill,
+        size = geom_params$size,
+        alpha = geom_params$alpha,
+        ...
+      )
   }
 
   # Add smooth line if requested
@@ -287,34 +449,52 @@ insper_scatterplot <- function(
 #' Insper Time Series Plot
 #'
 #' Create time series plots optimized for economic/business data using Insper's
-#' visual identity. Automatically handles Date and POSIXct x-axis variables.
+#' visual identity. Automatically handles Date and POSIXct x-axis variables and
+#' supports both discrete and continuous color mappings.
 #'
 #' @param data A data frame containing the data to plot
 #' @param x Time variable (numeric, Date, or POSIXct)
 #' @param y Value variable
-#' @param group Grouping variable for multiple lines (optional)
-#' @param line_width Numeric. Width of lines. Default is 1.2
+#' @param color Color aesthetic for multiple lines. Accepts either:
+#'   \itemize{
+#'     \item A bare column name for variable mapping (e.g., \code{color = category})
+#'     \item A quoted color string for static color (e.g., \code{color = "blue"})
+#'     \item \code{NULL} (default) to use default Insper teal
+#'   }
+#'   When mapping a variable, the appropriate scale is automatically applied.
+#' @param palette Character. Color palette for variable mappings. Default is "categorical".
+#' @param line_width Numeric. Width of lines. Default is 0.8
 #' @param add_points Logical. If TRUE, adds points to lines. Default is FALSE
-#' @param ... Additional arguments passed to \code{ggplot2::geom_line()}
+#' @param ... Additional arguments passed to \code{ggplot2::geom_line()},
+#'   allowing custom aesthetics like linetype, alpha, etc.
 #' @return A ggplot2 object
 #'
 #' @examples
 #' \dontrun{
-#' # Simple time series
+#' # Simple time series with default color
 #' df <- data.frame(time = 1:10, value = rnorm(10))
 #' insper_timeseries(df, x = time, y = value)
 #'
-#' # Grouped time series
+#' # Static color
+#' insper_timeseries(df, x = time, y = value, color = "darkblue")
+#'
+#' # Grouped time series (discrete variable)
 #' df <- data.frame(
 #'   time = rep(1:10, 2),
 #'   value = rnorm(20),
-#'   group = rep(c("A", "B"), each = 10)
+#'   category = rep(c("A", "B"), each = 10)
 #' )
-#' insper_timeseries(df, x = time, y = value, group = group)
+#' insper_timeseries(df, x = time, y = value, color = category)
 #'
 #' # With date axis
 #' df$date <- as.Date("2020-01-01") + df$time
-#' insper_timeseries(df, x = date, y = value)
+#' insper_timeseries(df, x = date, y = value, color = category)
+#'
+#' # Custom palette
+#' insper_timeseries(df, x = time, y = value, color = category, palette = "bright")
+#'
+#' # With points
+#' insper_timeseries(df, x = time, y = value, color = category, add_points = TRUE)
 #' }
 #'
 #' @family plots
@@ -324,7 +504,8 @@ insper_timeseries <- function(
   data,
   x,
   y,
-  group = NULL,
+  color = NULL,
+  palette = "categorical",
   line_width = 0.8,
   add_points = FALSE,
   ...
@@ -337,11 +518,16 @@ insper_timeseries <- function(
     ))
   }
 
-  # Check if group was provided using rlang
-  has_group <- !rlang::quo_is_null(rlang::enquo(group))
+  # Smart detection for color
+  color_quo <- rlang::enquo(color)
+  color_type <- detect_aesthetic_type(color_quo, "color", data)
 
-  # Initialize plot
-  if (!has_group) {
+  # Warn if palette specified with static color
+  warn_palette_ignored(color_type, palette, "color")
+
+  # Initialize plot based on color type
+  if (color_type$type == "missing") {
+    # Default: Insper teal
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_line(
         color = get_insper_colors("teals1"),
@@ -353,13 +539,35 @@ insper_timeseries <- function(
       p <- p +
         ggplot2::geom_point(color = get_insper_colors("teals1"), size = 1)
     }
+
+  } else if (color_type$type == "static_color") {
+    # User-specified static color
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+      ggplot2::geom_line(
+        color = color_type$value,
+        linewidth = line_width,
+        ...
+      )
+
+    if (add_points) {
+      p <- p +
+        ggplot2::geom_point(color = color_type$value, size = 1)
+    }
+
   } else {
+    # Variable mapping - multiple lines
     p <- ggplot2::ggplot(
       data,
-      ggplot2::aes(x = {{ x }}, y = {{ y }}, color = {{ group }})
+      ggplot2::aes(x = {{ x }}, y = {{ y }}, color = {{ color }})
     ) +
-      ggplot2::geom_line(linewidth = line_width, ...) +
-      scale_color_insper_d()
+      ggplot2::geom_line(linewidth = line_width, ...)
+
+    # Add appropriate color scale
+    if (color_type$is_continuous) {
+      p <- p + scale_color_insper_c(palette = palette)
+    } else {
+      p <- p + scale_color_insper_d(palette = palette)
+    }
 
     if (add_points) {
       p <- p + ggplot2::geom_point(size = 1)

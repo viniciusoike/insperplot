@@ -8,12 +8,11 @@ insper_barplot(
   data,
   x,
   y,
-  fill_var = NULL,
-  single_color = get_insper_colors("reds1"),
+  fill = NULL,
   position = "dodge",
+  palette = "categorical",
   zero = TRUE,
   text = FALSE,
-  palette = "categorical",
   text_size = 4,
   text_color = "black",
   label_formatter = scales::comma,
@@ -27,21 +26,22 @@ insper_barplot(
 
 \item{y}{Column name for y-axis}
 
-\item{fill_var}{Column name for fill aesthetic (creates grouped/stacked bars).
-If NULL, uses single_color for all bars.}
-
-\item{single_color}{Character. Hex color code for bars when not using fill_var.
-Default is Insper red.}
+\item{fill}{Fill aesthetic. Accepts either:
+\itemize{
+  \item A bare column name for variable mapping (e.g., \code{fill = gear})
+  \item A quoted color string for static fill (e.g., \code{fill = "blue"})
+  \item \code{NULL} (default) to use default Insper red
+}
+When mapping a variable, creates grouped or stacked bars based on \code{position}.}
 
 \item{position}{Position adjustment for bars. Options: "dodge", "stack",
 "fill", "identity". Default is "dodge"}
 
+\item{palette}{Character. Color palette for variable mappings. Default is "categorical".}
+
 \item{zero}{Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE}
 
 \item{text}{Logical. If TRUE, adds value labels on bars. Default is FALSE}
-
-\item{palette}{Character. Color palette name for grouped bars.
-Default is "categorical"}
 
 \item{text_size}{Numeric. Size of text labels. Default is 4}
 
@@ -49,33 +49,52 @@ Default is "categorical"}
 
 \item{label_formatter}{Function. Formatter for text labels. Default is scales::comma}
 
-\item{...}{Additional arguments passed to scale_fill_insper_d()}
+\item{...}{Additional arguments passed to \code{ggplot2::geom_col()},
+allowing custom aesthetics like width, alpha, etc.}
 }
 \value{
 A ggplot2 object
 }
 \description{
 This function creates a customized bar plot using ggplot2 with Insper's
-visual identity. It supports grouped bars, text labels, and automatic ordering.
+visual identity. Supports grouped bars, text labels, and automatic orientation.
+}
+\details{
+The function automatically detects bar orientation based on variable types:
+\itemize{
+  \item **Vertical bars**: When x is categorical and y is numeric (default)
+  \item **Horizontal bars**: When x is numeric and y is categorical
+}
+
+Text labels and zero lines automatically adjust to the detected orientation.
 }
 \examples{
 \dontrun{
-# Simple bar plot (categorical x, numeric y)
+# Simple bar plot with default color
 insper_barplot(mtcars, x = cyl, y = mpg)
 
-# Bar plot with swapped axes (numeric x, categorical y)
-df <- data.frame(category = letters[1:5], value = c(3, 5, 2, 8, 4))
-insper_barplot(df, x = value, y = category)
+# Static fill color
+insper_barplot(mtcars, x = cyl, y = mpg, fill = "steelblue")
 
-# Grouped bar plot
-insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
+# Grouped bar plot (variable mapping)
+insper_barplot(mtcars, x = cyl, y = mpg, fill = gear)
+
+# Stacked bars
+insper_barplot(mtcars, x = cyl, y = mpg, fill = gear, position = "stack")
 
 # With text labels
 insper_barplot(mtcars, x = cyl, y = mpg, text = TRUE)
 
+# Horizontal bars (numeric x, categorical y)
+df <- data.frame(category = letters[1:5], value = c(3, 5, 2, 8, 4))
+insper_barplot(df, x = value, y = category)
+
+# Custom palette
+insper_barplot(mtcars, x = cyl, y = mpg, fill = gear, palette = "bright")
+
 # Custom color and label formatting
 insper_barplot(mtcars, x = cyl, y = mpg,
-               single_color = get_insper_colors("teals1"),
+               fill = "#009491",
                label_formatter = format_num_br)
 }
 
