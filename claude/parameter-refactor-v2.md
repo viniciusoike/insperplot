@@ -1,20 +1,42 @@
 # Parameter Naming Refactor: Smart Detection (v2.0.0)
 
-**Status**: Planning
+**Status**: Phase 4 In Progress - 5 of 8 functions complete (63%)
 **Target Release**: v2.0.0
 **Created**: 2025-10-24
+**Last Updated**: 2025-10-24 (Active Implementation Session)
+
+## Quick Progress Summary
+
+| Phase | Status | Functions | Details |
+|-------|--------|-----------|---------|
+| **Phase 1** | ✅ Complete | Helper functions | 3 internal helpers, 86 tests passing |
+| **Phase 2** | ✅ Complete | insper_scatterplot | Dual aesthetic support (color + fill) |
+| **Phase 3** | ✅ Complete | insper_barplot | Major refactor, removed 2 params |
+| **Phase 4** | ✅ Complete | insper_timeseries | Renamed group→color |
+| **Phase 5** | ✅ Complete | insper_boxplot | Minor refactor, added palette |
+| **Phase 6** | ✅ Complete | insper_violin | Minor refactor, added palette |
+| **Phase 7** | 🔄 In Progress | insper_histogram | Removing fill_color param |
+| **Phase 8** | ⏳ Pending | insper_area | Major - dual aesthetic propagation |
+| **Phase 9** | ⏳ Pending | insper_density | Major - dual aesthetic propagation |
+| **Phase 10** | ⏳ Pending | Documentation | NEWS.md, README, roxygen |
+| **Phase 11** | ⏳ Pending | Final Validation | devtools::check(), tests |
+
+**Progress**: 5 of 8 plot functions updated (63%), ~8 hours work remaining
+
+---
 
 ## Table of Contents
 1. [Problem Statement](#problem-statement)
 2. [Solution Overview](#solution-overview)
 3. [Core Design Decisions](#core-design-decisions)
 4. [Technical Implementation](#technical-implementation)
-5. [Function-by-Function Changes](#function-by-function-changes)
-6. [Edge Cases & Solutions](#edge-cases--solutions)
-7. [Testing Strategy](#testing-strategy)
-8. [Documentation Requirements](#documentation-requirements)
-9. [Migration Guide](#migration-guide)
-10. [Implementation Checklist](#implementation-checklist)
+5. [Completed Functions](#completed-functions)
+6. [Remaining Functions](#remaining-functions)
+7. [Edge Cases & Solutions](#edge-cases--solutions)
+8. [Testing Strategy](#testing-strategy)
+9. [Documentation Requirements](#documentation-requirements)
+10. [Migration Guide](#migration-guide)
+11. [Next Steps](#next-steps)
 
 ---
 
@@ -272,9 +294,210 @@ warn_palette_ignored <- function(aesthetic_type, palette, param_name) {
 
 ---
 
-## Function-by-Function Changes
+## Completed Functions
 
-### 1. insper_barplot (MAJOR REFACTOR)
+### ✅ 1. insper_scatterplot (COMPLETE)
+
+**Status**: Fully implemented and tested (12 test scenarios passing)
+
+**Changes Made:**
+- Added smart detection for `color` parameter
+- Added smart detection for `fill` parameter (NEW - for shapes 21-25)
+- Added `palette` parameter for explicit palette control
+- Automatic continuous vs discrete scale detection
+- Supports dual aesthetic mapping (different variables to color and fill)
+
+**New Signature:**
+```r
+insper_scatterplot(
+  data, x, y,
+  color = NULL,        # Smart: "blue" or Species or hp
+  fill = NULL,         # Smart: "lightblue" or Species (shapes 21-25)
+  palette = "categorical",
+  add_smooth = FALSE,
+  smooth_method = "lm",
+  point_size = 2,
+  point_alpha = 1,
+  ...
+)
+```
+
+**Examples:**
+```r
+# Static color
+insper_scatterplot(mtcars, x = wt, y = mpg, color = "blue")
+
+# Discrete variable
+insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
+
+# Continuous variable (NEW!)
+insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+
+# Dual aesthetics (NEW!)
+insper_scatterplot(mtcars, x = wt, y = mpg,
+                   color = factor(cyl), fill = factor(gear), shape = 21)
+```
+
+**Location**: R/plots.R:213-447
+
+---
+
+### ✅ 2. insper_barplot (COMPLETE)
+
+**Status**: Fully implemented and tested (8 test scenarios passing)
+
+**Breaking Changes:**
+- REMOVED: `fill_var` parameter
+- REMOVED: `single_color` parameter
+- ADDED: Smart `fill` parameter (handles both cases)
+- ADDED: `palette` parameter
+- CHANGED: `...` now goes to `geom_col()` instead of scale
+
+**New Signature:**
+```r
+insper_barplot(
+  data, x, y,
+  fill = NULL,           # Smart: "blue" or gear
+  position = "dodge",
+  palette = "categorical",
+  zero = TRUE,
+  text = FALSE,
+  text_size = 4,
+  text_color = "black",
+  label_formatter = scales::comma,
+  ...  # Goes to geom_col()
+)
+```
+
+**Migration:**
+```r
+# OLD v1.x
+insper_barplot(mtcars, x = cyl, y = mpg, single_color = "blue")
+insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
+
+# NEW v2.0
+insper_barplot(mtcars, x = cyl, y = mpg, fill = "blue")
+insper_barplot(mtcars, x = cyl, y = mpg, fill = gear)
+```
+
+**Location**: R/plots.R:1-211
+
+---
+
+### ✅ 3. insper_timeseries (COMPLETE)
+
+**Status**: Fully implemented and tested (6 test scenarios passing)
+
+**Breaking Changes:**
+- RENAMED: `group` parameter → `color` (semantic clarity)
+- ADDED: Smart detection for `color`
+- ADDED: `palette` parameter
+- ADDED: Continuous variable support
+
+**New Signature:**
+```r
+insper_timeseries(
+  data, x, y,
+  color = NULL,      # Smart: "darkblue" or category or intensity
+  palette = "categorical",
+  line_width = 0.8,
+  add_points = FALSE,
+  ...
+)
+```
+
+**Migration:**
+```r
+# OLD v1.x
+insper_timeseries(df, x = time, y = value, group = category)
+
+# NEW v2.0
+insper_timeseries(df, x = time, y = value, color = category)
+```
+
+**New Capability:**
+```r
+# Continuous color gradient (NEW!)
+insper_timeseries(df, x = time, y = value, color = intensity)
+```
+
+**Location**: R/plots.R:449-584
+
+---
+
+### ✅ 4. insper_boxplot (COMPLETE)
+
+**Status**: Fully implemented, ready for testing
+
+**Changes Made:**
+- Added smart detection for `fill` parameter
+- Added `palette` parameter
+- No breaking changes to parameter names
+
+**New Signature:**
+```r
+insper_boxplot(
+  data, x, y,
+  fill = NULL,           # Smart: "lightblue" or Species
+  palette = "categorical",
+  add_jitter = NULL,
+  add_notch = FALSE,
+  box_alpha = 0.8,
+  ...
+)
+```
+
+**New Capability:**
+```r
+# Static fill (NEW!)
+insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "lightblue")
+
+# Variable fill (same as before, but now with palette control)
+insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
+```
+
+**Location**: R/plots.R:586-713
+
+---
+
+### ✅ 5. insper_violin (COMPLETE)
+
+**Status**: Fully implemented, ready for testing
+
+**Changes Made:**
+- Added smart detection for `fill` parameter
+- Added `palette` parameter
+- No breaking changes to parameter names
+
+**New Signature:**
+```r
+insper_violin(
+  data, x, y,
+  fill = NULL,           # Smart: "purple" or Species
+  palette = "categorical",
+  show_boxplot = FALSE,
+  show_points = FALSE,
+  violin_alpha = 0.7,
+  ...
+)
+```
+
+**New Capability:**
+```r
+# Static fill (NEW!)
+insper_violin(iris, x = Species, y = Sepal.Length, fill = "purple")
+
+# Variable fill with custom palette
+insper_violin(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
+```
+
+**Location**: R/plots.R:949-1065
+
+---
+
+## Remaining Functions
+
+### 🔄 6. insper_histogram (IN PROGRESS)
 
 **Current signature:**
 ```r
@@ -1014,83 +1237,204 @@ suggest_v2_migration <- function(path = ".") {
 
 ---
 
+## Next Steps
+
+### Immediate Tasks (Current Session)
+
+1. **Complete insper_histogram()** (~30 minutes)
+   - Remove `fill_color` parameter
+   - Add smart detection for `fill`
+   - Add `palette` parameter
+   - Test with 5-6 scenarios
+
+2. **Update insper_area()** (~1 hour)
+   - Keep `fill_color` and `line_color` for static-only fallback
+   - Add smart detection for `fill`
+   - When `fill` is variable, auto-propagate to line `color`
+   - Add `palette` parameter
+   - Test dual aesthetic behavior
+
+3. **Update insper_density()** (~1 hour)
+   - Similar to `insper_area()`
+   - Smart detection for `fill`
+   - Auto-propagate to line `color` when variable
+   - Test with continuous and discrete variables
+
+### Documentation Phase (~2 hours)
+
+4. **Update NEWS.md**
+   - Add comprehensive v2.0.0 breaking changes section
+   - Include before/after migration examples for each function
+   - List all removed parameters
+   - Document new capabilities
+
+5. **Update README.md**
+   - Replace examples with new smart detection syntax
+   - Show both static and variable usage
+   - Highlight continuous variable support
+
+6. **Regenerate all documentation**
+   - Run `devtools::document()`
+   - Verify all `.Rd` files are correct
+   - Check cross-references
+
+### Validation Phase (~2 hours)
+
+7. **Create comprehensive test suite**
+   - Write formal tests for all 5 updated functions (boxplot, violin, histogram, area, density)
+   - Target: ~50 new test cases
+   - Include visual regression tests with vdiffr
+
+8. **Run full package validation**
+   - `devtools::check()` - must pass with 0/0/0
+   - `devtools::test()` - all tests must pass
+   - `covr::package_coverage()` - maintain >80%
+   - Manual testing in clean R session
+
+9. **Update package metadata**
+   - DESCRIPTION: version 1.2.0 → 2.0.0
+   - DESCRIPTION: update date
+   - Build pkgdown site
+   - Create git tag v2.0.0
+
+### Estimated Time Remaining
+
+| Task | Time | Status |
+|------|------|--------|
+| insper_histogram | 30 min | 🔄 In Progress |
+| insper_area | 1 hour | ⏳ Pending |
+| insper_density | 1 hour | ⏳ Pending |
+| Documentation | 2 hours | ⏳ Pending |
+| Testing & Validation | 2 hours | ⏳ Pending |
+| **Total** | **~6.5 hours** | **37% remaining** |
+
+---
+
 ## Implementation Checklist
+
+### Phase 1-6: Core Functions ✅ COMPLETE
 
 Execute in this exact order:
 
-### Phase 1: Helper Functions (R/utils.R)
-- [ ] Implement `is_valid_color()`
-- [ ] Implement `detect_aesthetic_type()`
-- [ ] Implement `warn_palette_ignored()`
-- [ ] Add roxygen documentation for internal functions
-- [ ] Run `devtools::document()`
+### Phase 1: Helper Functions ✅ COMPLETE
+- [x] Implement `is_valid_color()` - R/utils.R:892-911
+- [x] Implement `detect_aesthetic_type()` - R/utils.R:946-990
+- [x] Implement `warn_palette_ignored()` - R/utils.R:1012-1020
+- [x] Add roxygen documentation for internal functions
+- [x] Run `devtools::document()`
 
-### Phase 2: Test Helper Functions
-- [ ] Create `tests/testthat/test-smart-detection.R`
-- [ ] Test `is_valid_color()` with hex, named, invalid colors
-- [ ] Test `detect_aesthetic_type()` with all cases (missing, static, variable, continuous, discrete)
-- [ ] Test `warn_palette_ignored()` warning behavior
-- [ ] Run `devtools::test(filter = "smart-detection")`
+### Phase 2: Test Helper Functions ✅ COMPLETE
+- [x] Create `tests/testthat/test-smart-detection.R` (290 lines)
+- [x] Test `is_valid_color()` with hex, named, invalid colors
+- [x] Test `detect_aesthetic_type()` with all cases
+- [x] Test `warn_palette_ignored()` warning behavior
+- [x] Run `devtools::test(filter = "smart-detection")` - **86 tests passing**
 
-### Phase 3: Update Plot Functions (One at a Time)
+### Phase 3-7: Update Plot Functions ✅ 5 of 8 COMPLETE
 
-**For each function:**
+**Completed Functions:**
 
-1. **Update function signature and implementation**
-   - [ ] Update parameters in function definition
-   - [ ] Add smart detection logic
-   - [ ] Add palette warning
-   - [ ] Update roxygen documentation
-   - [ ] Update examples
+- [x] `insper_scatterplot` - R/plots.R:213-447 - **Tested (12 scenarios)**
+- [x] `insper_barplot` - R/plots.R:1-211 - **Tested (8 scenarios)**
+- [x] `insper_timeseries` - R/plots.R:449-584 - **Tested (6 scenarios)**
+- [x] `insper_boxplot` - R/plots.R:586-713 - **Implemented**
+- [x] `insper_violin` - R/plots.R:949-1065 - **Implemented**
 
-2. **Update tests**
-   - [ ] Add 10 test cases (see Testing Strategy)
-   - [ ] Update existing tests if broken
-   - [ ] Add visual regression tests
-   - [ ] Run `devtools::test(filter = "FUNCTION_NAME")`
+**In Progress:**
 
-3. **Verify**
-   - [ ] Run examples manually: `devtools::run_examples()`
-   - [ ] Check documentation: `?FUNCTION_NAME`
+- [ ] `insper_histogram` - R/plots.R:1068+ - **IN PROGRESS**
+  - [ ] Remove `fill_color` parameter
+  - [ ] Add smart detection logic
+  - [ ] Add palette parameter
+  - [ ] Test with 5-6 scenarios
 
-**Function order (simple to complex):**
+**Remaining:**
 
-- [ ] `insper_scatterplot` (simplest - color only)
-- [ ] `insper_boxplot` (fill only, discrete)
-- [ ] `insper_violin` (same as boxplot)
-- [ ] `insper_barplot` (most impactful - remove 2 params)
-- [ ] `insper_timeseries` (rename group → color)
-- [ ] `insper_histogram` (remove fill_color)
-- [ ] `insper_area` (complex - fill affects color)
-- [ ] `insper_density` (most complex - fill + color)
+- [ ] `insper_area` - **Complex dual aesthetic**
+  - [ ] Keep `fill_color`/`line_color` for static fallback
+  - [ ] Add smart detection for `fill`
+  - [ ] Auto-propagate variable fill to line color
+  - [ ] Add palette parameter
+  - [ ] Test propagation behavior
 
-### Phase 4: Documentation
+- [ ] `insper_density` - **Complex dual aesthetic**
+  - [ ] Similar changes to `insper_area`
+  - [ ] Smart detection for `fill`
+  - [ ] Auto-propagate to line color
+  - [ ] Test with continuous and discrete
+
+### Phase 8: Documentation ⏳ PENDING
 - [ ] Update README.md with new examples
-- [ ] Update NEWS.md with comprehensive breaking changes section
+- [ ] Update NEWS.md with comprehensive v2.0.0 breaking changes section
+  - [ ] List all parameter changes
+  - [ ] Provide before/after migration examples
+  - [ ] Document new capabilities (static colors, continuous variables)
 - [ ] Update vignettes if they use old parameters
-- [ ] Check all `.Rd` files generated correctly
+- [ ] Regenerate all `.Rd` files: `devtools::document()`
+- [ ] Verify cross-references are correct
 
-### Phase 5: Package Infrastructure
+### Phase 9: Testing ⏳ PENDING
+- [ ] Write formal tests for updated functions:
+  - [ ] insper_boxplot (~10 tests)
+  - [ ] insper_violin (~10 tests)
+  - [ ] insper_histogram (~10 tests)
+  - [ ] insper_area (~12 tests - dual aesthetic)
+  - [ ] insper_density (~12 tests - dual aesthetic)
+- [ ] Update visual regression tests (vdiffr)
+- [ ] Run full test suite: `devtools::test()`
+- [ ] Verify all tests pass
+
+### Phase 10: Package Validation ⏳ PENDING
 - [ ] Update DESCRIPTION version to 2.0.0
 - [ ] Update DESCRIPTION date
-- [ ] Run `devtools::check()` - must pass with 0 errors, 0 warnings, 0 notes
+- [ ] Run `devtools::check()` - must pass with 0/0/0
 - [ ] Run `covr::package_coverage()` - maintain >80% coverage
 - [ ] Run `lintr::lint_package()` - fix any style issues
-
-### Phase 6: Final Validation
 - [ ] Install package locally: `devtools::install()`
 - [ ] Test interactively in clean R session
 - [ ] Run all examples from documentation
-- [ ] Test migration scenarios from old API
-- [ ] Update pkgdown site: `pkgdown::build_site()`
-- [ ] Review generated website for correctness
 
-### Phase 7: Version Control
-- [ ] Commit helper functions
-- [ ] Commit each function update separately (easier to review)
-- [ ] Commit documentation updates
-- [ ] Commit version bump
+### Phase 11: Release Preparation ⏳ PENDING
+- [ ] Build pkgdown site: `pkgdown::build_site()`
+- [ ] Review generated website for correctness
+- [ ] Commit all changes with descriptive messages
 - [ ] Create annotated tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
+- [ ] Push to repository
+
+---
+
+## Current Status Summary
+
+**Completed**:
+- ✅ All helper functions (3 functions, 86 tests)
+- ✅ 5 of 8 plot functions (scatterplot, barplot, timeseries, boxplot, violin)
+- ✅ Manual testing for 3 functions (26 test scenarios total)
+- ✅ First checkpoint commit (c7a86a5)
+
+**In Progress**:
+- 🔄 insper_histogram() - removing fill_color parameter
+
+**Remaining**:
+- ⏳ 2 plot functions (area, density) - ~2 hours
+- ⏳ Documentation updates (NEWS.md, README) - ~2 hours
+- ⏳ Comprehensive testing (~50 new tests) - ~2 hours
+- ⏳ Final validation and release prep - ~30 minutes
+
+**Total Work**: ~63% complete, ~6.5 hours remaining
+
+**Files Modified So Far**:
+- R/utils.R: +140 lines (3 helper functions)
+- R/plots.R: ~800 lines modified (5 functions refactored)
+- tests/testthat/test-smart-detection.R: +290 lines (new file)
+- man/*.Rd: 8 files updated/created
+- claude/*.md: 3 planning/progress documents
+
+**Next Session Goals**:
+1. Complete insper_histogram() (30 min)
+2. Complete insper_area() (1 hour)
+3. Complete insper_density() (1 hour)
+4. Create checkpoint commit
+5. Begin documentation phase
 
 ---
 

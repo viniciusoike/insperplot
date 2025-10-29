@@ -8,9 +8,9 @@ insper_histogram(
   data,
   x,
   fill = NULL,
+  palette = NULL,
   bins = NULL,
   bin_method = c("sturges", "fd", "scott", "manual"),
-  fill_color = get_insper_colors("reds1"),
   border_color = "white",
   zero = TRUE,
   ...
@@ -21,15 +21,23 @@ insper_histogram(
 
 \item{x}{Variable for x-axis (numeric)}
 
-\item{fill}{Variable for fill aesthetic (optional)}
+\item{fill}{<[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+Can be:
+\itemize{
+  \item A quoted color name/hex (e.g., `"blue"`, `"#FF0000"`) for static color
+  \item A bare column name (e.g., `factor(cyl)`) for discrete grouping
+  \item A continuous variable (e.g., `hp`) for gradient coloring (rare for histograms)
+}
+If `NULL` (default), uses Insper red.}
+
+\item{palette}{Character. Color palette name for variable mappings.
+Options: "categorical", "main", "bright", "reds", "teals", etc.
+If NULL (default), uses "categorical". Only applies to variable mappings.}
 
 \item{bins}{Numeric. Number of bins. Only used when bin_method = "manual"}
 
 \item{bin_method}{Character. Bin selection method: "sturges", "fd" (Freedman-Diaconis),
 "scott", or "manual". Default is "sturges"}
-
-\item{fill_color}{Character. Hex color for bars when not using fill aesthetic.
-Default is Insper red.}
 
 \item{border_color}{Character. Color for bar borders. Default is "white"}
 
@@ -55,8 +63,11 @@ Bin selection methods:
 }
 \examples{
 \dontrun{
-# Simple histogram with Sturges method
+# Simple histogram with Sturges method (default red)
 insper_histogram(mtcars, x = mpg)
+
+# Static color
+insper_histogram(mtcars, x = mpg, fill = "steelblue")
 
 # Using Freedman-Diaconis method
 insper_histogram(mtcars, x = mpg, bin_method = "fd")
@@ -64,8 +75,11 @@ insper_histogram(mtcars, x = mpg, bin_method = "fd")
 # Manual bin specification
 insper_histogram(mtcars, x = mpg, bin_method = "manual", bins = 15)
 
-# Grouped histogram
+# Grouped histogram with discrete variable
 insper_histogram(mtcars, x = mpg, fill = factor(cyl))
+
+# With custom palette
+insper_histogram(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
 }
 
 }

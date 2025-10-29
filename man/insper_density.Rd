@@ -8,6 +8,7 @@ insper_density(
   data,
   x,
   fill = NULL,
+  palette = NULL,
   fill_color = get_insper_colors("teals1"),
   line_color = get_insper_colors("teals3"),
   alpha = 0.6,
@@ -22,12 +23,25 @@ insper_density(
 
 \item{x}{Variable for x-axis (numeric)}
 
-\item{fill}{Variable for fill/group aesthetic (optional)}
+\item{fill}{<[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+Can be:
+\itemize{
+  \item A quoted color name/hex (e.g., `"purple"`, `"#9B59B6"`) for static color
+  \item A bare column name (e.g., `factor(cyl)`) for discrete grouping
+  \item A continuous variable (e.g., `gear`) for gradient coloring (rare for density)
+}
+If `NULL` (default), uses Insper teal. When a variable is mapped, it applies to
+both density fill and line color.}
+
+\item{palette}{Character. Color palette name for variable mappings.
+Options: "categorical", "main", "bright", "reds", "teals", etc.
+If NULL (default), uses "categorical". Only applies to variable mappings.}
 
 \item{fill_color}{Character. Hex color for density area when not using fill aesthetic.
-Default is Insper teal.}
+Default is Insper teal. (Deprecated: use `fill = "color"` instead)}
 
-\item{line_color}{Character. Color for density line. Default is darker teal.}
+\item{line_color}{Character. Color for density line. Default is darker teal.
+(Deprecated: use in combination with `fill = "color"`)}
 
 \item{alpha}{Numeric. Transparency of density area (0-1). Default is 0.6}
 
@@ -48,14 +62,23 @@ Supports grouped densities with automatic color assignment.
 }
 \examples{
 \dontrun{
-# Simple density plot
+# Simple density plot (default teal)
 insper_density(mtcars, x = mpg)
 
-# Grouped density plot
+# Static color
+insper_density(mtcars, x = mpg, fill = "purple")
+
+# Grouped density plot (discrete variable)
 insper_density(mtcars, x = mpg, fill = factor(cyl))
+
+# With custom palette
+insper_density(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
 
 # Adjust bandwidth
 insper_density(mtcars, x = mpg, adjust = 0.5)
+
+# Continuous gradient (rare but supported)
+insper_density(iris, x = Sepal.Length, fill = Petal.Length, palette = "reds")
 }
 
 }

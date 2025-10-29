@@ -110,13 +110,15 @@ insper_barplot <- function(
   if (fill_type$type == "missing") {
     # Default: Insper red
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
-      ggplot2::geom_col(fill = get_insper_colors("reds1"), position = position, ...)
-
+      ggplot2::geom_col(
+        fill = get_insper_colors("reds1"),
+        position = position,
+        ...
+      )
   } else if (fill_type$type == "static_color") {
     # User-specified static color
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_col(fill = fill_type$value, position = position, ...)
-
   } else {
     # Variable mapping - grouped/stacked bars
     # Note: Bar plots are inherently discrete (grouping by categories)
@@ -205,7 +207,9 @@ insper_barplot <- function(
       )
   }
 
-  p <- p + theme_insper() + ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
+  p <- p +
+    theme_insper() +
+    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
 
   return(p)
 }
@@ -357,7 +361,6 @@ insper_scatterplot <- function(
     } else {
       p <- p + scale_fill_insper_d(palette = palette)
     }
-
   } else if (has_color_mapping) {
     # Only color is variable mapping
     geom_params <- list(size = point_size, alpha = point_alpha)
@@ -380,14 +383,13 @@ insper_scatterplot <- function(
     } else {
       p <- p + scale_color_insper_d(palette = palette)
     }
-
   } else if (has_fill_mapping) {
     # Only fill is variable mapping
     geom_params <- list(size = point_size, alpha = point_alpha)
     if (color_type$type == "static_color") {
       geom_params$color <- color_type$value
     } else {
-      geom_params$color <- get_insper_colors("teals3")  # Default outline for filled shapes
+      geom_params$color <- get_insper_colors("teals3") # Default outline for filled shapes
     }
 
     p <- p +
@@ -405,7 +407,6 @@ insper_scatterplot <- function(
     } else {
       p <- p + scale_fill_insper_d(palette = palette)
     }
-
   } else {
     # Neither is variable mapping - use static colors
     geom_params <- list(size = point_size, alpha = point_alpha)
@@ -413,7 +414,7 @@ insper_scatterplot <- function(
     if (color_type$type == "static_color") {
       geom_params$color <- color_type$value
     } else {
-      geom_params$color <- get_insper_colors("teals1")  # Default
+      geom_params$color <- get_insper_colors("teals1") # Default
     }
 
     if (fill_type$type == "static_color") {
@@ -539,7 +540,6 @@ insper_timeseries <- function(
       p <- p +
         ggplot2::geom_point(color = get_insper_colors("teals1"), size = 1)
     }
-
   } else if (color_type$type == "static_color") {
     # User-specified static color
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
@@ -553,7 +553,6 @@ insper_timeseries <- function(
       p <- p +
         ggplot2::geom_point(color = color_type$value, size = 1)
     }
-
   } else {
     # Variable mapping - multiple lines
     p <- ggplot2::ggplot(
@@ -591,7 +590,13 @@ insper_timeseries <- function(
 #' @param data A data frame containing the data to plot
 #' @param x Variable for x-axis (categorical)
 #' @param y Variable for y-axis (numeric)
-#' @param fill Variable for fill aesthetic (optional)
+#' @param fill Fill aesthetic. Accepts either:
+#'   \itemize{
+#'     \item A bare column name for variable mapping (e.g., \code{fill = Species})
+#'     \item A quoted color string for static fill (e.g., \code{fill = "lightblue"})
+#'     \item \code{NULL} (default) to use default Insper teal
+#'   }
+#' @param palette Character. Color palette for variable mappings. Default is "categorical".
 #' @param add_jitter Logical. If TRUE, adds jittered points. If NULL (default),
 #'   automatically enables jitter when the largest group has <100 observations.
 #' @param add_notch Logical. If TRUE, creates notched boxplot. Default is FALSE
@@ -601,11 +606,17 @@ insper_timeseries <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Simple boxplot
+#' # Simple boxplot with default fill
 #' insper_boxplot(iris, x = Species, y = Sepal.Length)
 #'
-#' # With fill aesthetic
+#' # Static fill color
+#' insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "lightblue")
+#'
+#' # Variable fill mapping
 #' insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species)
+#'
+#' # Custom palette
+#' insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
 #'
 #' # Notched boxplot without jitter
 #' insper_boxplot(iris, x = Species, y = Sepal.Length,
@@ -620,6 +631,7 @@ insper_boxplot <- function(
   x,
   y,
   fill = NULL,
+  palette = "categorical",
   add_jitter = NULL,
   add_notch = FALSE,
   box_alpha = 0.8,
@@ -633,13 +645,17 @@ insper_boxplot <- function(
     ))
   }
 
-  # Check if fill was provided using rlang
-  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+  # Smart detection for fill
+  fill_quo <- rlang::enquo(fill)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
+
+  # Warn if palette specified with static fill
+  warn_palette_ignored(fill_type, palette, "fill")
 
   # Smart default for add_jitter: enable only if <100 obs per group
   if (is.null(add_jitter)) {
     x_quo <- rlang::enquo(x)
-    x_vals <- rlang::eval_tidy(x_quo, data)
+    x_vals <- rlang::eval_tidy(x_quo, rlang::as_data_mask(data))
 
     # Count observations per group
     group_counts <- table(x_vals)
@@ -649,8 +665,9 @@ insper_boxplot <- function(
     add_jitter <- max_group_size < 100
   }
 
-  # Initialize plot
-  if (!has_fill) {
+  # Initialize plot based on fill type
+  if (fill_type$type == "missing") {
+    # Default: Insper teal
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_boxplot(
         fill = get_insper_colors("teals2"),
@@ -658,13 +675,23 @@ insper_boxplot <- function(
         notch = add_notch,
         ...
       )
+  } else if (fill_type$type == "static_color") {
+    # User-specified static color
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+      ggplot2::geom_boxplot(
+        fill = fill_type$value,
+        alpha = box_alpha,
+        notch = add_notch,
+        ...
+      )
   } else {
+    # Variable mapping - boxplots are inherently discrete
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
       ggplot2::geom_boxplot(alpha = box_alpha, notch = add_notch, ...) +
-      scale_fill_insper_d()
+      scale_fill_insper_d(palette = palette)
   }
 
   # Add jittered points if requested
@@ -797,16 +824,27 @@ insper_heatmap <- function(
 #' @param data A data frame containing the data to plot
 #' @param x Time variable (numeric, Date, or POSIXct)
 #' @param y Value variable
-#' @param fill Variable for fill aesthetic (optional)
+#' @param fill <[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+#'   Can be:
+#'   \itemize{
+#'     \item A quoted color name/hex (e.g., `"teal"`, `"#00BFFF"`) for static color
+#'     \item A bare column name (e.g., `category`) for discrete grouping
+#'     \item A continuous variable (e.g., `intensity`) for gradient coloring
+#'   }
+#'   If `NULL` (default), uses Insper teal. When a variable is mapped, it applies to
+#'   both area fill and line color (if `add_line = TRUE`).
+#' @param palette Character. Color palette name for variable mappings.
+#'   Options: "categorical", "main", "bright", "reds", "teals", etc.
+#'   If NULL (default), uses "categorical". Only applies to variable mappings.
 #' @param stacked Logical. If TRUE and fill is provided, creates stacked areas.
 #'   Default is FALSE
-#' @param area_alpha Numeric. Transparency of areas (0-1). Default is 1
+#' @param area_alpha Numeric. Transparency of areas (0-1). Default is 0.9
 #' @param fill_color Character. Hex color code for area when not using fill aesthetic.
-#'   Default is Insper teal
+#'   Default is Insper teal. (Deprecated: use `fill = "color"` instead)
 #' @param add_line Logical. If TRUE, adds line on top of area. Default is TRUE
 #' @param line_color Character. Hex color code for line when not using fill aesthetic.
-#'   Default is darker Insper teal
-#' @param line_width Numeric. Width of line. Default is 1
+#'   Default is darker Insper teal. (Deprecated: use in combination with `fill = "color"`)
+#' @param line_width Numeric. Width of line. Default is 0.8
 #' @param line_alpha Numeric. Transparency of line (0-1). Default is 1
 #' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is FALSE
 #' @param ... Additional arguments passed to \code{ggplot2::geom_area()}
@@ -814,11 +852,14 @@ insper_heatmap <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Simple area plot
+#' # Simple area plot (default teal)
 #' df <- data.frame(time = 1:50, value = cumsum(rnorm(50)))
 #' insper_area(df, x = time, y = value)
 #'
-#' # Grouped areas
+#' # Static color
+#' insper_area(df, x = time, y = value, fill = "steelblue")
+#'
+#' # Grouped areas (discrete variable)
 #' df <- data.frame(
 #'   time = rep(1:50, 3),
 #'   value = c(cumsum(rnorm(50)), cumsum(rnorm(50)), cumsum(rnorm(50))),
@@ -829,12 +870,12 @@ insper_heatmap <- function(
 #' # Stacked areas
 #' insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
 #'
-#' # Custom colors and line width
-#' insper_area(df, x = time, y = value,
-#'             fill_color = get_insper_colors("reds1"),
-#'             line_color = get_insper_colors("reds3"),
-#'             line_width = 1.5,
-#'             zero = TRUE)
+#' # With custom palette
+#' insper_area(df, x = time, y = value, fill = group, palette = "bright")
+#'
+#' # Continuous gradient
+#' df$intensity <- rep(1:50, 3)
+#' insper_area(df, x = time, y = value, fill = intensity, palette = "teals")
 #' }
 #'
 #' @family plots
@@ -845,6 +886,7 @@ insper_area <- function(
   x,
   y,
   fill = NULL,
+  palette = NULL,
   stacked = FALSE,
   area_alpha = 0.9,
   fill_color = get_insper_colors("teals1"),
@@ -863,14 +905,23 @@ insper_area <- function(
     ))
   }
 
-  # Check if fill was provided using rlang
-  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+  # Smart detection for fill aesthetic
+  fill_quo <- rlang::enquo(fill)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
+  warn_palette_ignored(fill_type, palette, "fill")
+
+  # Use default palette if not specified
+  if (is.null(palette)) {
+    palette <- "categorical"
+  }
 
   # Determine position
-  position <- if (stacked && has_fill) "stack" else "identity"
+  has_fill_mapping <- fill_type$type == "variable_mapping"
+  position <- if (stacked && has_fill_mapping) "stack" else "identity"
 
-  # Initialize plot
-  if (!has_fill) {
+  # Build plot based on fill type
+  if (fill_type$type == "missing") {
+    # No fill specified - use default Insper teal
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_area(fill = fill_color, alpha = area_alpha, ...)
 
@@ -882,14 +933,35 @@ insper_area <- function(
           alpha = line_alpha
         )
     }
+  } else if (fill_type$type == "static_color") {
+    # Static color specified - use for both area and line
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+      ggplot2::geom_area(fill = fill_type$value, alpha = area_alpha, ...)
+
+    if (add_line) {
+      p <- p +
+        ggplot2::geom_line(
+          color = fill_type$value,
+          linewidth = line_width,
+          alpha = line_alpha
+        )
+    }
   } else {
+    # Variable mapping - propagate to both fill and color
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
-      ggplot2::geom_area(alpha = area_alpha, position = position, ...) +
-      scale_fill_insper_d()
+      ggplot2::geom_area(alpha = area_alpha, position = position, ...)
 
+    # Apply appropriate fill scale
+    if (fill_type$is_continuous) {
+      p <- p + scale_fill_insper_c(palette = palette)
+    } else {
+      p <- p + scale_fill_insper_d(palette = palette)
+    }
+
+    # Add line with matching color mapping
     if (add_line) {
       p <- p +
         ggplot2::geom_line(
@@ -897,8 +969,14 @@ insper_area <- function(
           linewidth = line_width,
           alpha = line_alpha,
           position = position
-        ) +
-        scale_color_insper_d()
+        )
+
+      # Apply appropriate color scale (same as fill)
+      if (fill_type$is_continuous) {
+        p <- p + scale_color_insper_c(palette = palette)
+      } else {
+        p <- p + scale_color_insper_d(palette = palette)
+      }
     }
   }
 
@@ -924,7 +1002,13 @@ insper_area <- function(
 #' @param data A data frame containing the data to plot
 #' @param x Variable for x-axis (categorical)
 #' @param y Variable for y-axis (numeric)
-#' @param fill Variable for fill aesthetic (optional)
+#' @param fill Fill aesthetic. Accepts either:
+#'   \itemize{
+#'     \item A bare column name for variable mapping (e.g., \code{fill = Species})
+#'     \item A quoted color string for static fill (e.g., \code{fill = "purple"})
+#'     \item \code{NULL} (default) to use default Insper teal
+#'   }
+#' @param palette Character. Color palette for variable mappings. Default is "categorical".
 #' @param show_boxplot Logical. If TRUE, overlays a boxplot. Default is FALSE
 #' @param show_points Logical. If TRUE, adds jittered points. Default is FALSE
 #' @param violin_alpha Numeric. Transparency of violins (0-1). Default is 0.7
@@ -933,16 +1017,21 @@ insper_area <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Simple violin plot
+#' # Simple violin plot with default fill
 #' insper_violin(iris, x = Species, y = Sepal.Length)
 #'
-#' # With fill aesthetic and points
-#' insper_violin(iris, x = Species, y = Sepal.Length,
-#'               fill = Species, show_points = TRUE)
+#' # Static fill color
+#' insper_violin(iris, x = Species, y = Sepal.Length, fill = "purple")
 #'
-#' # With boxplot overlay
+#' # Variable fill mapping
+#' insper_violin(iris, x = Species, y = Sepal.Length, fill = Species)
+#'
+#' # Custom palette
+#' insper_violin(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
+#'
+#' # With boxplot overlay and points
 #' insper_violin(iris, x = Species, y = Sepal.Length,
-#'               show_boxplot = TRUE)
+#'               show_boxplot = TRUE, show_points = TRUE)
 #' }
 #'
 #' @family plots
@@ -953,6 +1042,7 @@ insper_violin <- function(
   x,
   y,
   fill = NULL,
+  palette = "categorical",
   show_boxplot = FALSE,
   show_points = FALSE,
   violin_alpha = 0.7,
@@ -966,24 +1056,38 @@ insper_violin <- function(
     ))
   }
 
-  # Check if fill was provided using rlang
-  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+  # Smart detection for fill
+  fill_quo <- rlang::enquo(fill)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
 
-  # Initialize plot
-  if (!has_fill) {
+  # Warn if palette specified with static fill
+  warn_palette_ignored(fill_type, palette, "fill")
+
+  # Initialize plot based on fill type
+  if (fill_type$type == "missing") {
+    # Default: Insper teal
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
       ggplot2::geom_violin(
         fill = get_insper_colors("teals2"),
         alpha = violin_alpha,
         ...
       )
+  } else if (fill_type$type == "static_color") {
+    # User-specified static color
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }}, y = {{ y }})) +
+      ggplot2::geom_violin(
+        fill = fill_type$value,
+        alpha = violin_alpha,
+        ...
+      )
   } else {
+    # Variable mapping - violins are inherently discrete
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, y = {{ y }}, fill = {{ fill }})
     ) +
       ggplot2::geom_violin(alpha = violin_alpha, ...) +
-      scale_fill_insper_d()
+      scale_fill_insper_d(palette = palette)
   }
 
   # Add boxplot if requested
@@ -1014,12 +1118,20 @@ insper_violin <- function(
 #'
 #' @param data A data frame containing the data to plot
 #' @param x Variable for x-axis (numeric)
-#' @param fill Variable for fill aesthetic (optional)
+#' @param fill <[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+#'   Can be:
+#'   \itemize{
+#'     \item A quoted color name/hex (e.g., `"blue"`, `"#FF0000"`) for static color
+#'     \item A bare column name (e.g., `factor(cyl)`) for discrete grouping
+#'     \item A continuous variable (e.g., `hp`) for gradient coloring (rare for histograms)
+#'   }
+#'   If `NULL` (default), uses Insper red.
+#' @param palette Character. Color palette name for variable mappings.
+#'   Options: "categorical", "main", "bright", "reds", "teals", etc.
+#'   If NULL (default), uses "categorical". Only applies to variable mappings.
 #' @param bins Numeric. Number of bins. Only used when bin_method = "manual"
 #' @param bin_method Character. Bin selection method: "sturges", "fd" (Freedman-Diaconis),
 #'   "scott", or "manual". Default is "sturges"
-#' @param fill_color Character. Hex color for bars when not using fill aesthetic.
-#'   Default is Insper red.
 #' @param border_color Character. Color for bar borders. Default is "white"
 #' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE
 #' @param ... Additional arguments passed to \code{ggplot2::geom_histogram()}
@@ -1036,8 +1148,11 @@ insper_violin <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Simple histogram with Sturges method
+#' # Simple histogram with Sturges method (default red)
 #' insper_histogram(mtcars, x = mpg)
+#'
+#' # Static color
+#' insper_histogram(mtcars, x = mpg, fill = "steelblue")
 #'
 #' # Using Freedman-Diaconis method
 #' insper_histogram(mtcars, x = mpg, bin_method = "fd")
@@ -1045,8 +1160,11 @@ insper_violin <- function(
 #' # Manual bin specification
 #' insper_histogram(mtcars, x = mpg, bin_method = "manual", bins = 15)
 #'
-#' # Grouped histogram
+#' # Grouped histogram with discrete variable
 #' insper_histogram(mtcars, x = mpg, fill = factor(cyl))
+#'
+#' # With custom palette
+#' insper_histogram(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
 #' }
 #'
 #' @family plots
@@ -1057,9 +1175,9 @@ insper_histogram <- function(
   data,
   x,
   fill = NULL,
+  palette = NULL,
   bins = NULL,
   bin_method = c("sturges", "fd", "scott", "manual"),
-  fill_color = get_insper_colors("reds1"),
   border_color = "white",
   zero = TRUE,
   ...
@@ -1081,8 +1199,15 @@ insper_histogram <- function(
     ))
   }
 
-  # Check if fill was provided using rlang
-  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+  # Smart detection for fill aesthetic
+  fill_quo <- rlang::enquo(fill)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
+  warn_palette_ignored(fill_type, palette, "fill")
+
+  # Use default palette if not specified
+  if (is.null(palette)) {
+    palette <- "categorical"
+  }
 
   # Extract x values for bin calculation
   x_quo <- rlang::enquo(x)
@@ -1100,16 +1225,27 @@ insper_histogram <- function(
     n_bins <- bins
   }
 
-  # Initialize plot
-  if (!has_fill) {
+  # Build plot based on fill type
+  if (fill_type$type == "missing") {
+    # No fill specified - use default Insper red
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }})) +
       ggplot2::geom_histogram(
-        fill = fill_color,
+        fill = get_insper_colors("reds1"),
+        color = border_color,
+        bins = n_bins,
+        ...
+      )
+  } else if (fill_type$type == "static_color") {
+    # Static color specified
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }})) +
+      ggplot2::geom_histogram(
+        fill = fill_type$value,
         color = border_color,
         bins = n_bins,
         ...
       )
   } else {
+    # Variable mapping (discrete or continuous)
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, fill = {{ fill }})
@@ -1120,8 +1256,14 @@ insper_histogram <- function(
         position = "identity",
         alpha = 0.7,
         ...
-      ) +
-      scale_fill_insper_d()
+      )
+
+    # Apply appropriate scale
+    if (fill_type$is_continuous) {
+      p <- p + scale_fill_insper_c(palette = palette)
+    } else {
+      p <- p + scale_fill_insper_d(palette = palette)
+    }
   }
 
   # Add line at zero if requested
@@ -1147,10 +1289,22 @@ insper_histogram <- function(
 #'
 #' @param data A data frame containing the data to plot
 #' @param x Variable for x-axis (numeric)
-#' @param fill Variable for fill/group aesthetic (optional)
+#' @param fill <[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+#'   Can be:
+#'   \itemize{
+#'     \item A quoted color name/hex (e.g., `"purple"`, `"#9B59B6"`) for static color
+#'     \item A bare column name (e.g., `factor(cyl)`) for discrete grouping
+#'     \item A continuous variable (e.g., `gear`) for gradient coloring (rare for density)
+#'   }
+#'   If `NULL` (default), uses Insper teal. When a variable is mapped, it applies to
+#'   both density fill and line color.
+#' @param palette Character. Color palette name for variable mappings.
+#'   Options: "categorical", "main", "bright", "reds", "teals", etc.
+#'   If NULL (default), uses "categorical". Only applies to variable mappings.
 #' @param fill_color Character. Hex color for density area when not using fill aesthetic.
-#'   Default is Insper teal.
+#'   Default is Insper teal. (Deprecated: use `fill = "color"` instead)
 #' @param line_color Character. Color for density line. Default is darker teal.
+#'   (Deprecated: use in combination with `fill = "color"`)
 #' @param alpha Numeric. Transparency of density area (0-1). Default is 0.6
 #' @param bandwidth Numeric. Bandwidth for density estimation. Default is NULL (automatic).
 #' @param adjust Numeric. Adjustment multiplier for bandwidth. Default is 1.
@@ -1160,14 +1314,23 @@ insper_histogram <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Simple density plot
+#' # Simple density plot (default teal)
 #' insper_density(mtcars, x = mpg)
 #'
-#' # Grouped density plot
+#' # Static color
+#' insper_density(mtcars, x = mpg, fill = "purple")
+#'
+#' # Grouped density plot (discrete variable)
 #' insper_density(mtcars, x = mpg, fill = factor(cyl))
+#'
+#' # With custom palette
+#' insper_density(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
 #'
 #' # Adjust bandwidth
 #' insper_density(mtcars, x = mpg, adjust = 0.5)
+#'
+#' # Continuous gradient (rare but supported)
+#' insper_density(iris, x = Sepal.Length, fill = Petal.Length, palette = "reds")
 #' }
 #'
 #' @family plots
@@ -1177,6 +1340,7 @@ insper_density <- function(
   data,
   x,
   fill = NULL,
+  palette = NULL,
   fill_color = get_insper_colors("teals1"),
   line_color = get_insper_colors("teals3"),
   alpha = 0.6,
@@ -1193,11 +1357,19 @@ insper_density <- function(
     ))
   }
 
-  # Check if fill was provided using rlang
-  has_fill <- !rlang::quo_is_null(rlang::enquo(fill))
+  # Smart detection for fill aesthetic
+  fill_quo <- rlang::enquo(fill)
+  fill_type <- detect_aesthetic_type(fill_quo, "fill", data)
+  warn_palette_ignored(fill_type, palette, "fill")
 
-  # Initialize plot
-  if (!has_fill) {
+  # Use default palette if not specified
+  if (is.null(palette)) {
+    palette <- "categorical"
+  }
+
+  # Build plot based on fill type
+  if (fill_type$type == "missing") {
+    # No fill specified - use default Insper teal
     p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }})) +
       ggplot2::geom_density(
         fill = fill_color,
@@ -1208,7 +1380,20 @@ insper_density <- function(
         kernel = kernel,
         ...
       )
+  } else if (fill_type$type == "static_color") {
+    # Static color specified - use for both fill and line
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{ x }})) +
+      ggplot2::geom_density(
+        fill = fill_type$value,
+        color = fill_type$value,
+        alpha = alpha,
+        bw = bandwidth,
+        adjust = adjust,
+        kernel = kernel,
+        ...
+      )
   } else {
+    # Variable mapping - propagate to both fill and color
     p <- ggplot2::ggplot(
       data,
       ggplot2::aes(x = {{ x }}, fill = {{ fill }}, color = {{ fill }})
@@ -1219,9 +1404,18 @@ insper_density <- function(
         adjust = adjust,
         kernel = kernel,
         ...
-      ) +
-      scale_fill_insper_d() +
-      scale_color_insper_d()
+      )
+
+    # Apply appropriate scales
+    if (fill_type$is_continuous) {
+      p <- p +
+        scale_fill_insper_c(palette = palette) +
+        scale_color_insper_c(palette = palette)
+    } else {
+      p <- p +
+        scale_fill_insper_d(palette = palette) +
+        scale_color_insper_d(palette = palette)
+    }
   }
 
   # Apply theme and scale

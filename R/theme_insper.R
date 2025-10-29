@@ -162,7 +162,10 @@ theme_insper <- function(
     # Axis styling
     # Note: axis.ticks are commented out in base theme, applied conditionally based on border
     axis.text = element_text(size = rel(0.8), color = "gray10"),
-    axis.title = element_text(size = rel(1), color = get_insper_colors("black")),
+    axis.title = element_text(
+      size = rel(1),
+      color = get_insper_colors("black")
+    ),
 
     # Title and subtitle styling
     plot.title = element_text(
@@ -227,7 +230,10 @@ theme_insper <- function(
     # Show complete rectangular border around plot area
     theme_base <- theme_base +
       theme(
-        panel.border = element_rect(color = get_insper_colors("black"), fill = NA),
+        panel.border = element_rect(
+          color = get_insper_colors("black"),
+          fill = NA
+        ),
         axis.ticks = element_line(color = get_insper_colors("gray_dark")),
         axis.ticks.length = unit(7, "pt") # 7 point tick length
       )

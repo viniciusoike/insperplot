@@ -9,6 +9,7 @@ insper_area(
   x,
   y,
   fill = NULL,
+  palette = NULL,
   stacked = FALSE,
   area_alpha = 0.9,
   fill_color = get_insper_colors("teals1"),
@@ -27,22 +28,34 @@ insper_area(
 
 \item{y}{Value variable}
 
-\item{fill}{Variable for fill aesthetic (optional)}
+\item{fill}{<[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+Can be:
+\itemize{
+  \item A quoted color name/hex (e.g., `"teal"`, `"#00BFFF"`) for static color
+  \item A bare column name (e.g., `category`) for discrete grouping
+  \item A continuous variable (e.g., `intensity`) for gradient coloring
+}
+If `NULL` (default), uses Insper teal. When a variable is mapped, it applies to
+both area fill and line color (if `add_line = TRUE`).}
+
+\item{palette}{Character. Color palette name for variable mappings.
+Options: "categorical", "main", "bright", "reds", "teals", etc.
+If NULL (default), uses "categorical". Only applies to variable mappings.}
 
 \item{stacked}{Logical. If TRUE and fill is provided, creates stacked areas.
 Default is FALSE}
 
-\item{area_alpha}{Numeric. Transparency of areas (0-1). Default is 1}
+\item{area_alpha}{Numeric. Transparency of areas (0-1). Default is 0.9}
 
 \item{fill_color}{Character. Hex color code for area when not using fill aesthetic.
-Default is Insper teal}
+Default is Insper teal. (Deprecated: use `fill = "color"` instead)}
 
 \item{add_line}{Logical. If TRUE, adds line on top of area. Default is TRUE}
 
 \item{line_color}{Character. Hex color code for line when not using fill aesthetic.
-Default is darker Insper teal}
+Default is darker Insper teal. (Deprecated: use in combination with `fill = "color"`)}
 
-\item{line_width}{Numeric. Width of line. Default is 1}
+\item{line_width}{Numeric. Width of line. Default is 0.8}
 
 \item{line_alpha}{Numeric. Transparency of line (0-1). Default is 1}
 
@@ -59,11 +72,14 @@ Supports both single and grouped/stacked areas.
 }
 \examples{
 \dontrun{
-# Simple area plot
+# Simple area plot (default teal)
 df <- data.frame(time = 1:50, value = cumsum(rnorm(50)))
 insper_area(df, x = time, y = value)
 
-# Grouped areas
+# Static color
+insper_area(df, x = time, y = value, fill = "steelblue")
+
+# Grouped areas (discrete variable)
 df <- data.frame(
   time = rep(1:50, 3),
   value = c(cumsum(rnorm(50)), cumsum(rnorm(50)), cumsum(rnorm(50))),
@@ -74,12 +90,12 @@ insper_area(df, x = time, y = value, fill = group)
 # Stacked areas
 insper_area(df, x = time, y = value, fill = group, stacked = TRUE)
 
-# Custom colors and line width
-insper_area(df, x = time, y = value,
-            fill_color = get_insper_colors("reds1"),
-            line_color = get_insper_colors("reds3"),
-            line_width = 1.5,
-            zero = TRUE)
+# With custom palette
+insper_area(df, x = time, y = value, fill = group, palette = "bright")
+
+# Continuous gradient
+df$intensity <- rep(1:50, 3)
+insper_area(df, x = time, y = value, fill = intensity, palette = "teals")
 }
 
 }

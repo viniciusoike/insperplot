@@ -9,6 +9,7 @@ insper_violin(
   x,
   y,
   fill = NULL,
+  palette = "categorical",
   show_boxplot = FALSE,
   show_points = FALSE,
   violin_alpha = 0.7,
@@ -22,7 +23,14 @@ insper_violin(
 
 \item{y}{Variable for y-axis (numeric)}
 
-\item{fill}{Variable for fill aesthetic (optional)}
+\item{fill}{Fill aesthetic. Accepts either:
+\itemize{
+  \item A bare column name for variable mapping (e.g., \code{fill = Species})
+  \item A quoted color string for static fill (e.g., \code{fill = "purple"})
+  \item \code{NULL} (default) to use default Insper teal
+}}
+
+\item{palette}{Character. Color palette for variable mappings. Default is "categorical".}
 
 \item{show_boxplot}{Logical. If TRUE, overlays a boxplot. Default is FALSE}
 
@@ -41,16 +49,21 @@ Optionally overlay boxplots and/or jittered points.
 }
 \examples{
 \dontrun{
-# Simple violin plot
+# Simple violin plot with default fill
 insper_violin(iris, x = Species, y = Sepal.Length)
 
-# With fill aesthetic and points
-insper_violin(iris, x = Species, y = Sepal.Length,
-              fill = Species, show_points = TRUE)
+# Static fill color
+insper_violin(iris, x = Species, y = Sepal.Length, fill = "purple")
 
-# With boxplot overlay
+# Variable fill mapping
+insper_violin(iris, x = Species, y = Sepal.Length, fill = Species)
+
+# Custom palette
+insper_violin(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
+
+# With boxplot overlay and points
 insper_violin(iris, x = Species, y = Sepal.Length,
-              show_boxplot = TRUE)
+              show_boxplot = TRUE, show_points = TRUE)
 }
 
 }

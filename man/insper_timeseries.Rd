@@ -8,7 +8,8 @@ insper_timeseries(
   data,
   x,
   y,
-  group = NULL,
+  color = NULL,
+  palette = "categorical",
   line_width = 0.8,
   add_points = FALSE,
   ...
@@ -21,38 +22,57 @@ insper_timeseries(
 
 \item{y}{Value variable}
 
-\item{group}{Grouping variable for multiple lines (optional)}
+\item{color}{Color aesthetic for multiple lines. Accepts either:
+\itemize{
+  \item A bare column name for variable mapping (e.g., \code{color = category})
+  \item A quoted color string for static color (e.g., \code{color = "blue"})
+  \item \code{NULL} (default) to use default Insper teal
+}
+When mapping a variable, the appropriate scale is automatically applied.}
 
-\item{line_width}{Numeric. Width of lines. Default is 1.2}
+\item{palette}{Character. Color palette for variable mappings. Default is "categorical".}
+
+\item{line_width}{Numeric. Width of lines. Default is 0.8}
 
 \item{add_points}{Logical. If TRUE, adds points to lines. Default is FALSE}
 
-\item{...}{Additional arguments passed to \code{ggplot2::geom_line()}}
+\item{...}{Additional arguments passed to \code{ggplot2::geom_line()},
+allowing custom aesthetics like linetype, alpha, etc.}
 }
 \value{
 A ggplot2 object
 }
 \description{
 Create time series plots optimized for economic/business data using Insper's
-visual identity. Automatically handles Date and POSIXct x-axis variables.
+visual identity. Automatically handles Date and POSIXct x-axis variables and
+supports both discrete and continuous color mappings.
 }
 \examples{
 \dontrun{
-# Simple time series
+# Simple time series with default color
 df <- data.frame(time = 1:10, value = rnorm(10))
 insper_timeseries(df, x = time, y = value)
 
-# Grouped time series
+# Static color
+insper_timeseries(df, x = time, y = value, color = "darkblue")
+
+# Grouped time series (discrete variable)
 df <- data.frame(
   time = rep(1:10, 2),
   value = rnorm(20),
-  group = rep(c("A", "B"), each = 10)
+  category = rep(c("A", "B"), each = 10)
 )
-insper_timeseries(df, x = time, y = value, group = group)
+insper_timeseries(df, x = time, y = value, color = category)
 
 # With date axis
 df$date <- as.Date("2020-01-01") + df$time
-insper_timeseries(df, x = date, y = value)
+insper_timeseries(df, x = date, y = value, color = category)
+
+# Custom palette
+insper_timeseries(df, x = time, y = value, color = category, palette = "bright")
+
+# With points
+insper_timeseries(df, x = time, y = value, color = category, add_points = TRUE)
 }
 
 }

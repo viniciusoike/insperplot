@@ -12,9 +12,9 @@ test_that("insper_barplot validates data frame input", {
 
 test_that("insper_barplot validates position parameter", {
   df <- data.frame(x = c("A", "B"), y = c(1, 2), grp = c("X", "Y"))
-  expect_no_error(insper_barplot(df, x = x, y = y, fill_var = grp, position = "dodge"))
-  expect_no_error(insper_barplot(df, x = x, y = y, fill_var = grp, position = "stack"))
-  expect_error(insper_barplot(df, x = x, y = y, fill_var = grp, position = "invalid"))
+  expect_no_error(insper_barplot(df, x = x, y = y, fill = grp, position = "dodge"))
+  expect_no_error(insper_barplot(df, x = x, y = y, fill = grp, position = "stack"))
+  expect_error(insper_barplot(df, x = x, y = y, fill = grp, position = "invalid"))
 })
 
 test_that("insper_barplot handles grouped bars", {
@@ -24,7 +24,7 @@ test_that("insper_barplot handles grouped bars", {
     y = c(1, 2, 3, 4),
     grp = rep(c("X", "Y"), 2)
   )
-  p <- insper_barplot(df, x = x, y = y, fill_var = grp)
+  p <- insper_barplot(df, x = x, y = y, fill = grp)
   expect_s3_class(p, "ggplot")
 })
 
@@ -97,14 +97,14 @@ test_that("insper_timeseries creates plot", {
   expect_s3_class(p, "ggplot")
 })
 
-test_that("insper_timeseries handles group aesthetic", {
+test_that("insper_timeseries handles color aesthetic", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(
     time = rep(1:10, 2),
     value = rnorm(20),
     group = rep(c("A", "B"), each = 10)
   )
-  p <- insper_timeseries(df, x = time, y = value, group = group)
+  p <- insper_timeseries(df, x = time, y = value, color = group)
   expect_s3_class(p, "ggplot")
 })
 

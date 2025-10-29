@@ -9,6 +9,7 @@ insper_boxplot(
   x,
   y,
   fill = NULL,
+  palette = "categorical",
   add_jitter = NULL,
   add_notch = FALSE,
   box_alpha = 0.8,
@@ -22,7 +23,14 @@ insper_boxplot(
 
 \item{y}{Variable for y-axis (numeric)}
 
-\item{fill}{Variable for fill aesthetic (optional)}
+\item{fill}{Fill aesthetic. Accepts either:
+\itemize{
+  \item A bare column name for variable mapping (e.g., \code{fill = Species})
+  \item A quoted color string for static fill (e.g., \code{fill = "lightblue"})
+  \item \code{NULL} (default) to use default Insper teal
+}}
+
+\item{palette}{Character. Color palette for variable mappings. Default is "categorical".}
 
 \item{add_jitter}{Logical. If TRUE, adds jittered points. If NULL (default),
 automatically enables jitter when the largest group has <100 observations.}
@@ -42,11 +50,17 @@ using Insper's visual identity.
 }
 \examples{
 \dontrun{
-# Simple boxplot
+# Simple boxplot with default fill
 insper_boxplot(iris, x = Species, y = Sepal.Length)
 
-# With fill aesthetic
+# Static fill color
+insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "lightblue")
+
+# Variable fill mapping
 insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species)
+
+# Custom palette
+insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
 
 # Notched boxplot without jitter
 insper_boxplot(iris, x = Species, y = Sepal.Length,
