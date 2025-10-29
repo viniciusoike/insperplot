@@ -2,6 +2,7 @@
 #   - rec_buslines: Bus line information from Greater Recife
 #   - rec_passengers: Daily passenger counts from Greater Recife
 #   - spo_metro: São Paulo Metro Line 4 station data
+#   - fossil_fuel: Global fossil fuel consumption (OWID)
 #   - macro_series: Brazilian macroeconomic indicators
 #
 # Data Sources:
@@ -9,9 +10,11 @@
 #      https://dataverse.datascience.insper.edu.br
 #   2. Brazilian Central Bank (Banco Central do Brasil)
 #      https://www3.bcb.gov.br/sgspub/
+#   3. Our World in Data - Global fossil fuel consumption
+#      https://ourworldindata.org/grapher/global-fossil-fuel-consumption
 #
 # Author: Vinicius Reginatto
-# Last Updated: 2025-10-14
+# Last Updated: 2025-10-29
 
 library(dplyr)
 library(tidyr)
@@ -92,6 +95,36 @@ rec_passengers <- get_data(
 # Source: São Paulo Metro Company (stored locally in data-raw/)
 spo_metro <- read_csv("data-raw/metro_sp_line_4_stations.csv")
 
+# Global Fossil Fuel Consumption ----------------------------------------------
+# Primary energy consumption from fossil fuels measured in terawatt-hours (TWh)
+# Source: Our World in Data (https://ourworldindata.org/grapher/global-fossil-fuel-consumption)
+# License: CC BY 4.0
+# Note: This dataset contains only positive values, making it ideal for area plots
+
+fossil_fuel <- read_csv(
+  "data-raw/global-fossil-fuel-consumption/global-fossil-fuel-consumption.csv",
+  show_col_types = FALSE
+)
+
+# Rename columns to lowercase, semantic names
+names(fossil_fuel) <- c("entity", "code", "year", "gas", "oil", "coal")
+
+# Pivot to long format with one row per year-fuel combination
+fossil_fuel <- tidyr::pivot_longer(
+  fossil_fuel,
+  cols = gas:coal,
+  names_to = "fuel",
+  names_transform = stringr::str_to_title,
+  values_to = "consumption"
+)
+
+# Convert fuel to ordered factor for better plotting (logical stacking order)
+fossil_fuel$fuel <- factor(
+  fossil_fuel$fuel,
+  levels = c("Oil", "Gas", "Coal"),
+  ordered = TRUE
+)
+
 # Download Brazilian Macroeconomic Data ---------------------------------------
 # Download time series from Brazilian Central Bank
 # Series codes:
@@ -100,18 +133,30 @@ spo_metro <- read_csv("data-raw/metro_sp_line_4_stations.csv")
 #   21859: IPI - Industrial Production Index
 #   1389: Crude oil production
 #   24364: IBC-Br (seasonally adjusted) - Economic Activity Index
-macro_series <- rbcb::get_series(
-  c(
-    "ipca" = 433,
-    "pms" = 21637,
-    "ipi" = 21859,
-    "oil" = 1389,
-    "ibcbr_dessaz" = 24364
-  )
-)
 
-# Merge all series into single data frame by date
-macro_series <- purrr::reduce(macro_series, full_join, by = "date")
+update <- FALSE
+
+if (update) {
+  macro_series <- rbcb::get_series(
+    c(
+      "ipca" = 433,
+      "pms" = 21637,
+      "ipi" = 21859,
+      "oil" = 1389,
+      "ibcbr_dessaz" = 24364
+    )
+  )
+
+  # Merge all series into single data frame by date
+  macro_series <- purrr::reduce(macro_series, full_join, by = "date")
+}
+
+macro_series_long <- macro_series |>
+  tidyr::pivot_longer(
+    cols = -date,
+    names_to = "name_series",
+    values_to = "value"
+  )
 
 # Save Datasets ---------------------------------------------------------------
 
@@ -119,6 +164,8 @@ usethis::use_data(
   rec_buslines,
   rec_passengers,
   spo_metro,
+  fossil_fuel,
   macro_series,
+  macro_series_long,
   overwrite = TRUE
 )

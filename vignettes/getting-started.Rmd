@@ -11,43 +11,39 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 9,
-  fig.height = 6,
-  dpi = 150,
+  fig.width = 7,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "90%",
+  dpi = 300,
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  dev = "ragg_png"
 )
-
-# Load Insper fonts for vignette rendering
-# Suppresses output to keep vignette clean
-# Wrapped in try() to prevent vignette build failure if fonts unavailable
-suppressMessages(suppressWarnings({
-  try(insperplot::import_insper_fonts(verbose = FALSE), silent = TRUE)
-}))
 ```
 
 ## Introduction
 
-**insperplot** extends ggplot2 with Insper Instituto de Ensino e Pesquisa's visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
-
-This vignette demonstrates all the main features of insperplot using real-world Brazilian data: São Paulo Metro Line-4 ridership during the COVID-19 pandemic.
+**insperplot** extends ggplot2 with Insper's visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
 
 ### Installation
 
 ```{r eval=FALSE}
 # Install from GitHub
-pak::pak("viniciusreginatto/insperplot")
+remotes::install_github("viniciusreginatto/insperplot")
 ```
 
 ```{r setup}
 library(insperplot)
 library(ggplot2)
-library(dplyr)
+library(ragg)
 ```
 
-## Font Setup (Optional but Recommended)
+### Font Setup (Optional but Recommended)
 
-insperplot uses fonts based on Insper's official template: **GT Ultra Fine Bold** and **Georgia** (primary for titles), **Inter** and **Arial** (for body text). **EB Garamond** and **Playfair Display** are used as fallbacks for titles. While optional, installing these fonts significantly enhances plot aesthetics.
+insperplot uses fonts based on Insper's official template: **Georgia** (primary for titles), **Inter** and **Arial** (for body text). **EB Garamond** and **Playfair Display** are used as fallbacks for titles. While optional, installing these fonts significantly enhances plot aesthetics.
+
+Note: while "GT Ultra Fine Bold" is one of the official fonts, it is not available for free and thus is not included in the package.
 
 ```{r eval=FALSE}
 # Check if recommended fonts are installed
@@ -63,50 +59,57 @@ check_insper_fonts()
 
 Note: Georgia is typically pre-installed on most systems. GT Ultra Fine is a proprietary font and not available for free. If fonts are unavailable, plots will use system defaults.
 
-## The Dataset: São Paulo Metro Line-4
-
-We'll use ridership data from Line-4 (Yellow Line) of São Paulo's metro system, covering 2018-2020. This dataset captures the impact of COVID-19 lockdowns on public transportation.
-
-```{r load-data}
-# Load the metro dataset
-data("spo_metro")
-
-# Preview the data
-head(spo_metro, 10)
-```
-
-The dataset contains:
-- **date**: month of observation
-- **year**: Year (2018-2020)
-- **name_station**: station name
-- **value**: average business day ridership in thousands of passengers
-
 ## Basic Usage: theme_insper()
 
 The foundation of insperplot is `theme_insper()`, which applies Insper's visual identity to any plot.
 
-```{r basic-theme}
-# Standard ggplot2
-paulista <- subset(spo_metro, name_station == "Paulista")
-
-# With theme_insper()
-ggplot(paulista, aes(x = date, y = value)) +
-  geom_line(color = get_insper_colors("teals1"), linewidth = 0.8) +
-  theme_insper() +
+```{r theme-insper-basic}
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
   labs(
-    title = "The Covid-19 Lockdown Impacts on Paulista Station",
-    subtitle = "Average business day ridership in 2018-2020 (thousand daily passengers).",
-    x = NULL,
-    y = "Passengers (thous.)",
-    caption = "Fonte: ViaQuatro | Insper"
-  )
+    title = "Basic Theme",
+    subtitle = "Using theme_insper()",
+    caption = "Fonte: mtcars") +
+  theme_insper()
+```
+
+This function supports some quick customization options demonstrated below.
+
+```{r}
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
+  labs(
+    title = "Basic Theme",
+    subtitle = "Using theme_insper()",
+    caption = "Fonte: mtcars"
+  ) +
+  theme_insper(font_title = "Inter", border = "closed")
+```
+
+The main arguments of `theme_insper()` are:
+
+- `font_title`: Font for titles. Default is "Georgia".
+- `font_text`: Font for body text. Default is "Inter 18pt".
+- `grid`: Grid lines. Default is `TRUE`.
+- `border`: Border style. Default is "open" (no border).
+- `align`: Overall title, subtitle, and caption alignment. Default is "panel" (same as `ggplot2` default).
+
+To change any particular aspect of `theme_insper` add a `theme()` call.
+
+```{r}
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
+  theme_insper() +
+  theme(axis.text = element_text(color = "red"))
 ```
 
 ## Working with Colors
 
-The colors used in insperplot are based on Insper's [brandkit](https://github.com/Insper/Cores-Marca-Insper). There are
+The colors used in insperplot are based on Insper's [brandkit](https://github.com/Insper/Cores-Marca-Insper).
 
-### Extracting Individual Colors
+### Color Basics
+
+#### Extracting Individual Colors
 
 Use `get_insper_colors()` to extract individual colors by name:
 
@@ -119,7 +122,7 @@ all_colors <- get_insper_colors()
 head(all_colors)
 ```
 
-### Visualizing Individual Colors
+#### Visualizing Individual Colors
 
 Use `show_insper_colors()` to see what colors are available:
 
@@ -128,7 +131,7 @@ show_insper_colors()
 show_insper_colors("reds")
 ```
 
-### Working with Palettes
+#### Working with Palettes
 
 ```{r palette-viz, fig.height=4}
 # Show specific palette
@@ -141,170 +144,76 @@ show_insper_palette()
 list_palettes()
 ```
 
-## Plot Gallery: All 8 Functions
+### Using Colors in ggplot2
 
-Now let's demonstrate each plotting function with the metro dataset.
+The package provides scale functions for seamlessly integrating Insper colors into ggplot2 plots.
 
-### 1. Bar Plot: Monthly Ridership Comparison
+#### Discrete Scales
 
-Compare ridership across stations for a specific period using `insper_barplot()`:
+For categorical variables, use `scale_color_insper_d()` or `scale_fill_insper_d()`:
 
-```{r barplot}
-# Compare average 2020 ridership by station (horizontal via coord_flip)
-spo_metro |>
-  filter(year == 2019) |>
-  summarise()
-
-spo_metro |>
-  filter(year == 2020) |>
-  summarise(avg_ridership = mean(value), .by = name_station) |>
-  insper_barplot(
-    x = name_station,
-    y = avg_ridership,
-    text = TRUE
-  ) +
-  coord_flip() +
-  labs(
-    title = "Demanda Média por Estação em 2020",
-    subtitle = "Durante a pandemia de COVID-19",
-    caption = "Fonte: CCR Metrô"
-  )
-```
-
-### 2. Time Series: Station Trends Over Time
-
-Track ridership trends with `insper_timeseries()`:
-
-```{r timeseries}
-# Compare 4 major stations over time
-main_stations <- spo_metro |>
-  mutate(rank = rank(-value, ties.method = "first"), .by = date) |>
-  summarise(avg_rank = mean(rank), .by = name_station) |>
-  slice_min(avg_rank, n = 4) |>
-  pull(name_station)
-
-main_metro <- subset(spo_metro, name_station %in% main_stations)
-
-insper_timeseries(
-  main_metro, date, value,
-  group = name_station
-) +
-  labs(
-    title = "Evolução da Demanda - Principais Estações",
-    subtitle = "Linha 4-Amarela do Metrô de São Paulo (2018-2020)",
-    caption = "Fonte: CCR Metrô | Insper",
-    x = NULL,
-    y = "Daily Passengers (thous.)",
-    color = NULL
-  )
-```
-
-### 5. Scatter Plot: Station Correlation
-
-Explore relationships between stations with `insper_scatterplot()`:
-
-```{r scatterplot}
-# Compare Paulista vs Pinheiros ridership
-paulista <- spo_metro |>
-  filter(name_station == "Paulista") |>
-  select(date, paulista = value)
-
-pinheiros <- spo_metro |>
-  filter(name_station == "Pinheiros") |>
-  select(date, pinheiros = value)
-
-inner_join(paulista, pinheiros, by = "date") |>
-  insper_scatterplot(
-    x = paulista,
-    y = pinheiros,
-    color = factor(format(date, "%Y")),
-    add_smooth = TRUE
-  ) +
-  labs(
-    title = "Correlação: Paulista vs Pinheiros",
-    subtitle = "Demanda mensal (milhares), colorido por ano",
-    caption = "Fonte: CCR Metrô | Insper"
-  )
-```
-
-### 6. Box Plot: Distribution Analysis
-
-Compare distributions across categories with `insper_boxplot()`:
-
-```{r boxplot}
-# Distribution of ridership by station (horizontal via coord_flip)
-spo_metro |>
-  insper_boxplot(
-    x = name_station,
-    y = value,
-    fill = name_station,
-    add_jitter = FALSE
-  ) +
-  coord_flip() +
-  labs(
-    title = "Distribuição de Demanda por Estação",
-    subtitle = "Período: 2018-2020 (36 meses)",
-    caption = "Fonte: CCR Metrô | Insper"
-  )
-```
-
-## Brazilian Number Formatting
-
-insperplot includes helpers for Brazilian locale formatting:
-
-```{r formatting}
-# Format large numbers in Brazilian style
-large_numbers <- c(1234.56, 1234567.89, 0.1234)
-
-# Note: format_br_number() is internal, but you can use scales package
-library(scales)
-
-# For axis labels in plots
-ggplot(spo_metro |> filter(name_station == "Paulista"),
-       aes(x = date, y = value)) +
-  geom_line(color = get_insper_colors("teals1"), linewidth = 1.2) +
-  scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",")) +
+```{r scale-discrete-color}
+# Discrete color scale
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point(size = 3) +
+  scale_color_insper_d(palette = "main") +
   theme_insper() +
-  labs(
-    title = "Formatação Brasileira de Números",
-    subtitle = "Usando scales::label_number() com padrão brasileiro",
-    x = "Mês", y = "Passageiros (mil)",
-    caption = "Fonte: CCR Metrô | Insper"
-  )
+  labs(title = "Discrete Color Scale")
+```
+
+```{r scale-discrete-fill}
+# Discrete fill scale with barplot
+ggplot(mtcars, aes(x = factor(cyl), fill = factor(gear))) +
+  geom_bar(position = "dodge") +
+  scale_fill_insper_d(palette = "bright") +
+  theme_insper() +
+  labs(title = "Discrete Fill Scale", x = "Cylinders", fill = "Gears")
+```
+
+#### Continuous Scales
+
+For numerical variables, use `scale_color_insper_c()` or `scale_fill_insper_c()`:
+
+```{r scale-continuous}
+# Continuous color scale
+ggplot(mtcars, aes(x = wt, y = mpg, color = hp)) +
+  geom_point(size = 3) +
+  scale_color_insper_c(palette = "reds") +
+  theme_insper() +
+  labs(title = "Continuous Color Scale", color = "Horsepower")
+```
+
+### Using Colors in Base R
+
+While insperplot was designed for ggplot2, Insper colors can also be used in base R plots:
+
+```{r base-r-plots-1}
+# Simple scatter plot with Insper colors
+plot(mtcars$mpg, mtcars$wt,
+     col = get_insper_colors("reds1"),
+     pch = 19, cex = 1.5,
+     main = "Base R Plot with Insper Colors",
+     xlab = "MPG", ylab = "Weight")
+```
+
+```{r base-r-plots-2}
+# Barplot with multiple Insper colors
+barplot(table(mtcars$cyl),
+        col = get_insper_colors("reds1", "oranges1", "teals1"),
+        main = "Cylinders Distribution",
+        xlab = "Number of Cylinders",
+        ylab = "Count")
 ```
 
 ## Saving Plots
 
-Save plots in publication-ready formats:
+For best results when saving plots, use `ggsave()` with the ragg device to ensure proper font rendering:
 
-```{r saving, eval=FALSE}
-# Create a plot
-p <- spo_metro |>
-  filter(name_station == "Paulista") |>
-  insper_timeseries(
-    x = date,
-    y = value,
-    title = "Estação Paulista - Linha 4"
-  )
+```{r eval=FALSE}
+# Save plot with optimal settings
+p <- ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  theme_insper()
 
-# Save as PNG (high resolution)
-ggsave("paulista-ridership.png", p,
-       width = 10, height = 6, dpi = 300)
-
-# Save as PDF (vector graphics)
-ggsave("paulista-ridership.pdf", p,
-       width = 10, height = 6)
-
-# Save as SVG (for web)
-ggsave("paulista-ridership.svg", p,
-       width = 10, height = 6)
+ggsave("my_plot.png", p, width = 8, height = 5, dpi = 300, device = ragg::agg_png)
 ```
-
-**Recommended dimensions for common uses:**
-
-- **Academic papers**: 7-10 inches width, 4-6 inches height, 300 dpi
-- **Presentations**: 10-12 inches width, 6-7 inches height, 150 dpi
-- **Posters**: 12-16 inches width, 8-10 inches height, 300 dpi
-- **Web/dashboards**: 8-10 inches width, 5-6 inches height, 96-150 dpi
-
-## Summary

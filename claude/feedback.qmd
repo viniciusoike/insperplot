@@ -5,78 +5,24 @@ library(dplyr)
 library(ggplot2)
 ```
 
-# Review parameter naming and overall logic
+# General points
 
-## Parameter naming
-
-- The `fill` and `color` parameters can be confusing. They are usually used to specify a variable name (column name) to be used for filling or coloring the plot. However, this clashes when the user wants to use a different color for the geom.
+- The insper_ functions could have a `scale_name` (or something similar) that allows the user to change the name of the scale/legend
 
 
 ```{r}
-# These are the same
-ggplot(mtcars, aes(mpg, wt)) +
-    geom_point(aes(color = factor(cyl)))
-
 insper_scatterplot(mtcars, x = mpg, y = wt, color = factor(cyl))
+
+# currently, user needs to use guides() or labs() to change the name
+insper_scatterplot(mtcars, x = mpg, y = wt, color = factor(cyl)) +
+    guides(color = guide_legend(title = "Cylinders"))
+
+insper_scatterplot(mtcars, x = mpg, y = wt, color = factor(cyl)) +
+    guides(fill = "Cylinders")
 ```
 
+OBS: this will be a bit tricky for the `insper_scatterplot` function, since the user can set both `color` and `fill` to the same variable. In this case, the legend will show both the color and fill scales.
 
-```{r}
-ggplot(mtcars, aes(mpg, wt)) +
-    geom_point(color = "blue")
+- All examples are wrapped with "\dontrun{}" to avoid running them. We can remove this now. This also likely means that some examples will break and will need to be updated.
 
-# This isn't the same: it creates a "fake" group named blue
-insper_scatterplot(mtcars, x = mpg, y = wt, color = "blue")
-
-ggplot(mtcars, aes(mpg, wt)) +
-    geom_point(aes(color = "blue"))
-```
-
-This happens with other geoms as well.
-
-The `insper_barplot()` has a solution but the naming of the parameter is awkward. We have a `fill_var` column and a `single_color` column.
-
-```{r}
-insper_barplot(mtcars, x = cyl, y = mpg, single_color = "blue")
-```
-
-
-We could unify the logic across all functions by using a `variable` parameter that expects a column name that will be used for grouped filling or coloring. And then a respective color or fill parameter that is used for a single color.
-
-
-```{r, eval = FALSE}
-insper_scatterplot(
-    mtcars,
-    x = mpg,
-    y = wt,
-    variable = factor(cyl)
-)
-
-insper_scatterplot(
-    mtcars,
-    x = mpg,
-    y = wt,
-    color = "blue"
-)
-
-insper_barplot(
-    mtcars,
-    x = cyl,
-    y = mpg,
-    variable = factor(cyl)
-)
-
-insper_barplot(
-    mtcars,
-    x = cyl,
-    y = mpg,
-    # to control the color of the single bar
-    fill = "blue"
-)
-```
-
-Remember:
-
-- The API usuability should be simple and **consistent**. We should propose a change that keeps the naming of the parameters consistent across all functions.
-- The API usability should be **intuitive**. The user should be able to understand what the function is doing without having to read the documentation.
-- The API usability should offer useful parameters and leave less used options to the ... argument.
+## Specific points

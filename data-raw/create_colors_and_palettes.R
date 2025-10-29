@@ -110,22 +110,7 @@ insper_palettes <- list(
     "#954000"
   ),
 
-  # accent_cat = c(
-  #   scales::muted("#6C757D"),
-  #   scales::muted("#9B59B6"),
-  #   scales::muted("#F39C12"),
-  #   scales::muted("#2ECC71"),
-  #   scales::muted("#009491"),
-  #   "#003366",
-  #   "#F15A22",
-  #   "#E4002B"
-  # )
-
   # Good default palettes for general use
-
-  # colorbrewer_div1 <- RColorBrewer::brewer.pal(11, "RdBu")
-  # colorbrewer_div2 <- RColorBrewer::brewer.pal(11, "BrBG")
-
   categorical_ito = palette.colors(palette = "Okabe-Ito")[-1],
   categorical_tab = palette.colors(palette = "Tableau 10"),
   categorical_set = palette.colors(palette = "Set1")

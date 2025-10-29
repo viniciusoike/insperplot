@@ -107,7 +107,6 @@ ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
 ```
 
 
-
 ```{r}
 # View available colors
 show_insper_colors()

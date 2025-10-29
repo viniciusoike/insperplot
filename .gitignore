@@ -63,3 +63,5 @@ scratch/
 inst/doc
 
 /.quarto/
+/doc/
+/Meta/

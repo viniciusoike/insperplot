@@ -20,15 +20,23 @@
 #'   geom_point() +
 #'   scale_color_insper_d("main")
 #' }
-insper_pal <- function(palette = "main", n = NULL, type = "discrete", reverse = FALSE) {
-
+insper_pal <- function(
+  palette = "main",
+  n = NULL,
+  type = "discrete",
+  reverse = FALSE
+) {
   if (!palette %in% names(insper_palettes)) {
-    cli::cli_abort("Palette {.val {palette}} not found. Available palettes: {.val {names(insper_palettes)}}")
+    cli::cli_abort(
+      "Palette {.val {palette}} not found. Available palettes: {.val {names(insper_palettes)}}"
+    )
   }
 
   pal <- insper_palettes[[palette]]
 
-  if (reverse) pal <- rev(pal)
+  if (reverse) {
+    pal <- rev(pal)
+  }
 
   if (is.null(n)) {
     n <- length(pal)
