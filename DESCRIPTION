@@ -1,7 +1,7 @@
 Package: insperplot
 Type: Package
 Title: Insper Themed ggplot2 Extensions
-Version: 1.3.2
+Version: 1.3.3
 Date: 2025-10-29
 Authors@R: c(
     person(

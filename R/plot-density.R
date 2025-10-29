@@ -22,7 +22,9 @@
 #' @param line_color Character. Color for density line. Default is darker teal.
 #'   (Deprecated: use in combination with `fill = "color"`)
 #' @param alpha Numeric. Transparency of density area (0-1). Default is 0.6
-#' @param bandwidth Numeric. Bandwidth for density estimation. Default is NULL (automatic).
+#' @param bw Numeric or character. Bandwidth for density estimation.
+#'   Can be a numeric value or a bandwidth selector name ("nrd0", "nrd", "ucv", "bcv", "SJ").
+#'   Default is NULL which uses ggplot2's default ("nrd0").
 #' @param adjust Numeric. Adjustment multiplier for bandwidth. Default is 1.
 #' @param kernel Character. Kernel for density estimation. Default is "gaussian".
 #' @param ... Additional arguments passed to \code{ggplot2::geom_density()}
@@ -48,7 +50,7 @@ insper_density <- function(
   fill_color = get_insper_colors("teals1"),
   line_color = get_insper_colors("teals3"),
   alpha = 0.6,
-  bandwidth = NULL,
+  bw = NULL,
   adjust = 1,
   kernel = "gaussian",
   ...
@@ -79,7 +81,7 @@ insper_density <- function(
         fill = fill_color,
         color = line_color,
         alpha = alpha,
-        bw = bandwidth,
+        bw = bw,
         adjust = adjust,
         kernel = kernel,
         ...
@@ -91,7 +93,7 @@ insper_density <- function(
         fill = fill_type$value,
         color = fill_type$value,
         alpha = alpha,
-        bw = bandwidth,
+        bw = bw,
         adjust = adjust,
         kernel = kernel,
         ...
@@ -104,7 +106,7 @@ insper_density <- function(
     ) +
       ggplot2::geom_density(
         alpha = alpha,
-        bw = bandwidth,
+        bw = bw,
         adjust = adjust,
         kernel = kernel,
         ...

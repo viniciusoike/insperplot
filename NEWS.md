@@ -1,3 +1,41 @@
+# insperplot 1.3.3
+
+## Breaking Changes
+
+* **`insper_density()`**: Renamed parameter `bandwidth` to `bw` for consistency with ggplot2 conventions
+  - **Migration**: Change `insper_density(data, x = var, bandwidth = 1)` to `insper_density(data, x = var, bw = 1)`
+  - **Rationale**: ggplot2's `geom_density()` uses `bw` parameter, not `bandwidth`
+  - This change improves API consistency and matches user expectations
+
+## Bug Fixes
+
+* Fixed parameter naming inconsistency in `insper_density()` that could confuse users familiar with ggplot2 API
+
+## Testing Improvements
+
+* Added comprehensive test suite for `insper_density()` (7 new tests)
+  - Basic plot creation
+  - Fill aesthetic with variable mapping
+  - Data validation
+  - `bw` parameter functionality (numeric and method names)
+  - `kernel` parameter options
+  - `adjust` parameter functionality
+  - Static color specification
+
+* Added comprehensive test suite for `insper_histogram()` (7 new tests)
+  - Basic plot creation
+  - Bin method options ("sturges", "fd", "scott")
+  - Manual bins specification
+  - Fill aesthetic with variable mapping
+  - Zero line parameter
+  - Static color specification
+
+* **Test coverage milestone**: All 9 plot functions now have tests (100% coverage)
+  - Previous: 25 tests across 7 functions (77.8% coverage)
+  - Current: 39 tests across 9 functions (100% coverage)
+
+---
+
 # insperplot 1.3.2
 
 ## New Features

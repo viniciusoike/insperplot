@@ -12,7 +12,7 @@ insper_density(
   fill_color = get_insper_colors("teals1"),
   line_color = get_insper_colors("teals3"),
   alpha = 0.6,
-  bandwidth = NULL,
+  bw = NULL,
   adjust = 1,
   kernel = "gaussian",
   ...
@@ -45,7 +45,9 @@ Default is Insper teal. (Deprecated: use `fill = "color"` instead)}
 
 \item{alpha}{Numeric. Transparency of density area (0-1). Default is 0.6}
 
-\item{bandwidth}{Numeric. Bandwidth for density estimation. Default is NULL (automatic).}
+\item{bw}{Numeric or character. Bandwidth for density estimation.
+Can be a numeric value or a bandwidth selector name ("nrd0", "nrd", "ucv", "bcv", "SJ").
+Default is NULL which uses ggplot2's default ("nrd0").}
 
 \item{adjust}{Numeric. Adjustment multiplier for bandwidth. Default is 1.}
 

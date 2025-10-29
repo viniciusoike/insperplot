@@ -249,3 +249,107 @@ test_that("insper_violin optional features work", {
   expect_s3_class(p1, "ggplot")
   expect_s3_class(p2, "ggplot")
 })
+
+# Tests for insper_density()
+test_that("insper_density creates plot", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_density(mtcars, x = mpg)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_density handles fill aesthetic with variable mapping", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_density(iris, x = Sepal.Length, fill = Species)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_density validates data frame input", {
+  expect_error(insper_density(list(), x = x), "data frame")
+  expect_error(insper_density(c(1, 2, 3), x = x), "data frame")
+})
+
+test_that("insper_density bw parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_density(mtcars, x = mpg, bw = 1)
+  p2 <- insper_density(mtcars, x = mpg, bw = 5)
+  p3 <- insper_density(mtcars, x = mpg, bw = "nrd")
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+  expect_s3_class(p3, "ggplot")
+})
+
+test_that("insper_density kernel parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_density(mtcars, x = mpg, kernel = "epanechnikov")
+  p2 <- insper_density(mtcars, x = mpg, kernel = "rectangular")
+  p3 <- insper_density(mtcars, x = mpg, kernel = "triangular")
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+  expect_s3_class(p3, "ggplot")
+})
+
+test_that("insper_density adjust parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_density(mtcars, x = mpg, adjust = 0.5)
+  p2 <- insper_density(mtcars, x = mpg, adjust = 2)
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_density static color works", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_density(mtcars, x = mpg, fill = "purple")
+  expect_s3_class(p, "ggplot")
+})
+
+# Tests for insper_histogram()
+test_that("insper_histogram creates plot", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_histogram(mtcars, x = mpg)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_histogram bin methods work", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_histogram(mtcars, x = mpg, bin_method = "sturges")
+  p2 <- insper_histogram(mtcars, x = mpg, bin_method = "fd")
+  p3 <- insper_histogram(mtcars, x = mpg, bin_method = "scott")
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+  expect_s3_class(p3, "ggplot")
+})
+
+test_that("insper_histogram manual bins work", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_histogram(mtcars, x = mpg, bin_method = "manual", bins = 20)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_histogram validates manual bins", {
+  expect_error(
+    insper_histogram(mtcars, x = mpg, bin_method = "manual"),
+    "bins.*must be specified"
+  )
+})
+
+test_that("insper_histogram handles fill aesthetic", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_histogram(iris, x = Sepal.Length, fill = Species)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_histogram zero parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_histogram(mtcars, x = mpg, zero = TRUE)
+  p2 <- insper_histogram(mtcars, x = mpg, zero = FALSE)
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+  # Check that p1 has hline
+  expect_true(any(sapply(p1$layers, function(l) inherits(l$geom, "GeomHline"))))
+})
+
+test_that("insper_histogram static color works", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_histogram(mtcars, x = mpg, fill = "steelblue")
+  expect_s3_class(p, "ggplot")
+})
