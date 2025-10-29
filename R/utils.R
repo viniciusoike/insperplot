@@ -36,7 +36,8 @@ show_insper_colors <- function(color_family = "all") {
 
   if (color_family != "all") {
     # Filter by color family
-    pattern <- switch(color_family,
+    pattern <- switch(
+      color_family,
       "reds" = "^reds[0-9]",
       "oranges" = "^oranges[0-9]",
       "magentas" = "^magentas[0-9]",
@@ -152,18 +153,28 @@ show_insper_palette <- function(palette = "main") {
 
   # Create plot
   ggplot2::ggplot(df, ggplot2::aes(x = position, y = 1, fill = hex)) +
-    ggplot2::geom_tile(width = 0.9, height = 1, color = "white", linewidth = 1) +
+    ggplot2::geom_tile(
+      width = 0.9,
+      height = 1,
+      color = "white",
+      linewidth = 1
+    ) +
     ggplot2::scale_fill_identity() +
     ggplot2::geom_text(
       ggplot2::aes(label = hex),
-      size = 3, fontface = "bold", angle = 90, color = "white"
+      size = 3,
+      fontface = "bold",
+      angle = 90,
+      color = "white"
     ) +
     ggplot2::theme_void() +
     ggplot2::labs(
       title = paste0("Palette: ", palette),
       subtitle = paste0(
-        tools::toTitleCase(pal_data$type), " | ",
-        pal_data$n_colors, " colors | ",
+        tools::toTitleCase(pal_data$type),
+        " | ",
+        pal_data$n_colors,
+        " colors | ",
         pal_data$recommended_use
       )
     ) +
@@ -237,7 +248,7 @@ save_insper_plot <- function(
 #' @param x Numeric vector
 #' @param digits Number of decimal places (default 0)
 #' @param percent Logical. If TRUE, formats as percentage (multiplies by 100, adds \% suffix)
-#' @param currency Logical. If TRUE, formats as Brazilian Real currency (adds R\$ prefix)
+#' @param currency Logical. If TRUE, formats as Brazilian Real currency
 #' @param ... Additional arguments passed to \code{\link[scales]{number}}
 #' @return Formatted character vector
 #' @family utilities
@@ -252,7 +263,13 @@ save_insper_plot <- function(
 #' # Percentage formatting
 #' format_num_br(0.1234, percent = TRUE, digits = 1)
 #' format_num_br(0.1234, percent = TRUE, digits = 2)
-format_num_br <- function(x, digits = 0, percent = FALSE, currency = FALSE, ...) {
+format_num_br <- function(
+  x,
+  digits = 0,
+  percent = FALSE,
+  currency = FALSE,
+  ...
+) {
   if (percent) {
     return(scales::number(
       x * 100,
@@ -763,7 +780,7 @@ setup_insper_fonts <- function(check_only = FALSE) {
       # Optimal setup: has primary fonts (Georgia + Inter)
       # Good setup: has at least one title font and one body font
       fonts_installed <- (has_georgia && has_inter) ||
-                         (has_georgia || has_garamond || has_playfair) && has_inter
+        (has_georgia || has_garamond || has_playfair) && has_inter
     }
   }
 
@@ -925,12 +942,15 @@ is_valid_color <- function(x) {
   }
 
   # Check if grDevices recognizes it as a named color
-  tryCatch({
-    grDevices::col2rgb(x)
-    return(TRUE)
-  }, error = function(e) {
-    return(FALSE)
-  })
+  tryCatch(
+    {
+      grDevices::col2rgb(x)
+      return(TRUE)
+    },
+    error = function(e) {
+      return(FALSE)
+    }
+  )
 }
 
 #' Detect if aesthetic parameter is static color or variable mapping
@@ -994,16 +1014,19 @@ detect_aesthetic_type <- function(quo, param_name = "parameter", data = NULL) {
   # Detect if continuous or discrete
   if (!is.null(data)) {
     # Try to evaluate in data context to detect variable type
-    tryCatch({
-      var_vals <- rlang::eval_tidy(quo, rlang::as_data_mask(data))
-      is_continuous <- is.numeric(var_vals) && !is.factor(var_vals)
-    }, error = function(e) {
-      # If evaluation fails, default to discrete
-      # This can happen with complex expressions
-      is_continuous <- FALSE
-    })
+    tryCatch(
+      {
+        var_vals <- rlang::eval_tidy(quo, rlang::as_data_mask(data))
+        is_continuous <- is.numeric(var_vals) && !is.factor(var_vals)
+      },
+      error = function(e) {
+        # If evaluation fails, default to discrete
+        # This can happen with complex expressions
+        is_continuous <- FALSE
+      }
+    )
   } else {
-    is_continuous <- FALSE  # Can't determine without data
+    is_continuous <- FALSE # Can't determine without data
   }
 
   return(list(
@@ -1072,9 +1095,12 @@ has_insper_fonts <- function() {
   }
 
   # Try to detect if primary fonts are available
-  tryCatch({
-    fonts <- systemfonts::system_fonts()$family
-    # Check for at least one of the primary fonts (Georgia or Inter)
-    any(grepl("Georgia|Inter", fonts, ignore.case = TRUE))
-  }, error = function(e) FALSE)
+  tryCatch(
+    {
+      fonts <- systemfonts::system_fonts()$family
+      # Check for at least one of the primary fonts (Georgia or Inter)
+      any(grepl("Georgia|Inter", fonts, ignore.case = TRUE))
+    },
+    error = function(e) FALSE
+  )
 }

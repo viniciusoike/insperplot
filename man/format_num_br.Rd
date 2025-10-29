@@ -13,7 +13,7 @@ format_num_br(x, digits = 0, percent = FALSE, currency = FALSE, ...)
 
 \item{percent}{Logical. If TRUE, formats as percentage (multiplies by 100, adds \% suffix)}
 
-\item{currency}{Logical. If TRUE, formats as Brazilian Real currency (adds R\$ prefix)}
+\item{currency}{Logical. If TRUE, formats as Brazilian Real currency}
 
 \item{...}{Additional arguments passed to \code{\link[scales]{number}}}
 }

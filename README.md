@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/viniciusoike/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusoike/insperplot/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
@@ -47,15 +47,16 @@ setup_insper_fonts()  # Interactive guide for complete setup
 
 **Step 1: Install Insper Fonts**
 
-insperplot uses fonts based on Insper’s official template: - **Georgia**
-(serif, primary for titles) - typically pre-installed - **Inter**
-(sans-serif, for body text) - Google Font - **EB Garamond** & **Playfair
-Display** (serif, title fallbacks) - Google Fonts
+`insperplot` uses fonts based on Insper’s official template. We include
+EB Garamond and Playfair Display as fallbacks for Georgia.
 
-1.  Visit [Google Fonts](https://fonts.google.com)
-2.  Download and install “Inter”, “EB Garamond”, and “Playfair Display”
-3.  Restart R/RStudio
-4.  Note: Georgia is typically already installed on most systems
+- **Georgia** (serif, primary for titles) - typically pre-installed
+- **Inter** (sans-serif, for body text) - Google Font
+- **EB Garamond** & **Playfair Display** (serif, title fallbacks) -
+  Google
+
+To use these fonts, visit [Google Fonts](https://fonts.google.com) and
+download and install “Inter”, “EB Garamond”, and “Playfair Display”.
 
 **Step 2: Install ragg Graphics Device**
 
@@ -69,9 +70,6 @@ install.packages("ragg")
 - Set **Backend** to **AGG**
 - Restart R session
 
-**Note:** If fonts are unavailable, plots automatically fall back to
-system defaults (serif/sans).
-
 **Note:** Positron users can skip this step since it uses ragg by
 default.
 
@@ -81,13 +79,24 @@ default.
 functionality, additional palettes were created based on these basic
 colors.
 
+    #> insperplot 1.3.3 loaded.
+    #> Font setup: ?setup_insper_fonts | Device setup: ?use_ragg_device
+    #> 
+    #> Attaching package: 'dplyr'
+    #> The following objects are masked from 'package:stats':
+    #> 
+    #>     filter, lag
+    #> The following objects are masked from 'package:base':
+    #> 
+    #>     intersect, setdiff, setequal, union
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
 To use `insperplot` we recommend using `ggplot2`. The basic functions of
 the package are `theme_insper()` and the `scale_*_insper_*()` functions.
 
 ``` r
 library(insperplot)
-#> insperplot 1.3.0 loaded.
-#> Font setup: ?setup_insper_fonts | Device setup: ?use_ragg_device
 library(ggplot2)
 library(ragg)
 
@@ -102,229 +111,11 @@ ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
     x = "Weight (1000 lbs)",
     y = "Miles per Gallon"
   )
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-#> be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
-#> Unable to calculate text width/height (using zero)
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
-#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, : no
-#> font could be found for family "Inter"
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
+
+The package is based on Insper’s brand colors.
 
 ``` r
 # View available colors
@@ -332,57 +123,6 @@ show_insper_colors()
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
-
-## What’s New in v1.3.0: Smart Aesthetic Detection
-
-**insperplot now intelligently detects whether you’re specifying a
-static color or mapping a variable!**
-
-``` r
-# 🎨 Static colors (quoted strings)
-insper_barplot(mtcars, x = factor(cyl), y = mpg, fill = "steelblue")
-
-# 📊 Variable mapping (bare column names)
-insper_barplot(mtcars, x = factor(cyl), y = mpg, fill = gear)
-
-# 🌈 Continuous gradients (automatic detection)
-insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
-```
-
-**Key benefits:**
-
-- **Intuitive API**: Quoted = color, unquoted = variable
-- **Unified parameters**: No more `fill_var` vs `single_color` confusion
-- **Automatic scales**: Discrete vs continuous detected automatically
-- **Gradient support**: Continuous variables now work everywhere
-
-See `NEWS.md` for migration guide if upgrading from v1.2.0.
-
-## Features
-
-- **Custom Themes**: Professional ggplot2 themes reflecting Insper’s
-  visual identity
-- **Color Palettes**: Carefully curated color schemes for various data
-  visualization needs
-- **Specialized Plots**: Pre-configured plotting functions for common
-  chart types
-- **Brazilian Formatting**: Built-in formatters for Brazilian currency,
-  percentages, and numbers
-- **Export Utilities**: Helper functions for saving publication-ready
-  plots
-
-## Main Functions
-
-- `theme_insper()`: Apply Insper’s visual identity to ggplot2 plots
-- `get_insper_colors()`: Extract individual Insper brand colors by name
-- `get_palette_colors()`: Extract hex codes from color palettes
-- `scale_color_insper_d()` / `scale_fill_insper_d()`: Discrete color
-  scales
-- `scale_color_insper_c()` / `scale_fill_insper_c()`: Continuous color
-  scales
-- `show_insper_palette()`: Visualize available color palettes
-
-## Color Palettes
 
 insperplot includes several pre-defined palettes:
 
@@ -395,39 +135,29 @@ insperplot includes several pre-defined palettes:
 - **categorical**, **accent**: Additional color options
 
 Use `list_palettes()` to see all available palettes with detailed
-information.
-
-### Extracting Palette Colors
-
-You can extract hex color codes directly from palettes using
-`get_palette_colors()`:
+information. To visualize the colors in each palette, use
+`show_insper_palette()`:
 
 ``` r
-# Get 5 colors from the reds palette
-colors <- get_palette_colors("reds", n = 5)
-
-# Use in custom plots
-barplot(1:5, col = colors)
-
-# Use in ggplot2 manual scales
-ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
-  geom_point() +
-  scale_color_manual(values = get_palette_colors("main", n = 3))
+show_insper_palette()
 ```
+
+<img src="man/figures/README-view-palettes-1.png" width="100%" />
+
+## Main Functions
+
+- `theme_insper()`: Apply Insper’s visual identity to ggplot2 plots.
+- `scale_color_insper_d()` / `scale_fill_insper_d()`: Discrete color
+  scales.
+- `scale_color_insper_c()` / `scale_fill_insper_c()`: Continuous color
+  scales.
+- `show_insper_palette()`: Visualize available color palettes.
+- `insper_*()`: Specialized plotting functions.
 
 ## Documentation
 
 For detailed documentation and examples, visit the [package
-website](https://viniciusreginatto.github.io/insperplot/).
-
-## Development
-
-insperplot follows modern R development best practices:
-
-- Native pipe operator (`|>`) throughout
-- Modern tidyverse patterns (dplyr 1.1+)
-- Comprehensive documentation with roxygen2
-- Continuous integration with GitHub Actions
+website](https://viniciusoike.github.io/insperplot/).
 
 ## Contributing
 
@@ -446,9 +176,3 @@ This package was inspired by excellent ggplot2 theme packages including:
   (note: removed from CRAN in 2025)
 - [bbplot](https://github.com/bbc/bbplot) by BBC Data Team
 - [ggthemes](https://github.com/jrnold/ggthemes) by Jeffrey Arnold
-
-**Font Handling Evolution**: This package initially used the showtext
-approach for font management. After hrbrthemes was removed from CRAN due
-to extrafont dependency issues, we migrated to the modern
-`systemfonts + ragg` approach, which eliminates DPI conflicts and
-provides better performance.

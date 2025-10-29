@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 # insperplot <img src="man/figures/logo.png" align="right" height="139" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusreginatto/insperplot/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/viniciusoike/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusoike/insperplot/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
@@ -79,8 +79,10 @@ install.packages("ragg")
 `insperplot` is built upon Insper's brand colors. To improve functionality, additional palettes were created based on these basic colors.
 
 ```{r, echo = FALSE}
+library(insperplot)
 library(ggplot2)
 library(treemapify)
+library(dplyr)
 inds <- c(1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144)
 
 insper_cols <- get_palette_colors("main")
@@ -154,7 +156,7 @@ show_insper_palette()
 
 ## Documentation
 
-For detailed documentation and examples, visit the [package website](https://viniciusreginatto.github.io/insperplot/).
+For detailed documentation and examples, visit the [package website](https://viniciusoike.github.io/insperplot/).
 
 ## Contributing
 

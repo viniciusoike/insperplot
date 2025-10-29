@@ -1,4 +1,4 @@
-url: https://viniciusreginatto.github.io/insperplot/
+url: https://viniciusoike.github.io/insperplot/
 template:
   bootstrap: 5
   bootswatch: flatly
@@ -34,7 +34,7 @@ navbar:
       href: news/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://github.com/viniciusreginatto/insperplot
+      href: https://github.com/viniciusoike/insperplot
 
 reference:
 - title: Themes
@@ -56,6 +56,7 @@ reference:
   - show_insper_palette
   - list_palettes
   - get_insper_colors
+  - get_palette_colors
 
 - title: ggplot2 Scales
   desc: Insper color scales for ggplot2
@@ -98,4 +99,4 @@ figures:
 
 authors:
   Vinicius Reginatto:
-    href: https://github.com/viniciusreginatto
+    href: https://github.com/viniciusoike
