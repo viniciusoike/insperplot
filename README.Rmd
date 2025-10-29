@@ -80,35 +80,11 @@ install.packages("ragg")
 
 `insperplot` is built upon Insper's brand colors. To improve functionality, additional palettes were created based on these basic colors.
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, eval = FALSE}
+# Visualization chunk temporarily disabled - to be fixed
 library(treemapify)
 library(insperplot)
 library(ggplot2)
-
-df <- data.frame(
-  group = letters[1:3],
-  y = c(3, 5, 2)
-)
-
-colors_insper <- get_insper_colors("main", show_hex = FALSE)
-
-df <- data.frame(
-  x = letters[1:length(colors_insper)],
-  y = 1 / c(1, 2, 3, 5, 8, 13),
-  fill = colors_insper
-)
-
-ggplot(df, aes(x = x, y = y, area = y, fill = fill)) +
-  geom_treemap() +
-  geom_treemap_text(aes(label = fill)) +
-  scale_fill_insper_d(reverse = TRUE) +
-  guides(fill = "none") +
-  labs(title = "Basic Insper colors") +
-  theme_insper() +
-  theme(
-    axis.title = element_blank(),
-    axis.text = element_blank()
-  )
 ```
 
 To use `insperplot` we recommend using `ggplot2`. The basic functions of the package are `theme_insper()` and the `scale_*_insper_*()` functions.
@@ -136,6 +112,30 @@ ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
 # View available colors
 show_insper_colors()
 ```
+
+## What's New in v1.3.0: Smart Aesthetic Detection
+
+**insperplot now intelligently detects whether you're specifying a static color or mapping a variable!**
+
+```{r smart-detection, eval=FALSE}
+# 🎨 Static colors (quoted strings)
+insper_barplot(mtcars, x = factor(cyl), y = mpg, fill = "steelblue")
+
+# 📊 Variable mapping (bare column names)
+insper_barplot(mtcars, x = factor(cyl), y = mpg, fill = gear)
+
+# 🌈 Continuous gradients (automatic detection)
+insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+```
+
+**Key benefits:**
+
+- **Intuitive API**: Quoted = color, unquoted = variable
+- **Unified parameters**: No more `fill_var` vs `single_color` confusion
+- **Automatic scales**: Discrete vs continuous detected automatically
+- **Gradient support**: Continuous variables now work everywhere
+
+See `NEWS.md` for migration guide if upgrading from v1.2.0.
 
 ## Features
 

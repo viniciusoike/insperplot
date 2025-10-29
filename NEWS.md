@@ -1,3 +1,192 @@
+# insperplot 1.3.0
+
+## Smart Aesthetic Detection
+
+This release introduces **smart aesthetic detection** across all plot functions, making the API more intuitive and consistent with user expectations.
+
+### How It Works
+
+Plot functions now intelligently distinguish between static colors and variable mappings:
+
+```r
+# Static color (quoted string) → blue points
+insper_scatterplot(mtcars, x = wt, y = mpg, color = "blue")
+
+# Variable mapping (bare symbol) → color by groups
+insper_scatterplot(mtcars, x = wt, y = mpg, color = Species)
+
+# Continuous variable → gradient coloring
+insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+```
+
+**Key insight:** Quoted strings are always interpreted as colors, bare column names are always variable mappings.
+
+### Breaking Changes
+
+#### `insper_barplot()` - Major Refactor
+
+**REMOVED parameters:**
+- `fill_var` - Use `fill` with bare column name instead
+- `single_color` - Use `fill` with quoted color string instead
+
+**Migration:**
+```r
+# OLD - fill_var for grouping
+insper_barplot(mtcars, x = cyl, y = mpg, fill_var = gear)
+
+# NEW - unified fill parameter
+insper_barplot(mtcars, x = cyl, y = mpg, fill = gear)
+
+# OLD - single_color for static color
+insper_barplot(mtcars, x = cyl, y = mpg, single_color = "#FF5733")
+
+# NEW - fill with quoted string
+insper_barplot(mtcars, x = cyl, y = mpg, fill = "#FF5733")
+
+# NEW - omit fill for default Insper red
+insper_barplot(mtcars, x = cyl, y = mpg)
+```
+
+#### `insper_timeseries()` - Parameter Rename
+
+**RENAMED:**
+- `group` → `color` (semantic clarity - it controls line color, not grouping)
+
+**Migration:**
+```r
+# OLD
+insper_timeseries(df, x = date, y = value, group = category)
+
+# NEW
+insper_timeseries(df, x = date, y = value, color = category)
+```
+
+#### `insper_histogram()` - Parameter Removal
+
+**REMOVED:**
+- `fill_color` - Use `fill` with quoted color string instead
+
+**Migration:**
+```r
+# OLD
+insper_histogram(mtcars, x = mpg, fill_color = "steelblue")
+
+# NEW
+insper_histogram(mtcars, x = mpg, fill = "steelblue")
+
+# Grouped histogram (was already using fill)
+insper_histogram(mtcars, x = mpg, fill = factor(cyl))
+```
+
+### New Capabilities
+
+#### Continuous Variable Support
+
+All applicable functions now support continuous variables with automatic gradient scales:
+
+```r
+# Time series with gradient coloring by intensity
+insper_timeseries(df, x = date, y = value, color = temperature)
+
+# Scatterplot with continuous color scale
+insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+
+# Histogram with continuous fill (rare but supported)
+insper_histogram(mtcars, x = mpg, fill = hp)
+```
+
+#### Dual Aesthetic Support in Scatterplot
+
+`insper_scatterplot()` now supports **both** `color` and `fill` simultaneously for shapes 21-25:
+
+```r
+# Different variables for outline and fill
+insper_scatterplot(mtcars, x = wt, y = mpg,
+                   color = factor(cyl),
+                   fill = factor(gear),
+                   shape = 21)
+
+# Static outline, variable fill
+insper_scatterplot(mtcars, x = wt, y = mpg,
+                   color = "black",
+                   fill = Species,
+                   shape = 21)
+```
+
+#### Fill→Color Propagation
+
+`insper_area()` and `insper_density()` now automatically apply fill mappings to line colors:
+
+```r
+# Fill variable automatically applies to both area and line
+insper_area(df, x = date, y = value, fill = category)
+
+# Density fill and line color match automatically
+insper_density(mtcars, x = mpg, fill = factor(cyl))
+```
+
+### Enhanced Features
+
+#### Palette Parameter
+
+All plot functions now include explicit `palette` parameter:
+
+```r
+# Use custom palette for discrete variables
+insper_boxplot(mtcars, x = factor(cyl), y = mpg,
+               fill = factor(gear),
+               palette = "bright")
+
+# Continuous palette for gradients
+insper_timeseries(df, x = date, y = value,
+                  color = intensity,
+                  palette = "teals")
+```
+
+#### Intelligent Warnings
+
+The package now warns when `palette` is specified but ignored:
+
+```r
+# Warning: palette ignored when fill is a static color
+insper_barplot(mtcars, x = cyl, y = mpg,
+               fill = "blue",
+               palette = "bright")  # ⚠️ palette has no effect here
+```
+
+### Updated Functions
+
+All 8 plot functions refactored with smart detection:
+
+1. ✅ `insper_scatterplot()` - Dual aesthetic support (color + fill)
+2. ✅ `insper_barplot()` - Unified `fill` parameter (BREAKING)
+3. ✅ `insper_timeseries()` - Renamed `group` → `color` (BREAKING)
+4. ✅ `insper_boxplot()` - Smart `fill` detection
+5. ✅ `insper_violin()` - Smart `fill` detection
+6. ✅ `insper_histogram()` - Removed `fill_color` (BREAKING)
+7. ✅ `insper_area()` - Smart `fill` with fill→color propagation
+8. ✅ `insper_density()` - Smart `fill` with fill→color propagation
+
+### Backward Compatibility Notes
+
+**Soft breaking changes:**
+- `insper_area()` and `insper_density()` retain `fill_color` and `line_color` parameters (deprecated but functional)
+- These will be removed in v2.0.0
+
+**Hard breaking changes:**
+- `insper_barplot()`: `fill_var` and `single_color` removed entirely
+- `insper_timeseries()`: `group` parameter removed entirely
+- `insper_histogram()`: `fill_color` parameter removed entirely
+
+### Testing
+
+- 229 tests passing (0 failures)
+- 86 new tests for smart detection helpers
+- 4 existing tests updated for new API
+- 46 manual test scenarios validated
+
+---
+
 # insperplot 1.2.0
 
 ## Breaking Changes
