@@ -37,6 +37,7 @@ show_insper_palette("red_teal")
 
 Other colors: 
 \code{\link{get_insper_colors}()},
+\code{\link{get_palette_colors}()},
 \code{\link{insper_pal}()},
 \code{\link{list_palettes}()},
 \code{\link{show_insper_colors}()}

@@ -92,6 +92,7 @@ To use `insperplot` we recommend using `ggplot2`. The basic functions of the pac
 ```{r example}
 library(insperplot)
 library(ggplot2)
+library(ragg)
 
 # Create a basic plot with Insper theme
 ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
@@ -147,8 +148,8 @@ See `NEWS.md` for migration guide if upgrading from v1.2.0.
 ## Main Functions
 
 - `theme_insper()`: Apply Insper's visual identity to ggplot2 plots
-- `show_insper_colors()`: Extract Insper brand colors
-- `insper_pal()`: Get color palettes
+- `get_insper_colors()`: Extract individual Insper brand colors by name
+- `get_palette_colors()`: Extract hex codes from color palettes
 - `scale_color_insper_d()` / `scale_fill_insper_d()`: Discrete color scales
 - `scale_color_insper_c()` / `scale_fill_insper_c()`: Continuous color scales
 - `show_insper_palette()`: Visualize available color palettes
@@ -164,6 +165,23 @@ insperplot includes several pre-defined palettes:
 - **categorical**, **accent**: Additional color options
 
 Use `list_palettes()` to see all available palettes with detailed information.
+
+### Extracting Palette Colors
+
+You can extract hex color codes directly from palettes using `get_palette_colors()`:
+
+```{r palette-colors, eval=FALSE}
+# Get 5 colors from the reds palette
+colors <- get_palette_colors("reds", n = 5)
+
+# Use in custom plots
+barplot(1:5, col = colors)
+
+# Use in ggplot2 manual scales
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point() +
+  scale_color_manual(values = get_palette_colors("main", n = 3))
+```
 
 ## Documentation
 

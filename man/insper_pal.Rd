@@ -37,6 +37,7 @@ ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
 
 Other colors: 
 \code{\link{get_insper_colors}()},
+\code{\link{get_palette_colors}()},
 \code{\link{list_palettes}()},
 \code{\link{show_insper_colors}()},
 \code{\link{show_insper_palette}()}

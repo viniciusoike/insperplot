@@ -90,3 +90,61 @@ test_that("show_insper_palette accepts palette names", {
 test_that("show_insper_palette errors on invalid palette", {
   expect_error(show_insper_palette("invalid"), "not found")
 })
+
+# Tests for get_palette_colors()
+test_that("get_palette_colors returns all colors when n is NULL", {
+  pal <- get_palette_colors("main")
+  expect_type(pal, "character")
+  expect_true(all(grepl("^#", pal)))
+  expect_true(length(pal) > 0)
+  expect_equal(length(pal), 6)  # main palette has 6 colors
+})
+
+test_that("get_palette_colors can extract n colors", {
+  pal <- get_palette_colors("reds", n = 3)
+  expect_length(pal, 3)
+  expect_true(all(grepl("^#", pal)))
+})
+
+test_that("get_palette_colors reverse parameter works", {
+  pal_normal <- get_palette_colors("reds")
+  pal_reverse <- get_palette_colors("reds", reverse = TRUE)
+  expect_equal(pal_normal, rev(pal_reverse))
+})
+
+test_that("get_palette_colors warns when n exceeds palette length", {
+  expect_warning(get_palette_colors("reds", n = 20), "Not enough colors")
+  # Check it still returns the requested number
+  suppressWarnings({
+    pal <- get_palette_colors("reds", n = 20)
+    expect_length(pal, 20)
+  })
+})
+
+test_that("get_palette_colors validates palette names", {
+  expect_error(get_palette_colors("invalid_palette"), "not found")
+})
+
+test_that("get_palette_colors works with different palettes", {
+  # Sequential
+  expect_type(get_palette_colors("reds"), "character")
+  expect_type(get_palette_colors("oranges"), "character")
+  expect_type(get_palette_colors("teals"), "character")
+  expect_type(get_palette_colors("grays"), "character")
+
+  # Diverging
+  expect_type(get_palette_colors("red_teal"), "character")
+  expect_type(get_palette_colors("diverging"), "character")
+
+  # Qualitative
+  expect_type(get_palette_colors("bright"), "character")
+  expect_type(get_palette_colors("contrast"), "character")
+  expect_type(get_palette_colors("categorical"), "character")
+})
+
+test_that("get_palette_colors returns hex codes only (discrete mode)", {
+  pal <- get_palette_colors("main", n = 3)
+  # Should return first 3 colors from palette, not interpolated
+  expect_length(pal, 3)
+  expect_true(all(grepl("^#[0-9A-F]{6}$", pal)))
+})

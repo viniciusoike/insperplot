@@ -1,3 +1,23 @@
+# insperplot 1.3.2
+
+## New Features
+
+* Added `get_palette_colors()` function to extract hex color codes from palettes (#palette-utils.R:167)
+  - Provides direct access to palette hex values, similar to `RColorBrewer::brewer.pal()`
+  - Returns discrete colors from palettes (not interpolated)
+  - Supports `n` parameter to get specific number of colors
+  - Supports `reverse` parameter to reverse color order
+  - Maintains API consistency with `get_insper_colors()` naming pattern
+  - Example: `get_palette_colors("reds", n = 5)` returns 5 hex codes from reds palette
+
+## Documentation
+
+* Comprehensive roxygen2 documentation with examples
+* Cross-references to related functions (`list_palettes()`, `show_insper_palette()`, scale functions)
+* Added 8 test cases covering all function parameters and edge cases
+
+---
+
 # insperplot 1.3.0
 
 ## Smart Aesthetic Detection

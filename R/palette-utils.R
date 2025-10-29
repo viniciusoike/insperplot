@@ -162,3 +162,61 @@ get_insper_colors <- function(...) {
     return(insper_individual_colors[requested])
   }
 }
+
+
+#' Extract Hex Codes from Insper Color Palettes
+#'
+#' Extract hex color codes from Insper palettes for use in custom plots.
+#' This function provides direct access to palette colors, similar to
+#' \code{RColorBrewer::brewer.pal()}.
+#'
+#' @param palette Character string indicating palette name. Use
+#'   \code{\link{list_palettes}} to see available palettes. Common palettes
+#'   include "main", "reds", "oranges", "teals", "grays", "red_teal", "bright",
+#'   "contrast", "categorical".
+#' @param n Number of colors to return. If \code{NULL} (default), returns all
+#'   colors in the palette. If \code{n} exceeds the palette size, colors will
+#'   be recycled with a warning.
+#' @param reverse Logical. If \code{TRUE}, reverses the order of colors.
+#'   Default is \code{FALSE}.
+#'
+#' @return Character vector of hex color codes.
+#'
+#' @details
+#' This function extracts colors from Insper palettes in discrete mode, meaning
+#' it returns the actual palette colors (possibly recycled) rather than
+#' interpolating new colors. For continuous color interpolation in ggplot2,
+#' use \code{\link{scale_color_insper_c}} or \code{\link{scale_fill_insper_c}}.
+#'
+#' To explore available palettes visually, use \code{\link{show_insper_palette}}.
+#' To list all available palettes with metadata, use \code{\link{list_palettes}}.
+#'
+#' @family colors
+#' @seealso \code{\link{get_insper_colors}} for individual colors,
+#'   \code{\link{list_palettes}} to see all palettes,
+#'   \code{\link{show_insper_palette}} to visualize palettes,
+#'   \code{\link{scale_color_insper_d}} for ggplot2 discrete scales
+#' @export
+#' @examples
+#' # Get 5 colors from the reds sequential palette
+#' get_palette_colors("reds", n = 5)
+#'
+#' # Get all colors from the main palette
+#' get_palette_colors("main")
+#'
+#' # Get colors in reverse order
+#' get_palette_colors("teals", n = 3, reverse = TRUE)
+#'
+#' # Use in base R plots
+#' colors <- get_palette_colors("bright", n = 3)
+#' barplot(1:3, col = colors)
+#'
+#' # Use in ggplot2 manual scales
+#' library(ggplot2)
+#' ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+#'   geom_point() +
+#'   scale_color_manual(values = get_palette_colors("main", n = 3))
+get_palette_colors <- function(palette, n = NULL, reverse = FALSE) {
+  # Call internal insper_pal function with discrete type
+  insper_pal(palette = palette, n = n, type = "discrete", reverse = reverse)
+}
