@@ -6,7 +6,7 @@
 #' @param data A data frame containing the data to plot
 #' @param x Time variable (numeric, Date, or POSIXct)
 #' @param y Value variable
-#' @param fill <[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+#' @param fill Fill aesthetic.
 #'   Can be:
 #'   \itemize{
 #'     \item A quoted color name/hex (e.g., `"teal"`, `"#00BFFF"`) for static color
@@ -167,4 +167,3 @@ insper_area <- function(
 
   return(p)
 }
-

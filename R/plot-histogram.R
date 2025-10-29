@@ -5,7 +5,7 @@
 #'
 #' @param data A data frame containing the data to plot
 #' @param x Variable for x-axis (numeric)
-#' @param fill <[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+#' @param fill Fill aesthetic.
 #'   Can be:
 #'   \itemize{
 #'     \item A quoted color name/hex (e.g., `"blue"`, `"#FF0000"`) for static color
@@ -34,24 +34,14 @@
 #' }
 #'
 #' @examplesIf has_insper_fonts()
-#' # Simple histogram with Sturges method (default red)
+#' # Simple histogram with Sturges method
 #' insper_histogram(mtcars, x = mpg)
-#'
-#' # Static color
-#' insper_histogram(mtcars, x = mpg, fill = "steelblue")
 #'
 #' # Using Freedman-Diaconis method
 #' insper_histogram(mtcars, x = mpg, bin_method = "fd")
 #'
 #' # Manual bin specification
 #' insper_histogram(mtcars, x = mpg, bin_method = "manual", bins = 15)
-#'
-#' # Grouped histogram with discrete variable
-#' insper_histogram(mtcars, x = mpg, fill = factor(cyl))
-#'
-#' # With custom palette
-#' insper_histogram(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
-#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{insper_density}}
 #' @importFrom grDevices nclass.Sturges nclass.FD nclass.scott
@@ -165,5 +155,3 @@ insper_histogram <- function(
 
   return(p)
 }
-
-

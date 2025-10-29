@@ -25,14 +25,13 @@
 #' insper_boxplot(iris, x = Species, y = Sepal.Length)
 #'
 #' # Static fill color
-#' insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "lightblue")
+#' insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "#F15A22")
 #'
 #' # Variable fill mapping
 #' insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species)
 #'
 #' # Boxplot without jitter
 #' insper_boxplot(iris, x = Species, y = Sepal.Length, add_jitter = FALSE)
-#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 #' @export

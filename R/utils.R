@@ -236,8 +236,8 @@ save_insper_plot <- function(
 #'
 #' @param x Numeric vector
 #' @param digits Number of decimal places (default 0)
-#' @param percent Logical. If TRUE, formats as percentage (multiplies by 100, adds % suffix)
-#' @param currency Logical. If TRUE, formats as Brazilian Real currency (adds R$ prefix)
+#' @param percent Logical. If TRUE, formats as percentage (multiplies by 100, adds \% suffix)
+#' @param currency Logical. If TRUE, formats as Brazilian Real currency (adds R\$ prefix)
 #' @param ... Additional arguments passed to \code{\link[scales]{number}}
 #' @return Formatted character vector
 #' @family utilities

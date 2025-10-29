@@ -54,7 +54,7 @@ using Insper's visual identity.
 insper_boxplot(iris, x = Species, y = Sepal.Length)
 
 # Static fill color
-insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "lightblue")
+insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "#F15A22")
 
 # Variable fill mapping
 insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species)

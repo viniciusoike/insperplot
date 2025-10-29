@@ -28,7 +28,7 @@ insper_area(
 
 \item{y}{Value variable}
 
-\item{fill}{<[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+\item{fill}{Fill aesthetic.
 Can be:
 \itemize{
   \item A quoted color name/hex (e.g., `"teal"`, `"#00BFFF"`) for static color

@@ -23,7 +23,7 @@ insper_density(
 
 \item{x}{Variable for x-axis (numeric)}
 
-\item{fill}{<[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+\item{fill}{Fill aesthetic.
 Can be:
 \itemize{
   \item A quoted color name/hex (e.g., `"purple"`, `"#9B59B6"`) for static color
@@ -63,22 +63,13 @@ Supports grouped densities with automatic color assignment.
 \examples{
 \dontshow{if (has_insper_fonts()) withAutoprint(\{ # examplesIf}
 # Simple density plot (default teal)
-insper_density(mtcars, x = mpg)
+insper_density(macro_series, x = ipca)
 
 # Static color
-insper_density(mtcars, x = mpg, fill = "purple")
+insper_density(macro_series, x = ipca, fill = "purple")
 
 # Grouped density plot (discrete variable)
-insper_density(mtcars, x = mpg, fill = factor(cyl))
-
-# With custom palette
-insper_density(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
-
-# Adjust bandwidth
-insper_density(mtcars, x = mpg, adjust = 0.5)
-
-# Continuous gradient (rare but supported)
-insper_density(iris, x = Sepal.Length, fill = Petal.Length, palette = "reds")
+insper_density(iris, x = Sepal.Length, fill = Species)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

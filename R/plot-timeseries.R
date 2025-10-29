@@ -25,21 +25,14 @@
 #' library(ggplot2)
 #'
 #' # Plot inflation over time
-#' recent_data <- subset(macro_series, date >= as.Date("2020-01-01"))
-#' insper_timeseries(recent_data, x = date, y = ipca) +
-#'   labs(
-#'     title = "Brazilian Inflation (IPCA)",
-#'     subtitle = "Monthly rate in percent (2020-present)",
-#'     y = "IPCA (%)"
-#'   )
+#' insper_timeseries(macro_series, x = date, y = ipca)
+#'
+#' # The color argument automatically detects the type of variable
+#' insper_timeseries(macro_series, x = date, y = ipca, color = "#3CBFAE")
 #'
 #' # Grouped time series (discrete variable)
-#' df <- data.frame(
-#'   time = rep(1:10, 2),
-#'   value = rnorm(20),
-#'   category = rep(c("A", "B"), each = 10)
-#' )
-#' insper_timeseries(df, x = time, y = value, color = category)
+#' recent_data <- subset(fossil_fuel, year >= 1920)
+#' insper_timeseries(recent_data, x = year, y = consumption, color = fuel)
 #'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
@@ -124,4 +117,3 @@ insper_timeseries <- function(
 
   return(p)
 }
-

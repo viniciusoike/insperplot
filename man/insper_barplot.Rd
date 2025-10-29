@@ -75,13 +75,6 @@ insper_barplot(mtcars, x = factor(cyl), y = mpg)
 
 # With text labels showing values
 insper_barplot(mtcars, x = factor(cyl), y = mpg, text = TRUE)
-
-# Grouped bar plot by gear
-insper_barplot(mtcars, x = factor(cyl), y = mpg, fill = factor(gear))
-
-# Stacked bars
-insper_barplot(mtcars, x = factor(cyl), y = mpg,
-               fill = factor(gear), position = "stack")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

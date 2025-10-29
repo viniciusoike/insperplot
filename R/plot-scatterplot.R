@@ -43,30 +43,18 @@
 #' # Simple scatter plot with default color
 #' insper_scatterplot(mtcars, x = wt, y = mpg)
 #'
-#' # Static color
-#' insper_scatterplot(mtcars, x = wt, y = mpg, color = "blue")
-#'
 #' # Discrete variable mapping
 #' insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl))
-#'
-#' # Continuous variable mapping
-#' insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
-#'
-#' # Custom palette
-#' insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl), palette = "bright")
 #'
 #' # With smooth line
 #' insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE)
 #'
-#' # Shape 21 with both color and fill (different variables)
-#' insper_scatterplot(mtcars, x = wt, y = mpg,
-#'                    color = factor(cyl),
-#'                    fill = factor(gear),
-#'                    shape = 21, stroke = 1.5)
+#' # ... arguments always passed to geom_point()
+#' insper_scatterplot(mtcars, x = wt, y = mpg, size = 3, alpha = 0.5)
 #'
 #' # Shape 21 with static color and mapped fill
 #' insper_scatterplot(mtcars, x = wt, y = mpg,
-#'                    color = "black",
+#'                    color = "white",
 #'                    fill = factor(cyl),
 #'                    shape = 21)
 #'
@@ -228,4 +216,3 @@ insper_scatterplot <- function(
 
   return(p)
 }
-

@@ -21,7 +21,7 @@ insper_histogram(
 
 \item{x}{Variable for x-axis (numeric)}
 
-\item{fill}{<[`data-masked`][rlang::args_data_masking]> Fill aesthetic.
+\item{fill}{Fill aesthetic.
 Can be:
 \itemize{
   \item A quoted color name/hex (e.g., `"blue"`, `"#FF0000"`) for static color
@@ -63,23 +63,14 @@ Bin selection methods:
 }
 \examples{
 \dontshow{if (has_insper_fonts()) withAutoprint(\{ # examplesIf}
-# Simple histogram with Sturges method (default red)
+# Simple histogram with Sturges method
 insper_histogram(mtcars, x = mpg)
-
-# Static color
-insper_histogram(mtcars, x = mpg, fill = "steelblue")
 
 # Using Freedman-Diaconis method
 insper_histogram(mtcars, x = mpg, bin_method = "fd")
 
 # Manual bin specification
 insper_histogram(mtcars, x = mpg, bin_method = "manual", bins = 15)
-
-# Grouped histogram with discrete variable
-insper_histogram(mtcars, x = mpg, fill = factor(cyl))
-
-# With custom palette
-insper_histogram(mtcars, x = mpg, fill = factor(cyl), palette = "bright")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

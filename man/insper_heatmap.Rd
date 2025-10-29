@@ -45,14 +45,6 @@ insper_heatmap(cor_mat, show_values = FALSE)
 
 # Custom palette
 insper_heatmap(cor_mat, palette = "red_teal")
-
-# From melted data frame
-melted <- data.frame(
-  Var1 = rep(c("A", "B", "C"), each = 3),
-  Var2 = rep(c("X", "Y", "Z"), 3),
-  value = runif(9, -1, 1)
-)
-insper_heatmap(melted)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

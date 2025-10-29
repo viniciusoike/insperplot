@@ -52,6 +52,37 @@
 "macro_series"
 
 
+#' Brazilian Macroeconomic Time Series (Long Format)
+#'
+#' Long-format version of the \code{\link{macro_series}} dataset. Each row represents
+#' a single observation for one indicator on a specific date. This format is particularly
+#' useful for faceted plots and grouped visualizations.
+#'
+#' @format A data frame with 2,800 rows and 3 variables:
+#' \describe{
+#'   \item{date}{Date, first day of the month (YYYY-MM-DD)}
+#'   \item{name_series}{Character, name of the macroeconomic indicator.
+#'     Values: "ibcbr_dessaz", "ipca", "ipi", "oil", "pms"}
+#'   \item{value}{Numeric, value of the indicator on that date}
+#' }
+#'
+#' @details
+#' This dataset is created by pivoting \code{\link{macro_series}} from wide to long format,
+#' making it easier to create faceted plots or perform grouped operations where you need
+#' to treat each indicator as a separate group.
+#'
+#' The dataset contains the same data as \code{\link{macro_series}}, just restructured
+#' for different use cases. See \code{\link{macro_series}} for detailed information about
+#' each indicator and data sources.
+#'
+#' @source Brazilian Central Bank (Banco Central do Brasil)
+#'   \url{https://www3.bcb.gov.br/sgspub/}
+#'
+#' @seealso \code{\link{macro_series}} for the wide-format version
+#' @keywords datasets
+"macro_series_long"
+
+
 #' Recife Bus Lines Data
 #'
 #' Data on bus lines in the Greater Recife metropolitan region from Insper's

@@ -24,7 +24,7 @@
 #' insper_violin(iris, x = Species, y = Sepal.Length)
 #'
 #' # Static fill color
-#' insper_violin(iris, x = Species, y = Sepal.Length, fill = "purple")
+#' insper_violin(iris, x = Species, y = Sepal.Length, fill = "#E4002B")
 #'
 #' # Variable fill mapping
 #' insper_violin(iris, x = Species, y = Sepal.Length, fill = Species)
@@ -111,5 +111,3 @@ insper_violin <- function(
 
   return(p)
 }
-
-

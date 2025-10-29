@@ -42,13 +42,6 @@
 #' # With text labels showing values
 #' insper_barplot(mtcars, x = factor(cyl), y = mpg, text = TRUE)
 #'
-#' # Grouped bar plot by gear
-#' insper_barplot(mtcars, x = factor(cyl), y = mpg, fill = factor(gear))
-#'
-#' # Stacked bars
-#' insper_barplot(mtcars, x = factor(cyl), y = mpg,
-#'                fill = factor(gear), position = "stack")
-#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 #' @importFrom ggplot2 aes geom_col
@@ -197,4 +190,3 @@ insper_barplot <- function(
 
   return(p)
 }
-
