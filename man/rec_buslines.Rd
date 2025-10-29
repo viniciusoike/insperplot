@@ -39,28 +39,6 @@ studies on public transportation systems, focusing on efficiency,
 accessibility, and sustainability metrics to support evidence-based policy
 making.
 }
-\examples{
-\dontrun{
-library(dplyr)
-library(ggplot2)
-
-# Number of lines per company
-rec_buslines |>
-  count(abbrev_company, name_company) |>
-  arrange(desc(n)) |>
-  head(10) |>
-  ggplot(aes(x = reorder(abbrev_company, n), y = n)) +
-  geom_col(fill = get_insper_colors("teals1")) +
-  coord_flip() +
-  theme_insper() +
-  labs(
-    title = "Top 10 Bus Companies by Number of Lines",
-    subtitle = "Greater Recife Metropolitan Region",
-    x = "Company",
-    y = "Number of Lines"
-  )
-}
-}
 \seealso{
 \code{\link{rec_passengers}} for related passenger transport data
 }

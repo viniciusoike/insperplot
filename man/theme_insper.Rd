@@ -87,7 +87,7 @@ The function validates input parameters and will throw an error if invalid
 values are provided for \code{grid} or \code{border} arguments.
 }
 \examples{
-\dontrun{
+\dontshow{if (has_insper_fonts()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 
 # Basic usage with default settings
@@ -104,8 +104,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
   theme_insper(base_size = 14)
-}
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{import_insper_fonts}}, \code{\link{check_insper_fonts}}

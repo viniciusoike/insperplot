@@ -35,37 +35,4 @@ The data covers the period from 2018 onwards and can be used to analyze
 passenger flow patterns, peak hours, and the impact of events or policies on
 metro usage.
 }
-\examples{
-\dontrun{
-library(ggplot2)
-
-# Passenger entries by station
-ggplot(spo_metro, aes(x = date, y = value, color = name_station)) +
-  geom_line(alpha = 0.7) +
-  scale_color_insper_d(palette = "main") +
-  theme_insper() +
-  labs(
-    title = "São Paulo Metro Line 4 - Daily Passenger Entries",
-    x = "Date",
-    y = "Number of Entries",
-    color = "Station"
-  )
-
-# Top stations by average daily entries
-library(dplyr)
-spo_metro |>
-  group_by(name_station) |>
-  summarise(avg_entries = mean(value, na.rm = TRUE)) |>
-  arrange(desc(avg_entries)) |>
-  ggplot(aes(x = reorder(name_station, avg_entries), y = avg_entries)) +
-  geom_col(fill = get_insper_colors("teals1")) +
-  coord_flip() +
-  theme_insper() +
-  labs(
-    title = "Average Daily Entries by Station",
-    x = NULL,
-    y = "Average Daily Entries"
-  )
-}
-}
 \keyword{datasets}

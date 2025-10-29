@@ -47,36 +47,19 @@ Brazilian Central Bank's Time Series Management System (SGS).
   \item Oil production: 1389
   \item IBC-Br (seasonally adjusted): 24364
 }
-
-The IBC-Br (Índice de Atividade Econômica do Banco Central) is particularly
-important as it serves as a monthly proxy for GDP and is closely watched by
-policymakers and analysts.
 }
 \examples{
-\dontrun{
+\dontshow{if (has_insper_fonts()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 
-# Plot inflation over time
-ggplot(macro_series, aes(x = date, y = ipca)) +
-  geom_line(color = get_insper_colors("reds1")) +
-  theme_insper() +
+# Plot inflation over time using insper_timeseries
+recent_data <- subset(macro_series, date >= as.Date("2020-01-01"))
+insper_timeseries(recent_data, x = date, y = ipca) +
   labs(
     title = "Brazilian Inflation (IPCA)",
-    subtitle = "Monthly rate in percent",
-    x = "Date",
+    subtitle = "Monthly rate in percent (2020-present)",
     y = "IPCA (\%)"
   )
-
-# Compare multiple indicators
-library(tidyr)
-macro_series |>
-  select(date, ipca, ipi, ibcbr_dessaz) |>
-  pivot_longer(-date, names_to = "indicator", values_to = "value") |>
-  ggplot(aes(x = date, y = value, color = indicator)) +
-  geom_line() +
-  facet_wrap(~indicator, scales = "free_y") +
-  scale_color_insper_d(palette = "main") +
-  theme_insper()
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{datasets}

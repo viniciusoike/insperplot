@@ -738,23 +738,41 @@ setup_insper_fonts <- function(check_only = FALSE) {
   has_ragg <- requireNamespace("ragg", quietly = TRUE)
   has_systemfonts <- requireNamespace("systemfonts", quietly = TRUE)
 
-  # Check for locally installed fonts
+  # Check for locally installed fonts (check primary fonts)
   fonts_installed <- FALSE
+  has_georgia <- FALSE
+  has_inter <- FALSE
+  has_garamond <- FALSE
+  has_playfair <- FALSE
+
   if (has_systemfonts) {
     available_fonts <- try(systemfonts::system_fonts()$family, silent = TRUE)
     if (!inherits(available_fonts, "try-error")) {
+      has_georgia <- any(grepl("Georgia", available_fonts, ignore.case = TRUE))
+      has_inter <- any(grepl("Inter", available_fonts, ignore.case = TRUE))
       has_garamond <- any(grepl(
         "EB Garamond|Garamond",
         available_fonts,
         ignore.case = TRUE
       ))
-      has_barlow <- any(grepl("Barlow", available_fonts, ignore.case = TRUE))
-      fonts_installed <- has_garamond && has_barlow
+      has_playfair <- any(grepl(
+        "Playfair Display|Playfair",
+        available_fonts,
+        ignore.case = TRUE
+      ))
+      # Optimal setup: has primary fonts (Georgia + Inter)
+      # Good setup: has at least one title font and one body font
+      fonts_installed <- (has_georgia && has_inter) ||
+                         (has_georgia || has_garamond || has_playfair) && has_inter
     }
   }
 
   setup_status <- list(
     fonts_installed = fonts_installed,
+    has_georgia = has_georgia,
+    has_inter = has_inter,
+    has_garamond = has_garamond,
+    has_playfair = has_playfair,
     ragg_installed = has_ragg,
     setup_complete = fonts_installed && has_ragg
   )
@@ -818,15 +836,20 @@ setup_insper_fonts <- function(check_only = FALSE) {
     # Step 1: Install fonts if needed
     if (!fonts_installed) {
       cli::cli_h3("Step {step_num}: Install Insper Fonts Locally")
-      cli::cli_ol(c(
-        "Visit {.url https://fonts.google.com}",
-        "Search for {.strong EB Garamond} and download/install",
-        "Search for {.strong Barlow} and download/install",
-        "Restart R/RStudio after installation"
+      cli::cli_text("Primary fonts (recommended):")
+      cli::cli_ul(c(
+        "{.strong Georgia} - System font (already installed on most systems)",
+        "{.strong Inter} - Download from {.url https://fonts.google.com/specimen/Inter}"
+      ))
+      cli::cli_text("")
+      cli::cli_text("Optional fallback fonts:")
+      cli::cli_ul(c(
+        "{.strong EB Garamond} - {.url https://fonts.google.com/specimen/EB+Garamond}",
+        "{.strong Playfair Display} - {.url https://fonts.google.com/specimen/Playfair+Display}"
       ))
       cli::cli_text("")
       cli::cli_alert_info(
-        "After installing, run {.code check_insper_fonts()} to verify"
+        "After installing, restart R/RStudio and run {.code check_insper_fonts()} to verify"
       )
       cli::cli_text("")
       step_num <- step_num + 1
@@ -1026,4 +1049,32 @@ warn_palette_ignored <- function(aesthetic_type, palette, param_name) {
       "i" = "Remove {.code palette = {.val {palette}}} or use a variable for {.arg {param_name}}"
     ))
   }
+}
+
+#' Check if Insper Fonts are Available
+#'
+#' Helper function to determine if fonts required for examples are available.
+#' Used in conditional examples with \code{@examplesIf}.
+#'
+#' @return Logical. TRUE if at least one primary Insper font is available, FALSE otherwise
+#' @keywords internal
+#' @export
+has_insper_fonts <- function() {
+  # Only run examples in interactive sessions
+  # (fonts may be detected but not work with CMD check's graphics device)
+  if (!interactive()) {
+    return(FALSE)
+  }
+
+  # Check if systemfonts package is available
+  if (!requireNamespace("systemfonts", quietly = TRUE)) {
+    return(FALSE)
+  }
+
+  # Try to detect if primary fonts are available
+  tryCatch({
+    fonts <- systemfonts::system_fonts()$family
+    # Check for at least one of the primary fonts (Georgia or Inter)
+    any(grepl("Georgia|Inter", fonts, ignore.case = TRUE))
+  }, error = function(e) FALSE)
 }

@@ -35,39 +35,20 @@
 #'   \item IBC-Br (seasonally adjusted): 24364
 #' }
 #'
-#' The IBC-Br (Índice de Atividade Econômica do Banco Central) is particularly
-#' important as it serves as a monthly proxy for GDP and is closely watched by
-#' policymakers and analysts.
-#'
 #' @source Brazilian Central Bank (Banco Central do Brasil)
 #'   \url{https://www3.bcb.gov.br/sgspub/}
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf has_insper_fonts()
 #' library(ggplot2)
 #'
-#' # Plot inflation over time
-#' ggplot(macro_series, aes(x = date, y = ipca)) +
-#'   geom_line(color = get_insper_colors("reds1")) +
-#'   theme_insper() +
+#' # Plot inflation over time using insper_timeseries
+#' recent_data <- subset(macro_series, date >= as.Date("2020-01-01"))
+#' insper_timeseries(recent_data, x = date, y = ipca) +
 #'   labs(
 #'     title = "Brazilian Inflation (IPCA)",
-#'     subtitle = "Monthly rate in percent",
-#'     x = "Date",
+#'     subtitle = "Monthly rate in percent (2020-present)",
 #'     y = "IPCA (%)"
 #'   )
-#'
-#' # Compare multiple indicators
-#' library(tidyr)
-#' macro_series |>
-#'   select(date, ipca, ipi, ibcbr_dessaz) |>
-#'   pivot_longer(-date, names_to = "indicator", values_to = "value") |>
-#'   ggplot(aes(x = date, y = value, color = indicator)) +
-#'   geom_line() +
-#'   facet_wrap(~indicator, scales = "free_y") +
-#'   scale_color_insper_d(palette = "main") +
-#'   theme_insper()
-#' }
 "macro_series"
 
 
@@ -103,28 +84,6 @@
 #'   DOI: 10.60873/FK2/TLFP8L
 #'
 #' @seealso \code{\link{rec_passengers}} for related passenger transport data
-#'
-#' @examples
-#' \dontrun{
-#' library(dplyr)
-#' library(ggplot2)
-#'
-#' # Number of lines per company
-#' rec_buslines |>
-#'   count(abbrev_company, name_company) |>
-#'   arrange(desc(n)) |>
-#'   head(10) |>
-#'   ggplot(aes(x = reorder(abbrev_company, n), y = n)) +
-#'   geom_col(fill = get_insper_colors("teals1")) +
-#'   coord_flip() +
-#'   theme_insper() +
-#'   labs(
-#'     title = "Top 10 Bus Companies by Number of Lines",
-#'     subtitle = "Greater Recife Metropolitan Region",
-#'     x = "Company",
-#'     y = "Number of Lines"
-#'   )
-#' }
 "rec_buslines"
 
 
@@ -164,43 +123,6 @@
 #'   DOI: 10.60873/FK2/JEYM0J
 #'
 #' @seealso \code{\link{rec_buslines}} for bus line reference data
-#'
-#' @examples
-#' \dontrun{
-#' library(dplyr)
-#' library(ggplot2)
-#'
-#' # Daily total passengers across all lines
-#' rec_passengers |>
-#'   group_by(date) |>
-#'   summarise(total_passengers = sum(passengers, na.rm = TRUE)) |>
-#'   ggplot(aes(x = date, y = total_passengers)) +
-#'   geom_line(color = get_insper_colors("reds1")) +
-#'   theme_insper() +
-#'   labs(
-#'     title = "Daily Total Passengers - Greater Recife",
-#'     subtitle = "All bus lines combined",
-#'     x = "Date",
-#'     y = "Total Passengers"
-#'   )
-#'
-#' # Top 10 busiest lines
-#' rec_passengers |>
-#'   group_by(name_line) |>
-#'   summarise(avg_daily = mean(passengers, na.rm = TRUE)) |>
-#'   arrange(desc(avg_daily)) |>
-#'   head(10) |>
-#'   ggplot(aes(x = reorder(name_line, avg_daily), y = avg_daily)) +
-#'   geom_col(fill = get_insper_colors("teals1")) +
-#'   coord_flip() +
-#'   theme_insper() +
-#'   labs(
-#'     title = "Top 10 Busiest Bus Lines",
-#'     subtitle = "Average daily passengers",
-#'     x = NULL,
-#'     y = "Average Daily Passengers"
-#'   )
-#' }
 "rec_passengers"
 
 
@@ -230,37 +152,45 @@
 #' metro usage.
 #'
 #' @source São Paulo Metro Company (Companhia do Metropolitano de São Paulo)
-#'
-#' @examples
-#' \dontrun{
-#' library(ggplot2)
-#'
-#' # Passenger entries by station
-#' ggplot(spo_metro, aes(x = date, y = value, color = name_station)) +
-#'   geom_line(alpha = 0.7) +
-#'   scale_color_insper_d(palette = "main") +
-#'   theme_insper() +
-#'   labs(
-#'     title = "São Paulo Metro Line 4 - Daily Passenger Entries",
-#'     x = "Date",
-#'     y = "Number of Entries",
-#'     color = "Station"
-#'   )
-#'
-#' # Top stations by average daily entries
-#' library(dplyr)
-#' spo_metro |>
-#'   group_by(name_station) |>
-#'   summarise(avg_entries = mean(value, na.rm = TRUE)) |>
-#'   arrange(desc(avg_entries)) |>
-#'   ggplot(aes(x = reorder(name_station, avg_entries), y = avg_entries)) +
-#'   geom_col(fill = get_insper_colors("teals1")) +
-#'   coord_flip() +
-#'   theme_insper() +
-#'   labs(
-#'     title = "Average Daily Entries by Station",
-#'     x = NULL,
-#'     y = "Average Daily Entries"
-#'   )
-#' }
 "spo_metro"
+
+
+#' Global Fossil Fuel Consumption
+#'
+#' Primary energy consumption from fossil fuels (coal, oil, and gas) measured
+#' in terawatt-hours (TWh). Data covers global consumption from 1800 to recent years.
+#'
+#' @format A data frame with 231 rows and 5 variables:
+#' \describe{
+#'   \item{entity}{Character, name of the country or region (currently "World")}
+#'   \item{code}{Character, country/region code (OWID_WRL for World)}
+#'   \item{year}{Numeric, year of observation (1800-present)}
+#'   \item{fuel}{Ordered factor with 3 levels: Oil, Gas, Coal.
+#'     Levels are ordered for logical stacking in plots}
+#'   \item{consumption}{Numeric, primary energy consumption in terawatt-hours (TWh).
+#'     All values are positive, making this dataset ideal for area plots}
+#' }
+#'
+#' @details
+#' This dataset tracks the historical consumption of fossil fuels globally,
+#' showing the dramatic increase in energy use since the Industrial Revolution.
+#' The data is particularly useful for visualizing energy transitions and the
+#' relative importance of different fossil fuels over time.
+#'
+#' **Key features:**
+#' \itemize{
+#'   \item All consumption values are positive (no negative values)
+#'   \item Fuel types are ordered factors for better plot aesthetics
+#'   \item Covers over 200 years of energy history
+#'   \item Ideal for demonstrating area plots and stacked visualizations
+#' }
+#'
+#' The fuel factor is ordered as Oil > Gas > Coal, which creates an intuitive
+#' visual hierarchy when creating stacked area charts.
+#'
+#' @source Our World in Data (OWID)
+#'   \url{https://ourworldindata.org/grapher/global-fossil-fuel-consumption}
+#'   License: CC BY 4.0
+#'
+#' @seealso \code{\link{insper_area}} for creating area plots with this data
+"fossil_fuel"

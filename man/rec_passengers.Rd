@@ -43,43 +43,6 @@ planning decisions.
 With over 237,000 observations, the dataset enables comprehensive analysis
 of passenger flow patterns across different bus lines and time periods.
 }
-\examples{
-\dontrun{
-library(dplyr)
-library(ggplot2)
-
-# Daily total passengers across all lines
-rec_passengers |>
-  group_by(date) |>
-  summarise(total_passengers = sum(passengers, na.rm = TRUE)) |>
-  ggplot(aes(x = date, y = total_passengers)) +
-  geom_line(color = get_insper_colors("reds1")) +
-  theme_insper() +
-  labs(
-    title = "Daily Total Passengers - Greater Recife",
-    subtitle = "All bus lines combined",
-    x = "Date",
-    y = "Total Passengers"
-  )
-
-# Top 10 busiest lines
-rec_passengers |>
-  group_by(name_line) |>
-  summarise(avg_daily = mean(passengers, na.rm = TRUE)) |>
-  arrange(desc(avg_daily)) |>
-  head(10) |>
-  ggplot(aes(x = reorder(name_line, avg_daily), y = avg_daily)) +
-  geom_col(fill = get_insper_colors("teals1")) +
-  coord_flip() +
-  theme_insper() +
-  labs(
-    title = "Top 10 Busiest Bus Lines",
-    subtitle = "Average daily passengers",
-    x = NULL,
-    y = "Average Daily Passengers"
-  )
-}
-}
 \seealso{
 \code{\link{rec_buslines}} for bus line reference data
 }
