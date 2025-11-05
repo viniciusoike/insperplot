@@ -167,7 +167,7 @@ theme_insper <- function(
 
     # Title and subtitle styling
     plot.title = element_text(
-      size = rel(1.3), # 30% larger than base size
+      size = rel(1.4), # 40% larger than base size
       family = font_title, # Use title font
       color = get_insper_colors("black"),
       hjust = 0, # Left-align title

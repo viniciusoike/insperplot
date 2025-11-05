@@ -8,10 +8,8 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%",
-  fig.width = 8,
-  dev = "ragg_png"
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
@@ -78,43 +76,21 @@ install.packages("ragg")
 
 `insperplot` is built upon Insper's brand colors. To improve functionality, additional palettes were created based on these basic colors.
 
-```{r, echo = FALSE}
-library(insperplot)
-library(ggplot2)
-library(treemapify)
-library(dplyr)
-inds <- c(1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144)
-
-insper_cols <- get_palette_colors("main")
-
-dat <- tibble(
-  colors = factor(insper_cols, levels = insper_cols),
-  area = 1 / inds[1:length(colors)]
-)
-
-ggplot(dat, aes(area = area, fill = colors, label = colors)) +
-  geom_treemap() +
-  geom_treemap_text() +
-  scale_fill_manual(
-    values = insper_cols
-  ) +
-  theme(
-    legend.position = "none",
-    plot.margin = margin(10, 10, 10, 10)
-  )
-```
+<p align="center">
+  <img src="man/figures/readme-treemap.png" width="50%"/>
+</p>
 
 To use `insperplot` we recommend using `ggplot2`. The basic functions of the package are `theme_insper()` and the `scale_*_insper_*()` functions.
 
-```{r example}
+```{r example, eval = FALSE}
 library(insperplot)
 library(ggplot2)
 library(ragg)
 
 # Create a basic plot with Insper theme
 ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
-  geom_point(color = "#ffffff", size = 3, shape = 21, alpha = 0.9) +
-  scale_fill_insper_d() +
+  geom_point(color = "#ffffff", size = 4, shape = 21, alpha = 0.9) +
+  scale_fill_insper_d(name = NULL) +
   theme_insper() +
   labs(
     title = "Fuel Efficiency vs Weight",
@@ -124,13 +100,20 @@ ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
   )
 ```
 
+<p align="center">
+  <img src="man/figures/readme-mtcars-example.png" width="80%"/>
+</p>
 
 The package is based on Insper's brand colors.
 
-```{r}
+```{r, eval = FALSE}
 # View available colors
 show_insper_colors()
 ```
+
+<p align="center">
+  <img src="man/figures/readme-colors.png" width="80%"/>
+</p>
 
 insperplot includes several pre-defined palettes:
 
@@ -142,9 +125,13 @@ insperplot includes several pre-defined palettes:
 
 Use `list_palettes()` to see all available palettes with detailed information. To visualize the colors in each palette, use `show_insper_palette()`:
 
-```{r view-palettes}
+```{r view-palettes, eval = FALSE}
 show_insper_palette()
 ```
+
+<p align="center">
+  <img src="man/figures/readme-palette.png" width="80%"/>
+</p>
 
 ## Main Functions
 
