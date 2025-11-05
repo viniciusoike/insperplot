@@ -79,18 +79,10 @@ default.
 functionality, additional palettes were created based on these basic
 colors.
 
-    #> insperplot 1.3.3 loaded.
-    #> Font setup: ?setup_insper_fonts | Device setup: ?use_ragg_device
-    #> 
-    #> Attaching package: 'dplyr'
-    #> The following objects are masked from 'package:stats':
-    #> 
-    #>     filter, lag
-    #> The following objects are masked from 'package:base':
-    #> 
-    #>     intersect, setdiff, setequal, union
+<p align="center">
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/readme-treemap.png" width="50%"/>
+</p>
 
 To use `insperplot` we recommend using `ggplot2`. The basic functions of
 the package are `theme_insper()` and the `scale_*_insper_*()` functions.
@@ -102,8 +94,8 @@ library(ragg)
 
 # Create a basic plot with Insper theme
 ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
-  geom_point(color = "#ffffff", size = 3, shape = 21, alpha = 0.9) +
-  scale_fill_insper_d() +
+  geom_point(color = "#ffffff", size = 4, shape = 21, alpha = 0.9) +
+  scale_fill_insper_d(name = NULL) +
   theme_insper() +
   labs(
     title = "Fuel Efficiency vs Weight",
@@ -113,7 +105,10 @@ ggplot(mtcars, aes(x = wt, y = mpg, fill = factor(cyl))) +
   )
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<p align="center">
+
+<img src="man/figures/readme-mtcars-example.png" width="80%"/>
+</p>
 
 The package is based on Insper’s brand colors.
 
@@ -122,7 +117,10 @@ The package is based on Insper’s brand colors.
 show_insper_colors()
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<p align="center">
+
+<img src="man/figures/readme-colors.png" width="80%"/>
+</p>
 
 insperplot includes several pre-defined palettes:
 
@@ -142,7 +140,10 @@ information. To visualize the colors in each palette, use
 show_insper_palette()
 ```
 
-<img src="man/figures/README-view-palettes-1.png" width="100%" />
+<p align="center">
+
+<img src="man/figures/readme-palette.png" width="80%"/>
+</p>
 
 ## Main Functions
 
