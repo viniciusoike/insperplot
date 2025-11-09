@@ -65,3 +65,14 @@ inst/doc
 /.quarto/
 /doc/
 /Meta/
+
+# Development and planning files
+IMPLEMENTATION_PLAN.md
+inst/examples/
+
+# Binary archives in data-raw
+data-raw/*.zip
+data-raw/global-fossil-fuel-consumption/
+
+# Generated pkgdown assets
+pkgdown/favicon/

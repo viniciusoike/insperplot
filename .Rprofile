@@ -1,3 +1,0 @@
-if (interactive()) {
-  require(devtools)
-  }
