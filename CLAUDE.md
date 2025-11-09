@@ -7,11 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **insperplot** is an R package that extends ggplot2 with Insper Instituto de Ensino e Pesquisa's visual identity. It provides custom themes, color palettes, scales, and specialized plotting functions for academic and institutional use.
 
 **Key Info:**
-- Version: 0.9.0 (experimental lifecycle)
+- Version: 1.3.3 (stable lifecycle)
 - License: MIT
 - Minimum R version: 4.1.0
-- Main dependencies: ggplot2 (≥3.4.0), dplyr (≥1.1.0), scales (≥1.2.0)
-- Testing: testthat 3rd edition with 131+ tests, 94.8% coverage target
+- Main dependencies: ggplot2 (≥3.4.0), rlang (≥1.0.0), scales (≥1.2.0), cli
+- Testing: testthat 3rd edition with comprehensive test coverage
 
 ## Common Development Commands
 
@@ -72,7 +72,7 @@ This package follows **modern R development best practices** (2025 standards):
 - Font detection uses `systemfonts` package to check local installation
 
 **Color System (`R/utils.R`, `R/insper_palette.R`, `R/palette-utils.R`)**:
-- `show_insper_colors()`: Base color extraction (NOT `insper_col()` - deprecated in v0.9.0)
+- `show_insper_colors()`: Base color extraction (NOT `insper_col()` - removed in v1.0.0)
 - `insper_pal()`: Palette generator with discrete/continuous support
 - Palettes organized by type: sequential (reds, oranges, teals, grays), diverging (red_teal, diverging), qualitative (main, bright, contrast)
 - IMPORTANT: Old palette names like `reds_seq` deprecated → use `reds` (warnings until v1.0.0)
@@ -80,7 +80,7 @@ This package follows **modern R development best practices** (2025 standards):
 **Scales (`R/scales.R`)**:
 - `scale_color_insper_d()` / `scale_fill_insper_d()`: Discrete scales
 - `scale_color_insper_c()` / `scale_fill_insper_c()`: Continuous scales
-- CRITICAL: Old `scale_color_insper()` removed in v0.9.0 - must use `_d` or `_c` suffix
+- CRITICAL: Old `scale_color_insper()` removed in v1.0.0 - must use `_d` or `_c` suffix
 
 **Plotting Functions (`R/plots.R`)**:
 - 10 high-level plotting functions: barplot, scatterplot, timeseries, area, lollipop, boxplot, violin, heatmap, histogram, density
@@ -147,7 +147,8 @@ This package follows **modern R development best practices** (2025 standards):
 This package follows a deliberate API evolution:
 - v0.7.0: Removed orientation/label parameters from plot functions
 - v0.8.0: Renamed scale functions, deprecated `insper_col()`
-- v0.9.0: Removed deprecated functions, simplified palette names
+- v0.9.0: Simplified palette names
+- v1.0.0+: Removed deprecated functions, achieved stable API
 
 **When making breaking changes:**
 1. Deprecate in one release (show warnings, update NEWS.md)
@@ -250,17 +251,22 @@ The package website (_pkgdown.yml) organizes functions into categories:
 
 Website uses Insper colors in theme (primary: #E4002B, secondary: #009491).
 
-## Recent Major Changes (v0.9.0)
+## Recent Major Changes (v1.3.x)
 
-**BREAKING CHANGES:**
+**v1.3.3 (Latest):**
+- Fixed parameter naming in `insper_density()`: `bandwidth` → `bw` for ggplot2 consistency
+- Comprehensive test coverage for all plot functions (100% coverage milestone)
+- Added tests for `insper_density()` and `insper_histogram()`
+
+**v1.3.2:**
+- Added `get_palette_colors()` function for direct palette color extraction
+- Improved palette utilities
+
+**Earlier Breaking Changes (v0.9.0 - v1.0.0):**
 - Removed `scale_color_insper()` / `scale_fill_insper()` - use `_d` or `_c` suffix
 - Removed `insper_col()` - use `show_insper_colors()`
 - Simplified palette names: `reds_seq` → `reds`, `diverging_red_teal` → `red_teal`, etc.
-
-**Migration Support:**
-- Old palette names show deprecation warnings (removed in v1.0.0)
-- Comprehensive migration guide in NEWS.md
-- All documentation updated to new conventions
+- All deprecated functions removed; API now stable
 
 ## Future Considerations
 
