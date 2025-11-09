@@ -109,3 +109,142 @@ test_that("save_insper_plot handles different file formats", {
   expect_true(file.exists(temp_pdf))
   unlink(temp_pdf)
 })
+
+# Edge case tests ----
+
+test_that("format_num_br handles very small numbers", {
+  result <- format_num_br(0.000001, digits = 6)
+  expect_type(result, "character")
+  expect_match(result, "0,000001")
+})
+
+test_that("format_num_br handles very large numbers", {
+  result <- format_num_br(1e12, digits = 0)
+  expect_type(result, "character")
+  # Should have proper thousand separators
+  expect_match(result, "\\.")
+})
+
+test_that("format_num_br handles scientific notation input", {
+  result <- format_num_br(1.23e5, digits = 0)
+  expect_type(result, "character")
+  expect_match(result, "123\\.000")
+})
+
+test_that("format_num_br handles NA values", {
+  result <- format_num_br(NA, digits = 2)
+  expect_type(result, "character")
+})
+
+test_that("format_num_br handles Inf values", {
+  result <- format_num_br(Inf)
+  expect_type(result, "character")
+})
+
+test_that("format_num_br handles negative zero", {
+  result <- format_num_br(-0)
+  expect_type(result, "character")
+})
+
+test_that("format_num_br handles vector input", {
+  result <- format_num_br(c(1000, 2000, 3000), digits = 0)
+  expect_type(result, "character")
+  expect_length(result, 3)
+  expect_true(all(grepl("\\.", result)))
+})
+
+test_that("format_num_br currency with negative values", {
+  result <- format_num_br(-1234.56, currency = TRUE, digits = 2)
+  expect_match(result, "R\\$")
+  expect_match(result, "-")
+  expect_match(result, "1\\.234,56")
+})
+
+test_that("format_num_br percent with values > 1", {
+  # Values > 1 should give > 100%
+  result <- format_num_br(1.5, percent = TRUE, digits = 0)
+  expect_match(result, "150%")
+})
+
+test_that("format_num_br percent with negative values", {
+  result <- format_num_br(-0.1234, percent = TRUE, digits = 1)
+  expect_match(result, "-")
+  expect_match(result, "12,3%")
+})
+
+test_that("save_insper_plot validates plot input", {
+  skip_if_not_installed("ggplot2")
+  temp_file <- tempfile(fileext = ".png")
+
+  # Should error with non-plot object
+  expect_error(save_insper_plot("not a plot", temp_file))
+  expect_error(save_insper_plot(list(), temp_file))
+  expect_error(save_insper_plot(data.frame(), temp_file))
+})
+
+test_that("save_insper_plot handles edge case dimensions", {
+  skip_if_not_installed("ggplot2")
+  p <- ggplot2::ggplot(mtcars, ggplot2::aes(x = wt, y = mpg)) +
+    ggplot2::geom_point()
+
+  # Very small dimensions
+  temp_small <- tempfile(fileext = ".png")
+  expect_no_error(save_insper_plot(p, temp_small, width = 2, height = 2))
+  expect_true(file.exists(temp_small))
+  unlink(temp_small)
+
+  # Very large dimensions
+  temp_large <- tempfile(fileext = ".png")
+  expect_no_error(save_insper_plot(p, temp_large, width = 20, height = 15))
+  expect_true(file.exists(temp_large))
+  unlink(temp_large)
+})
+
+test_that("save_insper_plot handles different DPI values", {
+  skip_if_not_installed("ggplot2")
+  p <- ggplot2::ggplot(mtcars, ggplot2::aes(x = wt, y = mpg)) +
+    ggplot2::geom_point()
+
+  temp_file <- tempfile(fileext = ".png")
+  expect_no_error(save_insper_plot(p, temp_file, dpi = 300))
+  expect_true(file.exists(temp_file))
+  unlink(temp_file)
+})
+
+# Tests for insper_caption() ----
+
+test_that("insper_caption returns character", {
+  result <- insper_caption("Test source")
+  expect_type(result, "character")
+})
+
+test_that("insper_caption handles Portuguese language", {
+  result <- insper_caption("Fonte Teste", lang = "pt")
+  expect_match(result, "Fonte")
+})
+
+test_that("insper_caption handles English language", {
+  result <- insper_caption("Test source", lang = "en")
+  expect_match(result, "Source")
+})
+
+test_that("insper_caption includes custom note", {
+  result <- insper_caption("Test", note = "Custom note")
+  expect_match(result, "Custom note")
+})
+
+test_that("insper_caption validates lang parameter", {
+  expect_error(insper_caption("Test", lang = "fr"), "must be")
+})
+
+test_that("insper_caption handles empty source", {
+  result <- insper_caption("")
+  expect_type(result, "character")
+})
+
+test_that("insper_caption handles long source text", {
+  long_source <- paste(rep("Very long source", 20), collapse = " ")
+  result <- insper_caption(long_source)
+  expect_type(result, "character")
+  expect_match(result, "Very long source")
+})
