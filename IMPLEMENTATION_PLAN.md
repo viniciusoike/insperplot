@@ -2,14 +2,23 @@
 
 This document outlines the remaining improvements to implement, organized by priority.
 
-## Status: Quick Wins ✓ COMPLETED
+## 🎉 Phase 1: COMPLETED
 
-All quick wins have been completed (most were already implemented):
+### Quick Wins ✓
 - ✓ [data-masked] tags already removed from documentation
 - ✓ insper_heatmap() already has show_values = FALSE default
 - ✓ insper_boxplot() and insper_violin() already use iris in examples
 - ✓ format_num_br() already has comprehensive tests
 - ✓ CLAUDE.md version references updated to 1.3.3
+
+### Critical Improvements ✓
+- ✓ **All 9 plot functions already have `...` parameter implemented**
+- ✓ **Added 9 comprehensive tests for `...` functionality** (tests/testthat/test-plots.R)
+- ✓ **Verified dplyr not used in package code** (only in examples)
+
+**Files modified in Phase 1:**
+- `CLAUDE.md` (version updates)
+- `tests/testthat/test-plots.R` (+94 lines, 9 new test cases with 18 assertions)
 
 ---
 

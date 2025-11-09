@@ -353,3 +353,98 @@ test_that("insper_histogram static color works", {
   p <- insper_histogram(mtcars, x = mpg, fill = "steelblue")
   expect_s3_class(p, "ggplot")
 })
+
+# Tests for ... parameter functionality across plot functions
+test_that("insper_barplot ... parameter passes to geom_col", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(x = c("A", "B", "C"), y = c(1, 2, 3))
+  # Test width parameter (geom_col specific)
+  p1 <- insper_barplot(df, x = x, y = y, width = 0.5)
+  expect_s3_class(p1, "ggplot")
+  # Test alpha parameter
+  p2 <- insper_barplot(df, x = x, y = y, alpha = 0.5)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_scatterplot ... parameter passes to geom_point", {
+  skip_if_not_installed("ggplot2")
+  # Test shape parameter (geom_point specific)
+  p1 <- insper_scatterplot(mtcars, x = wt, y = mpg, shape = 17)
+  expect_s3_class(p1, "ggplot")
+  # Test stroke parameter (geom_point specific)
+  p2 <- insper_scatterplot(mtcars, x = wt, y = mpg, stroke = 2)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_timeseries ... parameter passes to geom_line", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:10, value = rnorm(10))
+  # Test linetype parameter (geom_line specific)
+  p1 <- insper_timeseries(df, x = time, y = value, linetype = "dashed")
+  expect_s3_class(p1, "ggplot")
+  # Test alpha parameter
+  p2 <- insper_timeseries(df, x = time, y = value, alpha = 0.7)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_area ... parameter passes to geom_area", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  # Test position parameter (geom_area specific)
+  p1 <- insper_area(df, x = time, y = value, position = "identity")
+  expect_s3_class(p1, "ggplot")
+  # Test na.rm parameter
+  p2 <- insper_area(df, x = time, y = value, na.rm = TRUE)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_histogram ... parameter passes to geom_histogram", {
+  skip_if_not_installed("ggplot2")
+  # Test binwidth parameter (geom_histogram specific)
+  p1 <- insper_histogram(mtcars, x = mpg, binwidth = 5)
+  expect_s3_class(p1, "ggplot")
+  # Test alpha parameter
+  p2 <- insper_histogram(mtcars, x = mpg, alpha = 0.8)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_density ... parameter passes to geom_density", {
+  skip_if_not_installed("ggplot2")
+  # Test n parameter (geom_density specific - number of points for density)
+  p1 <- insper_density(mtcars, x = mpg, n = 256)
+  expect_s3_class(p1, "ggplot")
+  # Test na.rm parameter
+  p2 <- insper_density(mtcars, x = mpg, na.rm = TRUE)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_boxplot ... parameter passes to geom_boxplot", {
+  skip_if_not_installed("ggplot2")
+  # Test width parameter (geom_boxplot specific)
+  p1 <- insper_boxplot(iris, x = Species, y = Sepal.Length, width = 0.5)
+  expect_s3_class(p1, "ggplot")
+  # Test outlier.shape parameter (geom_boxplot specific)
+  p2 <- insper_boxplot(iris, x = Species, y = Sepal.Length, outlier.shape = NA)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_violin ... parameter passes to geom_violin", {
+  skip_if_not_installed("ggplot2")
+  # Test width parameter (geom_violin specific)
+  p1 <- insper_violin(iris, x = Species, y = Sepal.Length, width = 0.8)
+  expect_s3_class(p1, "ggplot")
+  # Test trim parameter (geom_violin specific)
+  p2 <- insper_violin(iris, x = Species, y = Sepal.Length, trim = FALSE)
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_heatmap ... parameter passes to geom_tile", {
+  skip_if_not_installed("ggplot2")
+  cor_mat <- cor(mtcars[, 1:4])
+  # Test width parameter (geom_tile specific)
+  p1 <- insper_heatmap(cor_mat, width = 0.9)
+  expect_s3_class(p1, "ggplot")
+  # Test height parameter (geom_tile specific)
+  p2 <- insper_heatmap(cor_mat, height = 0.9)
+  expect_s3_class(p2, "ggplot")
+})
