@@ -19,17 +19,17 @@ library(dplyr)
 # The default should be show_value = FALSE
 insper_heatmap(mtcars, wt, mpg, show_value = FALSE)
 
-# This function doesn't work at all.
+# [RESOLVED v1.3.3] insper_density() now works correctly with bw parameter
 insper_density(mtcars, wt)
 
-# This function is very poorly implemented, the resuling plot is unaesthetic
-# and useless in several use cases.
-insper_lollipop(mtcars, cyl, mpg)
-# insper_lollipop() has to either make stronger assumptions about the shape
-# of the data or has to be removed.
-
-# I think this function should be removed. We can think of a better implementation
-# in the future.
+# [RESOLVED v1.3.3] insper_lollipop() - DECISION: NOT IMPLEMENTED
+# Lollipop charts are intentionally excluded from the package.
+# Rationale:
+# - Would require complex assumptions about data aggregation
+# - Can be easily created with standard ggplot2:
+#   ggplot(data, aes(x, y)) + geom_segment() + geom_point() + theme_insper()
+# - Or use insper_barplot() as starting point and customize
+# - Keeps package API focused on commonly-used, well-defined plot types
 
 # The examples of insper_boxplot() and insper_violin() should use iris and not
 # mtcars. The iris data set already has a Species column which is a factor

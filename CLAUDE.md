@@ -83,10 +83,11 @@ This package follows **modern R development best practices** (2025 standards):
 - CRITICAL: Old `scale_color_insper()` removed in v1.0.0 - must use `_d` or `_c` suffix
 
 **Plotting Functions (`R/plots.R`)**:
-- 10 high-level plotting functions: barplot, scatterplot, timeseries, area, lollipop, boxplot, violin, heatmap, histogram, density
+- 9 high-level plotting functions: barplot, scatterplot, timeseries, area, boxplot, violin, heatmap, histogram, density
 - All follow pattern: accept data + aesthetics, apply `theme_insper()`, return ggplot object
 - NO title/subtitle/caption parameters (removed in v0.7.0) - users must use `+ labs()` instead
 - NO orientation flip parameters (removed in v0.7.0) - users swap x/y or use `+ coord_flip()`
+- NOTE: `insper_lollipop()` intentionally NOT implemented - lollipop charts can be created with standard ggplot2 code or `insper_barplot()` with custom geoms
 
 **Utilities (`R/utils.R`)**:
 - Font setup: `setup_insper_fonts()` (interactive wizard), `check_insper_fonts()`, `import_insper_fonts()` (showtext fallback)
