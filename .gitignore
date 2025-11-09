@@ -8,6 +8,7 @@
 
 # User-specific files
 .Ruserdata
+.Rprofile
 
 # Example code in package build process
 *-Ex.R
@@ -69,6 +70,8 @@ inst/doc
 # Development and planning files
 IMPLEMENTATION_PLAN.md
 inst/examples/
+suggestions.R
+claude/
 
 # Binary archives in data-raw
 data-raw/*.zip
