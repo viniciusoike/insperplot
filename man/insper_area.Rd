@@ -10,7 +10,7 @@ insper_area(
   y,
   fill = NULL,
   palette = NULL,
-  stacked = FALSE,
+  stacked = NULL,
   area_alpha = 0.9,
   fill_color = get_insper_colors("teals1"),
   add_line = TRUE,
@@ -43,7 +43,9 @@ Options: "categorical", "main", "bright", "reds", "teals", etc.
 If NULL (default), uses "categorical". Only applies to variable mappings.}
 
 \item{stacked}{Logical. If TRUE and fill is provided, creates stacked areas.
-Default is FALSE}
+If NULL (default), automatically detects: stacks when `fill` is a variable
+mapping, otherwise uses overlapping areas. Set explicitly to FALSE to force
+overlapping areas even with fill mappings}
 
 \item{area_alpha}{Numeric. Transparency of areas (0-1). Default is 0.9}
 
@@ -70,6 +72,29 @@ A ggplot2 object
 Create area charts for time series data using Insper's visual identity.
 Supports both single and grouped/stacked areas.
 }
+\details{
+## Smart Stacking Behavior
+
+By default (`stacked = NULL`), the function automatically detects whether to
+stack areas based on context:
+\itemize{
+  \item When `fill` is a variable (e.g., `fill = category`): automatically
+        creates stacked areas to show part-to-whole relationships
+  \item When `fill` is missing or a static color: uses overlapping areas
+        (stacking has no effect)
+}
+
+You can override this behavior by explicitly setting `stacked = TRUE` (force
+stacking) or `stacked = FALSE` (force overlapping, useful for comparing
+distributions of different groups).
+
+## Line Overlay
+
+By default, a line is drawn on top of each area (`add_line = TRUE`). This
+helps emphasize trends and makes the areas more visually distinct. The line
+color matches the fill color. Set `add_line = FALSE` for cleaner appearance
+when comparing many groups.
+}
 \examples{
 \dontshow{if (has_insper_fonts()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
@@ -78,14 +103,24 @@ library(ggplot2)
 coal_data <- subset(fossil_fuel, fuel == "Coal" & year >= 1900)
 insper_area(coal_data, x = year, y = consumption)
 
-# Stacked area chart showing all fuels
+# Stacked area chart showing all fuels (automatically stacked when fill is provided)
 recent_data <- subset(fossil_fuel, year >= 1950)
 recent_data$fuel <- factor(recent_data$fuel, levels = c("Oil", "Gas", "Coal"))
-insper_area(recent_data, x = year, y = consumption,
-            fill = fuel, stacked = TRUE) +
+insper_area(recent_data, x = year, y = consumption, fill = fuel) +
   labs(
     title = "Global Fossil Fuel Consumption",
     subtitle = "Primary energy consumption by fuel type (1950-present)",
+    x = "Year",
+    y = "Consumption (TWh)",
+    fill = "Fuel Type"
+  )
+
+# Force overlapping areas (comparing distributions)
+insper_area(recent_data, x = year, y = consumption,
+            fill = fuel, stacked = FALSE) +
+  labs(
+    title = "Comparing Fuel Consumption Trends",
+    subtitle = "Overlapping areas show individual trajectories",
     x = "Year",
     y = "Consumption (TWh)",
     fill = "Fuel Type"

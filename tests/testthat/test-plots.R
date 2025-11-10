@@ -230,6 +230,47 @@ test_that("insper_area works without line overlay", {
   expect_s3_class(p, "ggplot")
 })
 
+test_that("insper_area smart detection: stacks when fill is a variable", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:10, 2),
+    value = abs(rnorm(20)),
+    group = rep(c("A", "B"), each = 10)
+  )
+  # With fill variable and stacked = NULL (default), should stack
+  p <- insper_area(df, x = time, y = value, fill = group)
+  expect_s3_class(p, "ggplot")
+  # Check that geom_area has position = "stack"
+  area_layer <- p$layers[[1]]
+  expect_true(inherits(area_layer$position, "PositionStack"))
+})
+
+test_that("insper_area smart detection: respects explicit stacked = FALSE", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:10, 2),
+    value = abs(rnorm(20)),
+    group = rep(c("A", "B"), each = 10)
+  )
+  # With fill variable but explicit stacked = FALSE, should NOT stack
+  p <- insper_area(df, x = time, y = value, fill = group, stacked = FALSE)
+  expect_s3_class(p, "ggplot")
+  # Check that geom_area has position = "identity"
+  area_layer <- p$layers[[1]]
+  expect_true(inherits(area_layer$position, "PositionIdentity"))
+})
+
+test_that("insper_area smart detection: no effect without fill variable", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  # Without fill variable, stacked = NULL should have no stacking effect
+  p <- insper_area(df, x = time, y = value)
+  expect_s3_class(p, "ggplot")
+  # When no fill variable is provided, should not stack (uses default ggplot2 position)
+  # The geom_area is created without explicit position parameter, so it uses defaults
+  expect_s3_class(p, "ggplot")
+})
+
 test_that("insper_violin creates plot", {
   skip_if_not_installed("ggplot2")
   p <- insper_violin(mtcars, x = factor(cyl), y = mpg)

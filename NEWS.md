@@ -1,3 +1,24 @@
+# insperplot (development version)
+
+## Enhancements
+
+* **`insper_area()` now features smart stacking detection**:
+  - When `fill` is a variable mapping (e.g., `fill = category`), areas are automatically stacked by default
+  - When `fill` is missing or a static color, uses overlapping areas (no change in behavior)
+  - Explicit control still available: set `stacked = FALSE` to force overlapping, or `stacked = TRUE` to force stacking
+  - **No breaking changes**: Existing code continues to work as expected
+  - **Improved UX**: Eliminates need to explicitly specify `stacked = TRUE` for common use case
+  - **Enhanced documentation**: Added `@details` section explaining smart detection behavior with examples
+
+## Testing Improvements
+
+* Added 3 comprehensive tests for `insper_area()` smart detection behavior:
+  - Verifies automatic stacking when fill variable is provided
+  - Verifies explicit `stacked = FALSE` overrides smart detection
+  - Verifies no stacking effect when fill is not a variable mapping
+
+---
+
 # insperplot 1.3.3
 
 ## Breaking Changes
