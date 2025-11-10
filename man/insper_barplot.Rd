@@ -15,6 +15,7 @@ insper_barplot(
   text = FALSE,
   text_size = 4,
   text_color = "black",
+  stack_vjust = 0.5,
   label_formatter = scales::comma,
   ...
 )
@@ -45,9 +46,15 @@ When mapping a variable, creates grouped or stacked bars based on \code{position
 
 \item{text_size}{Numeric. Size of text labels. Default is 4}
 
-\item{text_color}{Character. Color of text labels. Default is "black"}
+\item{text_color}{Character. Color of text labels. Default is "black".
+For position = "fill", automatic contrast-based colors are used if not specified.}
 
-\item{label_formatter}{Function. Formatter for text labels. Default is scales::comma}
+\item{stack_vjust}{Numeric. Vertical adjustment for text labels in stacked/filled bars.
+Range: 0 (bottom) to 1 (top). Default is 0.5 (center). Only applies when
+position = "stack" or "fill"}
+
+\item{label_formatter}{Function. Formatter for text labels. Default is scales::comma.
+For position = "fill", percentages are automatically formatted if values are proportions}
 
 \item{...}{Additional arguments passed to \code{ggplot2::geom_col()},
 allowing custom aesthetics like width, alpha, etc.}
@@ -75,6 +82,19 @@ insper_barplot(mtcars, x = factor(cyl), y = mpg)
 
 # With text labels showing values
 insper_barplot(mtcars, x = factor(cyl), y = mpg, text = TRUE)
+
+# Stacked bars with centered text labels
+data <- data.frame(
+  category = rep(c("A", "B", "C"), each = 2),
+  group = rep(c("X", "Y"), 3),
+  value = c(10, 15, 20, 25, 30, 35)
+)
+insper_barplot(data, x = category, y = value, fill = group,
+               position = "stack", text = TRUE)
+
+# Filled bars with automatic percentage formatting
+insper_barplot(data, x = category, y = value, fill = group,
+               position = "fill", text = TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

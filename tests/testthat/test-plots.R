@@ -12,7 +12,8 @@ test_that("insper_barplot validates data frame input", {
 
 test_that("insper_barplot validates position parameter", {
   df <- data.frame(x = c("A", "B"), y = c(1, 2), grp = c("X", "Y"))
-  expect_no_error(insper_barplot(df, x = x, y = y, fill = grp, position = "dodge"))
+  # Dodge warns about non-factor x but still works
+  expect_warning(insper_barplot(df, x = x, y = y, fill = grp, position = "dodge"), "factor")
   expect_no_error(insper_barplot(df, x = x, y = y, fill = grp, position = "stack"))
   expect_error(insper_barplot(df, x = x, y = y, fill = grp, position = "invalid"))
 })
@@ -24,7 +25,10 @@ test_that("insper_barplot handles grouped bars", {
     y = c(1, 2, 3, 4),
     grp = rep(c("X", "Y"), 2)
   )
-  p <- insper_barplot(df, x = x, y = y, fill = grp)
+  # Suppress warning about non-factor x (expected behavior)
+  suppressWarnings({
+    p <- insper_barplot(df, x = x, y = y, fill = grp)
+  })
   expect_s3_class(p, "ggplot")
 })
 
@@ -66,6 +70,87 @@ test_that("insper_barplot text parameter adds labels", {
   expect_s3_class(p, "ggplot")
   # Check that geom_text is present
   expect_true(any(sapply(p$layers, function(l) inherits(l$geom, "GeomText"))))
+})
+
+test_that("insper_barplot text labels work with stacked bars", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+  p <- insper_barplot(df, x = x, y = y, fill = grp, position = "stack", text = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check that geom_text has position_stack
+  text_layer <- p$layers[[which(sapply(p$layers, function(l) inherits(l$geom, "GeomText")))[1]]]
+  expect_true(inherits(text_layer$position, "PositionStack"))
+})
+
+test_that("insper_barplot text labels work with filled bars", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+  p <- insper_barplot(df, x = x, y = y, fill = grp, position = "fill", text = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check that geom_text has position_fill
+  text_layer <- p$layers[[which(sapply(p$layers, function(l) inherits(l$geom, "GeomText")))[1]]]
+  expect_true(inherits(text_layer$position, "PositionFill"))
+})
+
+test_that("insper_barplot stack_vjust parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+
+  # Test different stack_vjust values
+  p1 <- insper_barplot(df, x = x, y = y, fill = grp, position = "stack",
+                       text = TRUE, stack_vjust = 0)
+  p2 <- insper_barplot(df, x = x, y = y, fill = grp, position = "stack",
+                       text = TRUE, stack_vjust = 0.5)
+  p3 <- insper_barplot(df, x = x, y = y, fill = grp, position = "stack",
+                       text = TRUE, stack_vjust = 1)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+  expect_s3_class(p3, "ggplot")
+})
+
+test_that("insper_barplot warns when dodge used with non-factor x", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),  # character, not factor
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+
+  expect_warning(
+    insper_barplot(df, x = x, y = y, fill = grp, position = "dodge"),
+    "factor"
+  )
+})
+
+test_that("insper_barplot automatic percentage formatting for fill position", {
+  skip_if_not_installed("ggplot2")
+  # Test with proportion data (0-1)
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(0.4, 0.6, 0.3, 0.7),  # proportions
+    grp = rep(c("X", "Y"), 2)
+  )
+
+  p <- insper_barplot(df, x = x, y = y, fill = grp, position = "fill", text = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # The plot should build without errors
+  expect_no_error(ggplot2::ggplot_build(p))
 })
 
 test_that("insper_scatterplot creates plot", {

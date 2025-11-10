@@ -1116,3 +1116,50 @@ has_insper_fonts <- function() {
     error = function(e) FALSE
   )
 }
+
+#' Calculate Relative Luminance of a Color
+#'
+#' @param hex_color Character. Hex color code (e.g., "#E4002B")
+#' @return Numeric. Relative luminance value between 0 (black) and 1 (white)
+#' @noRd
+#' @keywords internal
+calculate_luminance <- function(hex_color) {
+  # Convert hex to RGB
+  rgb_vals <- grDevices::col2rgb(hex_color)[, 1] / 255
+
+  # Apply sRGB gamma correction
+  rgb_linear <- ifelse(
+    rgb_vals <= 0.03928,
+    rgb_vals / 12.92,
+    ((rgb_vals + 0.055) / 1.055)^2.4
+  )
+
+  # Calculate relative luminance (ITU-R BT.709)
+  luminance <- 0.2126 * rgb_linear[1] + 0.7152 * rgb_linear[2] + 0.0722 * rgb_linear[3]
+
+  return(luminance)
+}
+
+#' Choose Contrasting Text Color for Background
+#'
+#' @param bg_color Character. Background hex color code
+#' @param dark_color Character. Text color for light backgrounds. Default "#2C2C2C"
+#' @param light_color Character. Text color for dark backgrounds. Default "white"
+#' @param threshold Numeric. Luminance threshold (0-1). Default 0.5
+#' @return Character. Either dark_color or light_color based on background luminance
+#' @noRd
+#' @keywords internal
+get_contrast_text_color <- function(bg_color,
+                                    dark_color = "#2C2C2C",
+                                    light_color = "white",
+                                    threshold = 0.5) {
+  luminance <- calculate_luminance(bg_color)
+
+  # If background is light (high luminance), use dark text
+  # If background is dark (low luminance), use light text
+  if (luminance > threshold) {
+    return(dark_color)
+  } else {
+    return(light_color)
+  }
+}

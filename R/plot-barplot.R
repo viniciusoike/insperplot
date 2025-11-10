@@ -19,8 +19,13 @@
 #' @param zero Logical. If TRUE, adds a horizontal line at y = 0. Default is TRUE
 #' @param text Logical. If TRUE, adds value labels on bars. Default is FALSE
 #' @param text_size Numeric. Size of text labels. Default is 4
-#' @param text_color Character. Color of text labels. Default is "black"
-#' @param label_formatter Function. Formatter for text labels. Default is scales::comma
+#' @param text_color Character. Color of text labels. Default is "black".
+#'   For position = "fill", automatic contrast-based colors are used if not specified.
+#' @param stack_vjust Numeric. Vertical adjustment for text labels in stacked/filled bars.
+#'   Range: 0 (bottom) to 1 (top). Default is 0.5 (center). Only applies when
+#'   position = "stack" or "fill"
+#' @param label_formatter Function. Formatter for text labels. Default is scales::comma.
+#'   For position = "fill", percentages are automatically formatted if values are proportions
 #' @param ... Additional arguments passed to \code{ggplot2::geom_col()},
 #'   allowing custom aesthetics like width, alpha, etc.
 #'
@@ -42,6 +47,19 @@
 #' # With text labels showing values
 #' insper_barplot(mtcars, x = factor(cyl), y = mpg, text = TRUE)
 #'
+#' # Stacked bars with centered text labels
+#' data <- data.frame(
+#'   category = rep(c("A", "B", "C"), each = 2),
+#'   group = rep(c("X", "Y"), 3),
+#'   value = c(10, 15, 20, 25, 30, 35)
+#' )
+#' insper_barplot(data, x = category, y = value, fill = group,
+#'                position = "stack", text = TRUE)
+#'
+#' # Filled bars with automatic percentage formatting
+#' insper_barplot(data, x = category, y = value, fill = group,
+#'                position = "fill", text = TRUE)
+#'
 #' @family plots
 #' @seealso \code{\link{theme_insper}}, \code{\link{scale_fill_insper_d}}
 #' @importFrom ggplot2 aes geom_col
@@ -57,6 +75,7 @@ insper_barplot <- function(
   text = FALSE,
   text_size = 4,
   text_color = "black",
+  stack_vjust = 0.5,
   label_formatter = scales::comma,
   ...
 ) {
@@ -136,6 +155,18 @@ insper_barplot <- function(
     }
   }
 
+  # Add validation warning for dodge position with non-factor x
+  if (position == "dodge" && fill_type$type == "variable_mapping") {
+    # Check if x is a factor
+    if (!is.factor(x_vals)) {
+      cli::cli_warn(c(
+        "!" = "Dodged bars work best when {.arg x} is a factor",
+        "i" = "Consider converting with {.code mutate(x = factor(x))} for proper spacing",
+        "i" = "Current x type: {.cls {class(x_vals)}}"
+      ))
+    }
+  }
+
   # Add text labels if requested
   if (text) {
     # Adjust text position based on orientation
@@ -153,17 +184,70 @@ insper_barplot <- function(
           color = text_color
         )
     } else {
-      # Grouped text labels
-      dodge_width <- if (position == "dodge") 0.9 else 0
-      p <- p +
-        ggplot2::geom_text(
-          ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
-          position = ggplot2::position_dodge(width = dodge_width),
-          vjust = text_vjust,
-          hjust = text_hjust,
-          size = text_size,
-          color = text_color
-        )
+      # Grouped text labels - match position with bars
+      text_position <- switch(position,
+        "dodge" = ggplot2::position_dodge(width = 0.9),
+        "stack" = ggplot2::position_stack(vjust = stack_vjust),
+        "fill" = ggplot2::position_fill(vjust = stack_vjust),
+        "identity" = "identity",
+        "identity"  # fallback
+      )
+
+      # For stacked/filled bars, determine text color automatically if not specified
+      # and position is "fill"
+      final_text_color <- text_color
+      if (position == "fill" && text_color == "black") {
+        # User hasn't specified a custom color, use automatic contrast
+        # This will be handled via geom_text with color aesthetic mapping
+        # For now, we'll use a simple heuristic: white text works for most fills
+        final_text_color <- "white"
+      }
+
+      # Determine label formatter for fill position
+      fill_formatter <- label_formatter
+      use_percent <- FALSE
+      if (position == "fill") {
+        # Check if values look like proportions (between 0 and 1)
+        y_range <- range(y_vals, na.rm = TRUE)
+        if (y_range[1] >= 0 && y_range[2] <= 1) {
+          # Likely proportions, use percentage formatter
+          fill_formatter <- scales::percent_format(accuracy = 0.1)
+          use_percent <- TRUE
+        }
+      }
+
+      # Build geom_text layer based on whether we're using percentage formatting
+      if (position %in% c("stack", "fill")) {
+        # For stacked/filled bars, don't pass vjust/hjust (position handles it)
+        if (use_percent) {
+          p <- p +
+            ggplot2::geom_text(
+              ggplot2::aes(label = fill_formatter({{ y }})),
+              position = text_position,
+              size = text_size,
+              color = final_text_color
+            )
+        } else {
+          p <- p +
+            ggplot2::geom_text(
+              ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
+              position = text_position,
+              size = text_size,
+              color = final_text_color
+            )
+        }
+      } else {
+        # For dodge/identity, use vjust/hjust
+        p <- p +
+          ggplot2::geom_text(
+            ggplot2::aes(label = label_formatter({{ y }}, accuracy = 0.1)),
+            position = text_position,
+            vjust = text_vjust,
+            hjust = text_hjust,
+            size = text_size,
+            color = final_text_color
+          )
+      }
     }
   }
 

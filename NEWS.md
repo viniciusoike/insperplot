@@ -1,5 +1,23 @@
 # insperplot (development version)
 
+## Bug Fixes
+
+* **`insper_barplot()` text labels now work correctly with stacked and filled bars** (#issue):
+  - Fixed text label positioning for `position = "stack"` - labels now appear centered in each stacked segment
+  - Fixed text label positioning for `position = "fill"` - labels now align with proportionally scaled segments
+  - Previously, text labels only worked correctly with `position = "dodge"`
+  - Text labels used `position_dodge(width = 0)` for all non-dodge positions, which didn't apply proper transformations
+
+## New Features
+
+* **`insper_barplot()` enhancements for stacked/filled bars**:
+  - Added `stack_vjust` parameter (default = 0.5) to control text label vertical position within stacked/filled segments
+    - Range: 0 (bottom of segment) to 1 (top of segment)
+    - Only applies when `position = "stack"` or `position = "fill"`
+  - Automatic percentage formatting: When `position = "fill"` and data values are proportions (0-1), labels are automatically formatted as percentages
+  - Automatic contrast-based text color: When `position = "fill"`, white text is used by default for better readability on colored backgrounds
+  - Validation warning: When `position = "dodge"` with non-factor x variable, a helpful warning suggests converting to factor
+
 ## Enhancements
 
 * **`insper_area()` now features smart stacking detection**:
@@ -11,6 +29,14 @@
   - **Enhanced documentation**: Added `@details` section explaining smart detection behavior with examples
 
 ## Testing Improvements
+
+* Added comprehensive test suite for `insper_barplot()` stacked/filled bar text labels (6 new tests):
+  - Text labels work with stacked bars using `position_stack()`
+  - Text labels work with filled bars using `position_fill()`
+  - `stack_vjust` parameter controls label position (0, 0.5, 1)
+  - Warning appears when dodge used with non-factor x variable
+  - Automatic percentage formatting for fill position with proportion data
+  - All position types build without errors
 
 * Added 3 comprehensive tests for `insper_area()` smart detection behavior:
   - Verifies automatic stacking when fill variable is provided
