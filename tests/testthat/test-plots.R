@@ -574,3 +574,361 @@ test_that("insper_heatmap ... parameter passes to geom_tile", {
   p2 <- insper_heatmap(cor_mat, height = 0.9)
   expect_s3_class(p2, "ggplot")
 })
+
+# Extended tests for insper_scatterplot() ----
+
+test_that("insper_scatterplot validates data frame input", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_scatterplot("not a data frame", x = x, y = y),
+    "data.*must be a data frame"
+  )
+  expect_error(
+    insper_scatterplot(list(x = 1:5, y = 1:5), x = x, y = y),
+    "data.*must be a data frame"
+  )
+})
+
+test_that("insper_scatterplot validates smooth_method parameter", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "invalid"),
+    "smooth_method.*must be one of"
+  )
+})
+
+test_that("insper_scatterplot smooth_method variations work", {
+  skip_if_not_installed("ggplot2")
+  # Test all valid smooth methods
+  p_lm <- insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "lm")
+  p_loess <- insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "loess")
+  p_glm <- insper_scatterplot(mtcars, x = wt, y = mpg, add_smooth = TRUE, smooth_method = "glm")
+
+  expect_s3_class(p_lm, "ggplot")
+  expect_s3_class(p_loess, "ggplot")
+  expect_s3_class(p_glm, "ggplot")
+
+  # Check smooth layer is present
+  expect_true(any(sapply(p_lm$layers, function(l) inherits(l$geom, "GeomSmooth"))))
+})
+
+test_that("insper_scatterplot fill aesthetic with variable mapping", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, fill = factor(cyl), shape = 21)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_scatterplot fill aesthetic with static color", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, fill = "lightblue", shape = 21)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_scatterplot both color and fill variable mappings", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars,
+                          x = wt, y = mpg,
+                          color = factor(cyl),
+                          fill = factor(gear),
+                          shape = 21)
+  expect_s3_class(p, "ggplot")
+
+  # Check both scales are present
+  built <- ggplot2::ggplot_build(p)
+  expect_true(!is.null(p$scales$get_scales("colour")))
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+test_that("insper_scatterplot fill ignored for default shape", {
+  skip_if_not_installed("ggplot2")
+  # Shape 19 (default) doesn't support fill
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, fill = "lightblue")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_scatterplot static color string works", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, color = "#3CBFAE")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_scatterplot continuous color scale applied", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, color = hp)
+  expect_s3_class(p, "ggplot")
+
+  # Check continuous color scale is present
+  expect_true(!is.null(p$scales$get_scales("colour")))
+})
+
+test_that("insper_scatterplot continuous fill scale applied", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, fill = hp, shape = 21)
+  expect_s3_class(p, "ggplot")
+
+  # Check continuous fill scale is present
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+test_that("insper_scatterplot color and fill both continuous", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars,
+                          x = wt, y = mpg,
+                          color = hp,
+                          fill = disp,
+                          shape = 21)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_scatterplot default color when NULL", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg)
+  expect_s3_class(p, "ggplot")
+
+  # Should use default teals1 color
+  built <- ggplot2::ggplot_build(p)
+  expect_no_error(built)
+})
+
+test_that("insper_scatterplot palette parameter works with color", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl), palette = "bright")
+  p2 <- insper_scatterplot(mtcars, x = wt, y = mpg, color = factor(cyl), palette = "main")
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_scatterplot palette parameter works with fill", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg, fill = factor(cyl), palette = "contrast", shape = 21)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("insper_scatterplot warns when palette ignored", {
+  skip_if_not_installed("ggplot2")
+  # Palette should be ignored when both color and fill are static
+  expect_warning(
+    insper_scatterplot(mtcars, x = wt, y = mpg, color = "blue", fill = "red", palette = "bright", shape = 21),
+    "palette.*ignored"
+  )
+})
+
+test_that("insper_scatterplot point_size parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_scatterplot(mtcars, x = wt, y = mpg, point_size = 4)
+  p2 <- insper_scatterplot(mtcars, x = wt, y = mpg, point_size = 1)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_scatterplot point_alpha parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_scatterplot(mtcars, x = wt, y = mpg, point_alpha = 0.5)
+  p2 <- insper_scatterplot(mtcars, x = wt, y = mpg, point_alpha = 0.2)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_scatterplot shape 21-25 with color and fill", {
+  skip_if_not_installed("ggplot2")
+  # Test multiple fill-supporting shapes
+  for (shp in c(21, 22, 23, 24, 25)) {
+    p <- insper_scatterplot(mtcars,
+                            x = wt, y = mpg,
+                            color = "black",
+                            fill = factor(cyl),
+                            shape = shp)
+    expect_s3_class(p, "ggplot")
+  }
+})
+
+test_that("insper_scatterplot stroke parameter for outlined shapes", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars, x = wt, y = mpg,
+                          color = factor(cyl),
+                          shape = 21,
+                          stroke = 2)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_scatterplot discrete color with discrete fill", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_scatterplot(mtcars,
+                          x = wt, y = mpg,
+                          color = factor(cyl),
+                          fill = factor(gear),
+                          shape = 21)
+  expect_s3_class(p, "ggplot")
+
+  # Both should have discrete scales
+  expect_true(!is.null(p$scales$get_scales("colour")))
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+# Extended tests for insper_timeseries() ----
+
+test_that("insper_timeseries validates data frame input", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_timeseries("not a data frame", x = x, y = y),
+    "data.*must be a data frame"
+  )
+  expect_error(
+    insper_timeseries(list(x = 1:5, y = 1:5), x = x, y = y),
+    "data.*must be a data frame"
+  )
+})
+
+test_that("insper_timeseries static color string works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_timeseries(df, x = time, y = value, color = "#E4002B")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_timeseries default color when NULL", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_timeseries(df, x = time, y = value)
+  expect_s3_class(p, "ggplot")
+
+  # Should use default teals1 color
+  built <- ggplot2::ggplot_build(p)
+  expect_no_error(built)
+})
+
+test_that("insper_timeseries discrete color scale applied", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:20, 3),
+    value = c(cumsum(rnorm(20)), cumsum(rnorm(20)), cumsum(rnorm(20))),
+    group = rep(c("A", "B", "C"), each = 20)
+  )
+  p <- insper_timeseries(df, x = time, y = value, color = group)
+  expect_s3_class(p, "ggplot")
+
+  # Check discrete color scale is present
+  expect_true(!is.null(p$scales$get_scales("colour")))
+})
+
+test_that("insper_timeseries continuous color scale applied", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = 1:100,
+    value = cumsum(rnorm(100)),
+    intensity = seq(0, 1, length.out = 100)
+  )
+  p <- insper_timeseries(df, x = time, y = value, color = intensity)
+  expect_s3_class(p, "ggplot")
+
+  # Check continuous color scale is present
+  expect_true(!is.null(p$scales$get_scales("colour")))
+})
+
+test_that("insper_timeseries static color with add_points", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_timeseries(df, x = time, y = value, color = "#009491", add_points = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check both line and point layers present
+  has_line <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomLine")))
+  has_point <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_true(has_line)
+  expect_true(has_point)
+})
+
+test_that("insper_timeseries variable color with add_points", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:20, 2),
+    value = c(cumsum(rnorm(20)), cumsum(rnorm(20))),
+    group = rep(c("A", "B"), each = 20)
+  )
+  p <- insper_timeseries(df, x = time, y = value, color = group, add_points = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check both layers present
+  has_line <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomLine")))
+  has_point <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_true(has_line)
+  expect_true(has_point)
+})
+
+test_that("insper_timeseries handles Date x-axis", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    date = as.Date("2020-01-01") + 0:19,
+    value = cumsum(rnorm(20))
+  )
+  p <- insper_timeseries(df, x = date, y = value)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_timeseries handles POSIXct x-axis", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    datetime = as.POSIXct("2020-01-01 00:00:00") + (0:19) * 3600,
+    value = cumsum(rnorm(20))
+  )
+  p <- insper_timeseries(df, x = datetime, y = value)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_timeseries handles numeric x-axis", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    year = 2000:2019,
+    value = cumsum(rnorm(20))
+  )
+  p <- insper_timeseries(df, x = year, y = value)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_timeseries palette parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = rep(1:20, 3),
+    value = c(cumsum(rnorm(20)), cumsum(rnorm(20)), cumsum(rnorm(20))),
+    group = rep(c("A", "B", "C"), each = 20)
+  )
+  p1 <- insper_timeseries(df, x = time, y = value, color = group, palette = "bright")
+  p2 <- insper_timeseries(df, x = time, y = value, color = group, palette = "contrast")
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_timeseries warns when palette ignored", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+
+  # Palette should be ignored when color is static
+  expect_warning(
+    insper_timeseries(df, x = time, y = value, color = "blue", palette = "bright"),
+    "palette.*ignored"
+  )
+})
+
+test_that("insper_timeseries line_width parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p1 <- insper_timeseries(df, x = time, y = value, line_width = 1.5)
+  p2 <- insper_timeseries(df, x = time, y = value, line_width = 0.5)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
