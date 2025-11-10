@@ -216,6 +216,15 @@ save_insper_plot <- function(
   device = NULL,
   ...
 ) {
+  # Validate that plot is a ggplot object
+  if (!ggplot2::is.ggplot(plot)) {
+    cli::cli_abort(c(
+      "{.arg plot} must be a ggplot object",
+      "x" = "You supplied an object of class {.cls {class(plot)}}",
+      "i" = "Create a plot using ggplot2 or insperplot functions first"
+    ))
+  }
+
   # Auto-detect ragg for PNG files if device not specified
   if (is.null(device) && grepl("\\.png$", filename, ignore.case = TRUE)) {
     if (requireNamespace("ragg", quietly = TRUE)) {
@@ -270,6 +279,9 @@ format_num_br <- function(
   currency = FALSE,
   ...
 ) {
+  if (!is.numeric(x)) {
+    cli::cli_abort("{.arg x} must be numeric")
+  }
   if (percent) {
     return(scales::number(
       x * 100,

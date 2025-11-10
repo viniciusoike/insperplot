@@ -134,17 +134,20 @@ insper_scatterplot <- function(
   } else if (has_color_mapping) {
     # Only color is variable mapping
     geom_params <- list(size = point_size, alpha = point_alpha)
-    if (fill_type$type == "static_color") {
+
+    # Check if shape supports fill before adding fill aesthetic
+    dots <- list(...)
+    user_shape <- dots$shape
+    supports_fill <- !is.null(user_shape) && is.numeric(user_shape) && user_shape %in% 21:25
+
+    if (fill_type$type == "static_color" && supports_fill) {
       geom_params$fill <- fill_type$value
     }
 
     p <- p +
-      ggplot2::geom_point(
-        ggplot2::aes(color = {{ color }}),
-        size = geom_params$size,
-        alpha = geom_params$alpha,
-        fill = geom_params$fill,
-        ...
+      do.call(
+        ggplot2::geom_point,
+        c(list(mapping = ggplot2::aes(color = {{ color }})), geom_params, list(...))
       )
 
     # Add appropriate color scale
@@ -179,25 +182,35 @@ insper_scatterplot <- function(
     }
   } else {
     # Neither is variable mapping - use static colors
-    geom_params <- list(size = point_size, alpha = point_alpha)
+    geom_params <- list(
+      color = if (color_type$type == "static_color") {
+        color_type$value
+      } else {
+        get_insper_colors("teals1") # Default
+      },
+      size = point_size,
+      alpha = point_alpha
+    )
 
-    if (color_type$type == "static_color") {
-      geom_params$color <- color_type$value
-    } else {
-      geom_params$color <- get_insper_colors("teals1") # Default
-    }
+    # Check if user provided a shape that supports fill (21-25)
+    # Extract shape from ... if provided
+    dots <- list(...)
+    user_shape <- dots$shape
 
-    if (fill_type$type == "static_color") {
+    # Only add fill if user provided it AND either:
+    # 1. Shape supports fill (21-25), OR
+    # 2. No shape specified (default shape 19 doesn't support fill, so skip)
+    supports_fill <- !is.null(user_shape) && is.numeric(user_shape) && user_shape %in% 21:25
+
+    if (fill_type$type == "static_color" && supports_fill) {
       geom_params$fill <- fill_type$value
     }
 
+    # Build geom_point call with conditional fill parameter
     p <- p +
-      ggplot2::geom_point(
-        color = geom_params$color,
-        fill = geom_params$fill,
-        size = geom_params$size,
-        alpha = geom_params$alpha,
-        ...
+      do.call(
+        ggplot2::geom_point,
+        c(geom_params, list(...))
       )
   }
 
