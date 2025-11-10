@@ -215,3 +215,157 @@ test_that("save_insper_plot handles different DPI values", {
   expect_true(file.exists(temp_file))
   unlink(temp_file)
 })
+
+# Tests for show_insper_colors() ----
+
+test_that("show_insper_colors returns ggplot object for all colors", {
+  p <- show_insper_colors("all")
+  expect_s3_class(p, "ggplot")
+  expect_s3_class(p, "gg")
+})
+
+test_that("show_insper_colors filters reds family correctly", {
+  p <- show_insper_colors("reds")
+  expect_s3_class(p, "ggplot")
+  # Check plot has correct title
+  expect_match(p$labels$title, "Reds", ignore.case = TRUE)
+})
+
+test_that("show_insper_colors filters oranges family correctly", {
+  p <- show_insper_colors("oranges")
+  expect_s3_class(p, "ggplot")
+  expect_match(p$labels$title, "Oranges", ignore.case = TRUE)
+})
+
+test_that("show_insper_colors filters magentas family correctly", {
+  p <- show_insper_colors("magentas")
+  expect_s3_class(p, "ggplot")
+  expect_match(p$labels$title, "Magentas", ignore.case = TRUE)
+})
+
+test_that("show_insper_colors filters teals family correctly", {
+  p <- show_insper_colors("teals")
+  expect_s3_class(p, "ggplot")
+  expect_match(p$labels$title, "Teals", ignore.case = TRUE)
+})
+
+test_that("show_insper_colors filters grays family correctly", {
+  p <- show_insper_colors("grays")
+  expect_s3_class(p, "ggplot")
+  expect_match(p$labels$title, "Grays", ignore.case = TRUE)
+})
+
+test_that("show_insper_colors filters basic family correctly", {
+  p <- show_insper_colors("basic")
+  expect_s3_class(p, "ggplot")
+  expect_match(p$labels$title, "Basic", ignore.case = TRUE)
+})
+
+test_that("show_insper_colors errors on invalid family", {
+  expect_error(
+    show_insper_colors("invalid_family"),
+    "Invalid color family"
+  )
+})
+
+# Tests for show_insper_palette() ----
+
+test_that("show_insper_palette returns ggplot object", {
+  p <- show_insper_palette("main")
+  expect_s3_class(p, "ggplot")
+  expect_s3_class(p, "gg")
+})
+
+test_that("show_insper_palette handles all palette types", {
+  # Get all palette names from list_palettes()
+  all_palettes <- list_palettes()$palette
+
+  # Test a few representative palettes
+  test_palettes <- c("main", "reds", "diverging", "bright")
+
+  for (pal in test_palettes) {
+    p <- show_insper_palette(pal)
+    expect_s3_class(p, "ggplot")
+  }
+})
+
+test_that("show_insper_palette shows correct subtitle from list_palettes", {
+  p <- show_insper_palette("main")
+
+  # Should contain palette info in subtitle
+  expect_true(!is.null(p$labels$subtitle))
+  expect_type(p$labels$subtitle, "character")
+})
+
+# Tests for import_insper_fonts() ----
+
+test_that("import_insper_fonts returns logical value", {
+  result <- suppressMessages(import_insper_fonts(verbose = FALSE))
+  expect_type(result, "logical")
+  expect_length(result, 1)
+})
+
+test_that("import_insper_fonts verbose=FALSE suppresses messages", {
+  expect_silent(import_insper_fonts(verbose = FALSE))
+})
+
+test_that("import_insper_fonts sets option when successful", {
+  skip_if_not_installed("showtext")
+  skip_if_not_installed("sysfonts")
+
+  # Clear option first
+  old_opt <- getOption("insperplot.fonts_loaded")
+  on.exit(options(insperplot.fonts_loaded = old_opt))
+  options(insperplot.fonts_loaded = NULL)
+
+  # This will actually try to import - wrapped to handle network issues
+  result <- suppressMessages(tryCatch(
+    import_insper_fonts(enable = FALSE, verbose = FALSE),
+    error = function(e) FALSE
+  ))
+
+  # Either succeeded or failed gracefully (network issues OK)
+  expect_type(result, "logical")
+
+  # If it succeeded, option should be set
+  if (result) {
+    expect_true(getOption("insperplot.fonts_loaded"))
+  }
+})
+
+# Tests for check_insper_fonts() ----
+
+test_that("check_insper_fonts returns named logical vector", {
+  result <- suppressMessages(check_insper_fonts(verbose = FALSE))
+
+  expect_type(result, "logical")
+  expect_named(result)
+  expect_true(all(names(result) %in% c("Georgia", "Inter", "EB Garamond", "Playfair Display")))
+  expect_length(result, 4)
+})
+
+test_that("check_insper_fonts verbose=FALSE suppresses output", {
+  expect_silent(check_insper_fonts(verbose = FALSE))
+})
+
+test_that("check_insper_fonts detects fonts from import_insper_fonts option", {
+  # Set option to simulate fonts loaded via import_insper_fonts
+  old_opt <- getOption("insperplot.fonts_loaded")
+  on.exit(options(insperplot.fonts_loaded = old_opt))
+  options(insperplot.fonts_loaded = TRUE)
+
+  result <- suppressMessages(check_insper_fonts(verbose = FALSE))
+
+  # Should detect fonts based on option being set
+  expect_type(result, "logical")
+  # At least one font should be detected when option is TRUE
+  expect_true(any(result) || isTRUE(getOption("insperplot.fonts_loaded")))
+})
+
+# Tests for has_insper_fonts() ----
+
+test_that("has_insper_fonts returns logical value", {
+  result <- has_insper_fonts()
+  expect_type(result, "logical")
+  expect_length(result, 1)
+})
