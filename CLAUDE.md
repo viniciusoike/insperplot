@@ -93,7 +93,6 @@ This package follows **modern R development best practices** (2025 standards):
 - Font setup: `setup_insper_fonts()` (interactive wizard), `check_insper_fonts()`, `import_insper_fonts()` (showtext fallback)
 - Graphics: `use_ragg_device()` (ragg setup helper), `save_insper_plot()` (auto-detects ragg)
 - Brazilian formatters: `format_brl()`, `format_percent_br()`, `format_num_br()`
-- Caption builder: `insper_caption()` with Portuguese/English support
 
 **Data (`R/data.R`, `data/`):**
 - 4 datasets: `macro_series` (Brazilian economic indicators), `rec_buslines`/`rec_passengers` (Recife public transport), `spo_metro` (São Paulo metro ridership)

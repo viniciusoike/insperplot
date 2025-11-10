@@ -124,8 +124,9 @@ For official Insper communications and materials, please visit:
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/viniciusreginatto/insperplot}
-  \item Report bugs at \url{https://github.com/viniciusreginatto/insperplot/issues}
+  \item \url{https://viniciusoike.github.io/insperplot/}
+  \item \url{https://github.com/viniciusoike/insperplot}
+  \item Report bugs at \url{https://github.com/viniciusoike/insperplot/issues}
 }
 
 

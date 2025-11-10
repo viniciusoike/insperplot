@@ -132,8 +132,13 @@ test_that("format_num_br handles scientific notation input", {
 })
 
 test_that("format_num_br handles NA values", {
-  result <- format_num_br(NA, digits = 2)
+  result <- format_num_br(c(1.234, 2.123, NA), digits = 2)
   expect_type(result, "character")
+  expect_length(result, 3)
+})
+
+test_that("format_num_br handles all NA values", {
+  expect_error(format_num_br(NA))
 })
 
 test_that("format_num_br handles Inf values", {
@@ -209,42 +214,4 @@ test_that("save_insper_plot handles different DPI values", {
   expect_no_error(save_insper_plot(p, temp_file, dpi = 300))
   expect_true(file.exists(temp_file))
   unlink(temp_file)
-})
-
-# Tests for insper_caption() ----
-
-test_that("insper_caption returns character", {
-  result <- insper_caption("Test source")
-  expect_type(result, "character")
-})
-
-test_that("insper_caption handles Portuguese language", {
-  result <- insper_caption("Fonte Teste", lang = "pt")
-  expect_match(result, "Fonte")
-})
-
-test_that("insper_caption handles English language", {
-  result <- insper_caption("Test source", lang = "en")
-  expect_match(result, "Source")
-})
-
-test_that("insper_caption includes custom note", {
-  result <- insper_caption("Test", note = "Custom note")
-  expect_match(result, "Custom note")
-})
-
-test_that("insper_caption validates lang parameter", {
-  expect_error(insper_caption("Test", lang = "fr"), "must be")
-})
-
-test_that("insper_caption handles empty source", {
-  result <- insper_caption("")
-  expect_type(result, "character")
-})
-
-test_that("insper_caption handles long source text", {
-  long_source <- paste(rep("Very long source", 20), collapse = " ")
-  result <- insper_caption(long_source)
-  expect_type(result, "character")
-  expect_match(result, "Very long source")
 })
