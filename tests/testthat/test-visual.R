@@ -88,7 +88,7 @@ test_that("insper_barplot with text labels renders correctly", {
 })
 
 test_that("insper_barplot with grouped bars renders correctly", {
-  p <- insper_barplot(test_df, x = category, y = value, fill_var = group)
+  p <- insper_barplot(test_df, x = category, y = value, fill = group)
   vdiffr::expect_doppelganger("barplot_grouped", p)
 })
 
@@ -114,7 +114,7 @@ test_that("insper_timeseries with groups renders correctly", {
     value = cumsum(rnorm(40)),
     group = rep(c("A", "B"), each = 20)
   )
-  p <- insper_timeseries(ts_data, x = time, y = value, group = group)
+  p <- insper_timeseries(ts_data, x = time, y = value, color = group)
   vdiffr::expect_doppelganger("timeseries_grouped", p)
 })
 

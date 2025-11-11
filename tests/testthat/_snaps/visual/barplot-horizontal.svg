@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='576.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<rect x='0.00' y='0.00' width='720.00' height='576.00' style='stroke-width: 1.16; stroke: #FEFEFE; fill: #FEFEFE;' />
+</g>
+<defs>
+  <clipPath id='cpMzkuNTJ8NzA1LjA2fDI4Ljc0fDUzOS45Mw=='>
+    <rect x='39.52' y='28.74' width='665.53' height='511.19' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMzkuNTJ8NzA1LjA2fDI4Ljc0fDUzOS45Mw==)'>
+<rect x='39.52' y='28.74' width='665.53' height='511.19' style='stroke-width: 1.16; stroke: #FEFEFE; fill: #FEFEFE;' />
+<polyline points='39.52,466.90 705.06,466.90 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
+<polyline points='39.52,345.19 705.06,345.19 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
+<polyline points='39.52,223.48 705.06,223.48 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
+<polyline points='39.52,101.77 705.06,101.77 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
+<rect x='39.52' y='412.13' width='201.68' height='109.54' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #E4002B;' />
+<rect x='39.52' y='290.42' width='504.19' height='109.54' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #E4002B;' />
+<rect x='39.52' y='168.71' width='302.51' height='109.54' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #E4002B;' />
+<rect x='39.52' y='47.00' width='605.03' height='109.54' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #E4002B;' />
+<line x1='39.52' y1='539.93' x2='39.52' y2='28.74' style='stroke-width: 2.13; stroke-linecap: butt;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<text x='34.14' y='469.93' text-anchor='end' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='5.87px' lengthAdjust='spacingAndGlyphs'>A</text>
+<text x='34.14' y='348.22' text-anchor='end' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='5.87px' lengthAdjust='spacingAndGlyphs'>B</text>
+<text x='34.14' y='226.51' text-anchor='end' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='6.36px' lengthAdjust='spacingAndGlyphs'>C</text>
+<text x='34.14' y='104.79' text-anchor='end' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='6.36px' lengthAdjust='spacingAndGlyphs'>D</text>
+<text x='39.52' y='551.37' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='241.20' y='551.37' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>10</text>
+<text x='442.88' y='551.37' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>20</text>
+<text x='644.55' y='551.37' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='9.79px' lengthAdjust='spacingAndGlyphs'>30</text>
+<text x='372.29' y='563.75' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='26.30px' lengthAdjust='spacingAndGlyphs'>value</text>
+<text transform='translate(22.51,284.34) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='42.20px' lengthAdjust='spacingAndGlyphs'>category</text>
+<text x='39.52' y='22.16' style='font-size: 15.40px; font-family: sans;' textLength='122.43px' lengthAdjust='spacingAndGlyphs'>barplot_horizontal</text>
+</g>
+</svg>

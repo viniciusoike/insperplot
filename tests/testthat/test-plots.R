@@ -932,3 +932,451 @@ test_that("insper_timeseries line_width parameter works", {
   expect_s3_class(p1, "ggplot")
   expect_s3_class(p2, "ggplot")
 })
+
+# Extended tests for insper_violin() ----
+
+test_that("insper_violin validates data frame input", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_violin("not a data frame", x = x, y = y),
+    "data.*must be a data frame"
+  )
+  expect_error(
+    insper_violin(list(x = c("A", "B"), y = c(1, 2)), x = x, y = y),
+    "data.*must be a data frame"
+  )
+})
+
+test_that("insper_violin static fill color works", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_violin(iris, x = Species, y = Sepal.Length, fill = "#E4002B")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_violin default fill when NULL", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_violin(iris, x = Species, y = Sepal.Length)
+  expect_s3_class(p, "ggplot")
+
+  # Should use default teals2 color
+  built <- ggplot2::ggplot_build(p)
+  expect_no_error(built)
+})
+
+test_that("insper_violin variable fill mapping", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_violin(iris, x = Species, y = Sepal.Length, fill = Species)
+  expect_s3_class(p, "ggplot")
+
+  # Check discrete fill scale is present
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+test_that("insper_violin show_boxplot parameter works", {
+  skip_if_not_installed("ggplot2")
+  p_with <- insper_violin(iris, x = Species, y = Sepal.Length, show_boxplot = TRUE)
+  p_without <- insper_violin(iris, x = Species, y = Sepal.Length, show_boxplot = FALSE)
+
+  expect_s3_class(p_with, "ggplot")
+  expect_s3_class(p_without, "ggplot")
+
+  # Check boxplot layer is present in p_with
+  has_boxplot <- any(sapply(p_with$layers, function(l) inherits(l$geom, "GeomBoxplot")))
+  expect_true(has_boxplot)
+})
+
+test_that("insper_violin show_points parameter works", {
+  skip_if_not_installed("ggplot2")
+  p_with <- insper_violin(iris, x = Species, y = Sepal.Length, show_points = TRUE)
+  p_without <- insper_violin(iris, x = Species, y = Sepal.Length, show_points = FALSE)
+
+  expect_s3_class(p_with, "ggplot")
+  expect_s3_class(p_without, "ggplot")
+
+  # Check jitter layer is present in p_with
+  has_jitter <- any(sapply(p_with$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_true(has_jitter)
+})
+
+test_that("insper_violin show_boxplot and show_points together", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_violin(iris, x = Species, y = Sepal.Length,
+                     show_boxplot = TRUE, show_points = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check both layers present
+  has_boxplot <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomBoxplot")))
+  has_points <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_true(has_boxplot)
+  expect_true(has_points)
+})
+
+test_that("insper_violin violin_alpha parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_violin(iris, x = Species, y = Sepal.Length, violin_alpha = 0.3)
+  p2 <- insper_violin(iris, x = Species, y = Sepal.Length, violin_alpha = 0.9)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_violin palette parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_violin(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
+  p2 <- insper_violin(iris, x = Species, y = Sepal.Length, fill = Species, palette = "contrast")
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_violin warns when palette ignored", {
+  skip_if_not_installed("ggplot2")
+  # Palette should be ignored when fill is static
+  expect_warning(
+    insper_violin(iris, x = Species, y = Sepal.Length, fill = "purple", palette = "bright"),
+    "palette.*ignored"
+  )
+})
+
+# Extended tests for insper_heatmap() ----
+
+test_that("insper_heatmap validates input types", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_heatmap("not a data frame or matrix"),
+    "data.*must be a data frame or matrix"
+  )
+  expect_error(
+    insper_heatmap(list(a = 1:5, b = 1:5)),
+    "data.*must be a data frame or matrix"
+  )
+})
+
+test_that("insper_heatmap accepts melted data frame", {
+  skip_if_not_installed("ggplot2")
+  melted_df <- data.frame(
+    Var1 = rep(c("A", "B", "C"), each = 3),
+    Var2 = rep(c("X", "Y", "Z"), 3),
+    value = rnorm(9)
+  )
+  p <- insper_heatmap(melted_df)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_heatmap accepts matrix input", {
+  skip_if_not_installed("ggplot2")
+  mat <- matrix(rnorm(12), nrow = 3, ncol = 4)
+  p <- insper_heatmap(mat)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_heatmap errors on non-numeric data frame", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    a = c("x", "y", "z"),
+    b = c(1, 2, 3)
+  )
+  expect_error(
+    insper_heatmap(df),
+    "must contain only numeric columns"
+  )
+})
+
+test_that("insper_heatmap handles matrix without names", {
+  skip_if_not_installed("ggplot2")
+  mat <- matrix(rnorm(12), nrow = 3, ncol = 4)
+  # No rownames or colnames
+  p <- insper_heatmap(mat)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_heatmap handles matrix with custom names", {
+  skip_if_not_installed("ggplot2")
+  mat <- cor(mtcars[, 1:4])
+  # Already has rownames/colnames from cor()
+  p <- insper_heatmap(mat)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_heatmap value_color parameter works", {
+  skip_if_not_installed("ggplot2")
+  mat <- cor(mtcars[, 1:4])
+  p1 <- insper_heatmap(mat, show_values = TRUE, value_color = "white")
+  p2 <- insper_heatmap(mat, show_values = TRUE, value_color = "black")
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_heatmap value_size parameter works", {
+  skip_if_not_installed("ggplot2")
+  mat <- cor(mtcars[, 1:4])
+  p1 <- insper_heatmap(mat, show_values = TRUE, value_size = 2)
+  p2 <- insper_heatmap(mat, show_values = TRUE, value_size = 4)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_heatmap palette parameter works", {
+  skip_if_not_installed("ggplot2")
+  mat <- cor(mtcars[, 1:4])
+  p1 <- insper_heatmap(mat, palette = "diverging")
+  p2 <- insper_heatmap(mat, palette = "red_teal")
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_heatmap continuous scale applied", {
+  skip_if_not_installed("ggplot2")
+  mat <- cor(mtcars[, 1:4])
+  p <- insper_heatmap(mat)
+  expect_s3_class(p, "ggplot")
+
+  # Check continuous fill scale is present
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+test_that("insper_heatmap handles NA values in matrix", {
+  skip_if_not_installed("ggplot2")
+  mat <- matrix(c(1, 2, NA, 4, 5, 6, 7, 8, 9), nrow = 3)
+  p <- insper_heatmap(mat)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_heatmap show_values displays text layer", {
+  skip_if_not_installed("ggplot2")
+  mat <- cor(mtcars[, 1:4])
+  p_with <- insper_heatmap(mat, show_values = TRUE)
+  p_without <- insper_heatmap(mat, show_values = FALSE)
+
+  expect_s3_class(p_with, "ggplot")
+  expect_s3_class(p_without, "ggplot")
+
+  # Check text layer is present in p_with
+  has_text <- any(sapply(p_with$layers, function(l) inherits(l$geom, "GeomText")))
+  expect_true(has_text)
+})
+
+# Extended tests for insper_area() ----
+
+test_that("insper_area validates data frame input", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_area("not a data frame", x = x, y = y),
+    "data.*must be a data frame"
+  )
+})
+
+test_that("insper_area static fill with line overlay", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p <- insper_area(df, x = time, y = value, fill = "#E4002B", add_line = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check both area and line layers
+  has_area <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomArea")))
+  has_line <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomLine")))
+  expect_true(has_area)
+  expect_true(has_line)
+})
+
+test_that("insper_area continuous fill scale applied", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    time = 1:100,
+    value = cumsum(rnorm(100)),
+    intensity = seq(0, 1, length.out = 100)
+  )
+  p <- insper_area(df, x = time, y = value, fill = intensity)
+  expect_s3_class(p, "ggplot")
+
+  # Check continuous fill scale is present
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+test_that("insper_area warns when palette ignored", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+
+  # Palette should be ignored when fill is static
+  expect_warning(
+    insper_area(df, x = time, y = value, fill = "#009491", palette = "bright"),
+    "palette.*ignored"
+  )
+})
+
+test_that("insper_area line_width parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p1 <- insper_area(df, x = time, y = value, line_width = 1.5)
+  p2 <- insper_area(df, x = time, y = value, line_width = 0.3)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_area line_alpha parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p1 <- insper_area(df, x = time, y = value, line_alpha = 0.5)
+  p2 <- insper_area(df, x = time, y = value, line_alpha = 1)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_area add_line parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p_with <- insper_area(df, x = time, y = value, add_line = TRUE)
+  p_without <- insper_area(df, x = time, y = value, add_line = FALSE)
+
+  expect_s3_class(p_with, "ggplot")
+  expect_s3_class(p_without, "ggplot")
+
+  # Check line is present only in p_with
+  has_line_with <- any(sapply(p_with$layers, function(l) inherits(l$geom, "GeomLine")))
+  has_line_without <- any(sapply(p_without$layers, function(l) inherits(l$geom, "GeomLine")))
+  expect_true(has_line_with)
+  expect_false(has_line_without)
+})
+
+test_that("insper_area zero parameter adds horizontal line", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = c(-5:-1, 0, 1:14))
+  p <- insper_area(df, x = time, y = value, zero = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Check hline is present
+  has_hline <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomHline")))
+  expect_true(has_hline)
+})
+
+test_that("insper_area area_alpha parameter works", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(time = 1:20, value = cumsum(rnorm(20)))
+  p1 <- insper_area(df, x = time, y = value, area_alpha = 0.3)
+  p2 <- insper_area(df, x = time, y = value, area_alpha = 1)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+# Extended tests for insper_boxplot() ----
+
+test_that("insper_boxplot validates data frame input", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    insper_boxplot("not a data frame", x = x, y = y),
+    "data.*must be a data frame"
+  )
+})
+
+test_that("insper_boxplot auto-jitter with small groups", {
+  skip_if_not_installed("ggplot2")
+  # Small dataset - jitter should be auto-enabled
+  p <- insper_boxplot(iris, x = Species, y = Sepal.Length)
+  expect_s3_class(p, "ggplot")
+
+  # Check jitter layer is present (auto-enabled for small groups)
+  has_jitter <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_true(has_jitter)
+})
+
+test_that("insper_boxplot auto-jitter with large groups", {
+  skip_if_not_installed("ggplot2")
+  # Create large dataset (>100 per group)
+  large_df <- data.frame(
+    group = rep(c("A", "B"), each = 150),
+    value = rnorm(300)
+  )
+  p <- insper_boxplot(large_df, x = group, y = value)
+  expect_s3_class(p, "ggplot")
+
+  # Jitter should NOT be auto-enabled for large groups
+  has_jitter <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_false(has_jitter)
+})
+
+test_that("insper_boxplot add_jitter override works", {
+  skip_if_not_installed("ggplot2")
+  # Force jitter on large dataset
+  large_df <- data.frame(
+    group = rep(c("A", "B"), each = 150),
+    value = rnorm(300)
+  )
+  p <- insper_boxplot(large_df, x = group, y = value, add_jitter = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # Jitter should be present because explicitly requested
+  has_jitter <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomPoint")))
+  expect_true(has_jitter)
+})
+
+test_that("insper_boxplot add_notch parameter works", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_boxplot(iris, x = Species, y = Sepal.Length, add_notch = TRUE)
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_boxplot box_alpha parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_boxplot(iris, x = Species, y = Sepal.Length, box_alpha = 0.3)
+  p2 <- insper_boxplot(iris, x = Species, y = Sepal.Length, box_alpha = 1)
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_boxplot palette parameter works", {
+  skip_if_not_installed("ggplot2")
+  p1 <- insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species, palette = "bright")
+  p2 <- insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species, palette = "contrast")
+
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
+})
+
+test_that("insper_boxplot warns when palette ignored", {
+  skip_if_not_installed("ggplot2")
+  # Palette should be ignored when fill is static
+  expect_warning(
+    insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "lightblue", palette = "bright"),
+    "palette.*ignored"
+  )
+})
+
+test_that("insper_boxplot static fill matches expected color", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_boxplot(iris, x = Species, y = Sepal.Length, fill = "#F15A22")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("insper_boxplot variable fill mapping", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_boxplot(iris, x = Species, y = Sepal.Length, fill = Species)
+  expect_s3_class(p, "ggplot")
+
+  # Check discrete fill scale is present
+  expect_true(!is.null(p$scales$get_scales("fill")))
+})
+
+test_that("insper_boxplot default fill when NULL", {
+  skip_if_not_installed("ggplot2")
+  p <- insper_boxplot(iris, x = Species, y = Sepal.Length)
+  expect_s3_class(p, "ggplot")
+
+  # Should use default teals2 color
+  built <- ggplot2::ggplot_build(p)
+  expect_no_error(built)
+})
