@@ -217,7 +217,7 @@ save_insper_plot <- function(
   ...
 ) {
   # Validate that plot is a ggplot object
-  if (!ggplot2::is.ggplot(plot)) {
+  if (!ggplot2::is_ggplot(plot)) {
     cli::cli_abort(c(
       "{.arg plot} must be a ggplot object",
       "x" = "You supplied an object of class {.cls {class(plot)}}",
@@ -1135,7 +1135,10 @@ calculate_luminance <- function(hex_color) {
   )
 
   # Calculate relative luminance (ITU-R BT.709)
-  luminance <- 0.2126 * rgb_linear[1] + 0.7152 * rgb_linear[2] + 0.0722 * rgb_linear[3]
+  luminance <- 0.2126 *
+    rgb_linear[1] +
+    0.7152 * rgb_linear[2] +
+    0.0722 * rgb_linear[3]
 
   return(luminance)
 }
@@ -1149,10 +1152,12 @@ calculate_luminance <- function(hex_color) {
 #' @return Character. Either dark_color or light_color based on background luminance
 #' @noRd
 #' @keywords internal
-get_contrast_text_color <- function(bg_color,
-                                    dark_color = "#2C2C2C",
-                                    light_color = "white",
-                                    threshold = 0.5) {
+get_contrast_text_color <- function(
+  bg_color,
+  dark_color = "#2C2C2C",
+  light_color = "white",
+  threshold = 0.5
+) {
   luminance <- calculate_luminance(bg_color)
 
   # If background is light (high luminance), use dark text
