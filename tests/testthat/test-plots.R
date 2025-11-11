@@ -102,6 +102,59 @@ test_that("insper_barplot text labels work with filled bars", {
   expect_true(inherits(text_layer$position, "PositionFill"))
 })
 
+test_that("insper_barplot uses white text for stacked bars by default", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+  p <- insper_barplot(df, x = x, y = y, fill = grp, position = "stack", text = TRUE)
+
+  # Extract text layer and check color
+  text_layer <- p$layers[[which(sapply(p$layers, function(l) inherits(l$geom, "GeomText")))[1]]]
+  expect_equal(text_layer$aes_params$colour, "white",
+               info = "Stacked bars should use white text for readability on colored bars")
+})
+
+test_that("insper_barplot uses white text for filled bars by default", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+  p <- insper_barplot(df, x = x, y = y, fill = grp, position = "fill", text = TRUE)
+
+  # Extract text layer and check color
+  text_layer <- p$layers[[which(sapply(p$layers, function(l) inherits(l$geom, "GeomText")))[1]]]
+  expect_equal(text_layer$aes_params$colour, "white",
+               info = "Filled bars should use white text for readability on colored bars")
+})
+
+test_that("insper_barplot respects custom text_color parameter", {
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    x = rep(c("A", "B"), each = 2),
+    y = c(10, 15, 20, 25),
+    grp = rep(c("X", "Y"), 2)
+  )
+
+  # Test custom color is not overridden for stack
+  p1 <- insper_barplot(df, x = x, y = y, fill = grp, position = "stack",
+                       text = TRUE, text_color = "red")
+  text_layer1 <- p1$layers[[which(sapply(p1$layers, function(l) inherits(l$geom, "GeomText")))[1]]]
+  expect_equal(text_layer1$aes_params$colour, "red",
+               info = "Custom text_color should be respected for stacked bars")
+
+  # Test custom color is not overridden for fill
+  p2 <- insper_barplot(df, x = x, y = y, fill = grp, position = "fill",
+                       text = TRUE, text_color = "blue")
+  text_layer2 <- p2$layers[[which(sapply(p2$layers, function(l) inherits(l$geom, "GeomText")))[1]]]
+  expect_equal(text_layer2$aes_params$colour, "blue",
+               info = "Custom text_color should be respected for filled bars")
+})
+
 test_that("insper_barplot stack_vjust parameter works", {
   skip_if_not_installed("ggplot2")
   df <- data.frame(

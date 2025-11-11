@@ -194,9 +194,8 @@ insper_barplot <- function(
       )
 
       # For stacked/filled bars, determine text color automatically if not specified
-      # and position is "fill"
       final_text_color <- text_color
-      if (position == "fill" && text_color == "black") {
+      if (position %in% c("stack", "fill") && text_color == "black") {
         # User hasn't specified a custom color, use automatic contrast
         # This will be handled via geom_text with color aesthetic mapping
         # For now, we'll use a simple heuristic: white text works for most fills
