@@ -38,12 +38,12 @@ line_data <- data.frame(
 
 p_line <- ggplot(line_data, aes(x, y)) +
   geom_line(color = "white", linewidth = 0.5, lineend = "round") +
-  geom_vline(
-    xintercept = seq(0, 50, 100),
-    color = "white",
-    lwd = 0.25,
-    linetype = 2
-  ) +
+  # geom_vline(
+  #   xintercept = seq(2.5, 10, 2.5),
+  #   color = "white",
+  #   lwd = 0.25,
+  #   linetype = 2
+  # ) +
   # geom_hline(yintercept = 0, color = "white", lwd = 0.8) +
   # geom_point(
   #   data = line_data[c(1, 26, 100), ],
@@ -59,6 +59,22 @@ p_line <- ggplot(line_data, aes(x, y)) +
 
 p_bar <- ggplot(bar_data, aes(x, y)) +
   geom_col(fill = "white", width = 0.7) +
+  theme_subplot()
+
+lollipop_data <- data.frame(
+  x = c(3.5, 2.5),
+  y = c(1.8, 1.1),
+  z = c(1.1, 2.5),
+  a = c(1.5, 2.5)
+)
+
+p_lolli <- lollipop_data |>
+  tidyr::pivot_longer(cols = everything()) |>
+  ggplot(aes(value, name)) +
+  geom_line(aes(group = name), lwd = 0.5, color = "white") +
+  geom_point(size = 0.75, color = "white") +
+  geom_vline(xintercept = 2, lwd = 0.25, linetype = "dashed", color = "white") +
+  scale_x_continuous(limits = c(0.9, 3.7)) +
   theme_subplot()
 
 panel <- (p_bar | p_line)
