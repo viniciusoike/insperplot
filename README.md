@@ -15,14 +15,6 @@ Pesquisa](https://www.insper.edu.br/) visual identity, providing custom
 themes, color palettes, and specialized plotting functions for academic
 and institutional use.
 
-## ⚠️ Disclaimer
-
-**This is an unofficial package created by an Insper employee, not an
-official Insper product.** This package is developed independently and
-is not endorsed, supported, or maintained by Insper Instituto de Ensino
-e Pesquisa. For official Insper communications and materials, please
-refer to [Insper’s official website](https://www.insper.edu.br/).
-
 ## Installation
 
 You can install the development version of insperplot from GitHub:
@@ -34,16 +26,8 @@ remotes::install_github("viniciusoike/insperplot")
 
 ## Setup (Recommended)
 
-For the best results with insperplot, we recommend a one-time setup:
-
-### Quick Setup Wizard
-
-``` r
-library(insperplot)
-setup_insper_fonts()  # Interactive guide for complete setup
-```
-
-### Manual Setup
+For the best results with insperplot, we recommend installing Inter from
+Google Fonts.
 
 **Step 1: Install Insper Fonts**
 
@@ -52,8 +36,8 @@ EB Garamond and Playfair Display as fallbacks for Georgia.
 
 - **Georgia** (serif, primary for titles) - typically pre-installed
 - **Inter** (sans-serif, for body text) - Google Font
-- **EB Garamond** & **Playfair Display** (serif, title fallbacks) -
-  Google
+- \[Optional\] **EB Garamond** & **Playfair Display** (serif, title
+  fallbacks).
 
 To use these fonts, visit [Google Fonts](https://fonts.google.com) and
 download and install “Inter”, “EB Garamond”, and “Playfair Display”.
@@ -160,20 +144,14 @@ show_insper_palette()
 For detailed documentation and examples, visit the [package
 website](https://viniciusoike.github.io/insperplot/).
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md)
-for guidelines.
-
 ## License
 
-MIT © Vinicius Reginatto
+MIT © Vinicius Oike
 
-## Acknowledgments
+## Disclaimer
 
-This package was inspired by excellent ggplot2 theme packages including:
-
-- [hrbrthemes](https://github.com/hrbrmstr/hrbrthemes) by Bob Rudis
-  (note: removed from CRAN in 2025)
-- [bbplot](https://github.com/bbc/bbplot) by BBC Data Team
-- [ggthemes](https://github.com/jrnold/ggthemes) by Jeffrey Arnold
+**This is not an official Insper product.** This package is developed
+independently and is not endorsed, supported, or maintained by Insper
+Instituto de Ensino e Pesquisa. For official Insper communications and
+materials, please refer to [Insper’s official
+website](https://www.insper.edu.br/).
