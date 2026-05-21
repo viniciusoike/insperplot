@@ -74,11 +74,8 @@ The theme uses fonts based on Insper's official template:
   \item Inter (sans-serif, Google Font) for body text - falls back to Arial
 }
 
-To use these fonts, you have two options:
-\enumerate{
-  \item Install fonts locally - see \code{\link{check_insper_fonts}()}
-  \item Load fonts remotely - use \code{\link{import_insper_fonts}()}
-}
+To install or check fonts, see \code{\link{setup_insper_fonts}} and
+\code{\link{import_insper_fonts}}.
 
 If fonts are unavailable, the theme automatically falls back through the
 chain and ultimately to system defaults ("serif" and "sans") without errors.
@@ -90,28 +87,28 @@ values are provided for \code{grid} or \code{border} arguments.
 \dontshow{if (has_insper_fonts()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 
-# Basic usage with default settings
+# Default
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
   theme_insper()
 
-# Without grid lines and with closed border
+# Minimal — no grid, clean background
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
-  theme_insper(grid = FALSE, border = "closed")
+  theme_insper(grid = FALSE)
 
-# Custom font size
+# Presentation — larger text for slides
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
-  theme_insper(base_size = 14)
+  theme_insper(base_size = 16, grid = FALSE)
+
+# Print / PDF — closed border, smaller text
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  theme_insper(base_size = 11, border = "closed")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{import_insper_fonts}}, \code{\link{check_insper_fonts}}
-
-Other themes: 
-\code{\link{theme_insper_minimal}()},
-\code{\link{theme_insper_presentation}()},
-\code{\link{theme_insper_print}()}
+\code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{setup_insper_fonts}}, \code{\link{import_insper_fonts}}
 }
 \concept{themes}

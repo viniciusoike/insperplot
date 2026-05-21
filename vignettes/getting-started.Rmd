@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
 ```{r eval=FALSE}
 # Install from GitHub
-remotes::install_github("viniciusreginatto/insperplot")
+remotes::install_github("viniciusoike/insperplot")
 ```
 
 ```{r setup}
@@ -46,11 +46,14 @@ insperplot uses fonts based on Insper's official template: **Georgia** (primary 
 Note: while "GT Ultra Fine Bold" is one of the official fonts, it is not available for free and thus is not included in the package.
 
 ```{r eval=FALSE}
-# Check if recommended fonts are installed
-check_insper_fonts()
+# Check font status
+setup_insper_fonts()
+
+# Download missing fonts automatically
+import_insper_fonts()
 ```
 
-**Installation instructions:**
+**Manual installation:**
 
 1. Visit [Google Fonts](https://fonts.google.com)
 2. Download "Inter", "EB Garamond", and "Playfair Display"
@@ -69,7 +72,8 @@ ggplot(mtcars, aes(mpg, wt)) +
   labs(
     title = "Basic Theme",
     subtitle = "Using theme_insper()",
-    caption = "Fonte: mtcars") +
+    caption = "Fonte: mtcars"
+  ) +
   theme_insper()
 ```
 
@@ -107,41 +111,12 @@ ggplot(mtcars, aes(mpg, wt)) +
 
 The colors used in insperplot are based on Insper's [brandkit](https://github.com/Insper/Cores-Marca-Insper).
 
-### Color Basics
-
-#### Extracting Individual Colors
-
-Use `get_insper_colors()` to extract individual colors by name:
-
-```{r colors-extract}
-# Get specific colors
-get_insper_colors("reds1", "teals1")
-
-# Get all individual colors
-all_colors <- get_insper_colors()
-head(all_colors)
-```
-
-#### Visualizing Individual Colors
-
-Use `show_insper_colors()` to see what colors are available:
-
-```{r colors-viz, fig.height=3}
-show_insper_colors()
-show_insper_colors("reds")
-```
-
-#### Working with Palettes
-
 ```{r palette-viz, fig.height=4}
 # Show specific palette
-show_insper_palette("reds")
+insper_palette("reds")
 
 # Show default "main" palette
-show_insper_palette()
-
-# List all available palettes
-list_palettes()
+show_insper_palettes()
 ```
 
 ### Using Colors in ggplot2
@@ -189,20 +164,27 @@ While insperplot was designed for ggplot2, Insper colors can also be used in bas
 
 ```{r base-r-plots-1}
 # Simple scatter plot with Insper colors
-plot(mtcars$mpg, mtcars$wt,
-     col = get_insper_colors("reds1"),
-     pch = 19, cex = 1.5,
-     main = "Base R Plot with Insper Colors",
-     xlab = "MPG", ylab = "Weight")
+plot(
+  mtcars$mpg,
+  mtcars$wt,
+  col = get_insper_colors("reds1"),
+  pch = 19,
+  cex = 1.5,
+  main = "Base R Plot with Insper Colors",
+  xlab = "MPG",
+  ylab = "Weight"
+)
 ```
 
 ```{r base-r-plots-2}
 # Barplot with multiple Insper colors
-barplot(table(mtcars$cyl),
-        col = get_insper_colors("reds1", "oranges1", "teals1"),
-        main = "Cylinders Distribution",
-        xlab = "Number of Cylinders",
-        ylab = "Count")
+barplot(
+  table(mtcars$cyl),
+  col = get_insper_colors("reds1", "oranges1", "teals1"),
+  main = "Cylinders Distribution",
+  xlab = "Number of Cylinders",
+  ylab = "Count"
+)
 ```
 
 ## Saving Plots
@@ -215,5 +197,12 @@ p <- ggplot(mtcars, aes(wt, mpg)) +
   geom_point() +
   theme_insper()
 
-ggsave("my_plot.png", p, width = 8, height = 5, dpi = 300, device = ragg::agg_png)
+ggsave(
+  "my_plot.png",
+  p,
+  width = 8,
+  height = 5,
+  dpi = 300,
+  device = ragg::agg_png
+)
 ```

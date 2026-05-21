@@ -143,31 +143,3 @@ test_that("insper_heatmap renders correctly", {
   vdiffr::expect_doppelganger("heatmap_basic", p)
 })
 
-# Theme Variant Tests ---------------------------------------------------------
-
-test_that("theme_insper_minimal renders correctly", {
-  p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
-    geom_point() +
-    labs(title = "Minimal Theme") +
-    theme_insper_minimal()
-
-  vdiffr::expect_doppelganger("theme_minimal", p)
-})
-
-test_that("theme_insper_presentation renders correctly", {
-  p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
-    geom_point(size = 3) +
-    labs(title = "Presentation Theme") +
-    theme_insper_presentation()
-
-  vdiffr::expect_doppelganger("theme_presentation", p)
-})
-
-test_that("theme_insper_print renders correctly", {
-  p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
-    geom_point() +
-    labs(title = "Print Theme") +
-    theme_insper_print()
-
-  vdiffr::expect_doppelganger("theme_print", p)
-})

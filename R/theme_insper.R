@@ -51,11 +51,8 @@
 #'   \item Inter (sans-serif, Google Font) for body text - falls back to Arial
 #' }
 #'
-#' To use these fonts, you have two options:
-#' \enumerate{
-#'   \item Install fonts locally - see \code{\link{check_insper_fonts}()}
-#'   \item Load fonts remotely - use \code{\link{import_insper_fonts}()}
-#' }
+#' To install or check fonts, see \code{\link{setup_insper_fonts}} and
+#' \code{\link{import_insper_fonts}}.
 #'
 #' If fonts are unavailable, the theme automatically falls back through the
 #' chain and ultimately to system defaults ("serif" and "sans") without errors.
@@ -66,23 +63,28 @@
 #' @examplesIf has_insper_fonts()
 #' library(ggplot2)
 #'
-#' # Basic usage with default settings
+#' # Default
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
 #'   geom_point() +
 #'   theme_insper()
 #'
-#' # Without grid lines and with closed border
+#' # Minimal — no grid, clean background
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
 #'   geom_point() +
-#'   theme_insper(grid = FALSE, border = "closed")
+#'   theme_insper(grid = FALSE)
 #'
-#' # Custom font size
+#' # Presentation — larger text for slides
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
 #'   geom_point() +
-#'   theme_insper(base_size = 14)
+#'   theme_insper(base_size = 16, grid = FALSE)
+#'
+#' # Print / PDF — closed border, smaller text
+#' ggplot(mtcars, aes(x = wt, y = mpg)) +
+#'   geom_point() +
+#'   theme_insper(base_size = 11, border = "closed")
 #'
 #' @family themes
-#' @seealso \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{import_insper_fonts}}, \code{\link{check_insper_fonts}}
+#' @seealso \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{setup_insper_fonts}}, \code{\link{import_insper_fonts}}
 #' @importFrom ggplot2 element_blank element_line element_rect element_text unit theme theme_minimal rel margin %+replace%
 #' @export
 theme_insper <- function(
@@ -247,72 +249,34 @@ theme_insper <- function(
 
 # Helper Functions --------------------------------------------------------
 
-#' Detect Font Availability with Fallback Chain
-#'
-#' Internal helper function to detect if a font is available and provide
-#' fallback chain if not. Checks both loaded fonts (via showtext) and system fonts.
-#'
-#' @param font_name Character. Name of font to check
-#' @param fallback_chain Character vector. Fallback fonts to try in order if
-#'   requested font unavailable
-#'
-#' @return Character. Either the requested font (if available) or first available
-#'   font from fallback chain
 #' @keywords internal
 #' @noRd
 detect_font <- function(font_name, fallback_chain = "sans") {
-  # First check if fonts loaded via import_insper_fonts()
-  fonts_imported <- isTRUE(getOption("insperplot.fonts_loaded", FALSE))
-
-  # If fonts imported via showtext, use the requested font
-  if (fonts_imported) {
-    return(font_name)
+  if (!requireNamespace("systemfonts", quietly = TRUE)) {
+    return(fallback_chain[length(fallback_chain)])
   }
 
-  # Otherwise check if font is installed locally (requires systemfonts)
-  has_systemfonts <- requireNamespace("systemfonts", quietly = TRUE)
+  tryCatch(
+    {
+      available_fonts <- systemfonts::system_fonts()$family
 
-  if (has_systemfonts) {
-    tryCatch(
-      {
-        available_fonts <- systemfonts::system_fonts()$family
-
-        # Check if requested font is available
-        font_available <- any(grepl(
-          font_name,
-          available_fonts,
-          ignore.case = TRUE
-        ))
-
-        if (font_available) {
-          return(font_name)
-        }
-
-        # If not, try each font in the fallback chain
-        for (fallback_font in fallback_chain) {
-          # Skip generic families (serif, sans, mono) - always available
-          if (fallback_font %in% c("serif", "sans", "mono")) {
-            return(fallback_font)
-          }
-
-          fallback_available <- any(grepl(
-            fallback_font,
-            available_fonts,
-            ignore.case = TRUE
-          ))
-
-          if (fallback_available) {
-            return(fallback_font)
-          }
-        }
-      },
-      error = function(e) {
-        # If error checking fonts, use last fallback silently
-        return(fallback_chain[length(fallback_chain)])
+      if (any(grepl(font_name, available_fonts, ignore.case = TRUE))) {
+        return(font_name)
       }
-    )
-  }
 
-  # If systemfonts not available, use last fallback
+      for (fallback_font in fallback_chain) {
+        if (fallback_font %in% c("serif", "sans", "mono")) {
+          return(fallback_font)
+        }
+        if (any(grepl(fallback_font, available_fonts, ignore.case = TRUE))) {
+          return(fallback_font)
+        }
+      }
+    },
+    error = function(e) {
+      return(fallback_chain[length(fallback_chain)])
+    }
+  )
+
   return(fallback_chain[length(fallback_chain)])
 }
