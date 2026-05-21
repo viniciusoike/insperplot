@@ -185,12 +185,13 @@ insper_barplot <- function(
         )
     } else {
       # Grouped text labels - match position with bars
-      text_position <- switch(position,
+      text_position <- switch(
+        position,
         "dodge" = ggplot2::position_dodge(width = 0.9),
         "stack" = ggplot2::position_stack(vjust = stack_vjust),
         "fill" = ggplot2::position_fill(vjust = stack_vjust),
         "identity" = "identity",
-        "identity"  # fallback
+        "identity" # fallback
       )
 
       # For stacked/filled bars, determine text color automatically if not specified

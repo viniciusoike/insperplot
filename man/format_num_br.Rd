@@ -37,10 +37,8 @@ format_num_br(0.1234, percent = TRUE, digits = 2)
 }
 \seealso{
 Other utilities: 
-\code{\link{check_insper_fonts}()},
 \code{\link{import_insper_fonts}()},
 \code{\link{save_insper_plot}()},
-\code{\link{setup_insper_fonts}()},
-\code{\link{use_ragg_device}()}
+\code{\link{setup_insper_fonts}()}
 }
 \concept{utilities}

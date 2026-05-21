@@ -11,9 +11,11 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 <!-- badges: end -->
 
 **insperplot** extends ggplot2 with [Insper Instituto de Ensino e
-Pesquisa](https://www.insper.edu.br/) visual identity, providing custom
-themes, color palettes, and specialized plotting functions for academic
-and institutional use.
+Pesquisa](https://www.insper.edu.br/en/home) visual identity, providing
+custom themes, color palettes, and specialized plotting functions for
+academic and institutional use.
+[Insper](https://www.insper.edu.br/en/quem-somos) is a non-profit
+institution dedicated to teaching and research.
 
 ## Installation
 
@@ -23,39 +25,6 @@ You can install the development version of insperplot from GitHub:
 # install.packages("remotes")
 remotes::install_github("viniciusoike/insperplot")
 ```
-
-## Setup (Recommended)
-
-For the best results with insperplot, we recommend installing Inter from
-Google Fonts.
-
-**Step 1: Install Insper Fonts**
-
-`insperplot` uses fonts based on Insper’s official template. We include
-EB Garamond and Playfair Display as fallbacks for Georgia.
-
-- **Georgia** (serif, primary for titles) - typically pre-installed
-- **Inter** (sans-serif, for body text) - Google Font
-- \[Optional\] **EB Garamond** & **Playfair Display** (serif, title
-  fallbacks).
-
-To use these fonts, visit [Google Fonts](https://fonts.google.com) and
-download and install “Inter”, “EB Garamond”, and “Playfair Display”.
-
-**Step 2: Install ragg Graphics Device**
-
-``` r
-install.packages("ragg")
-```
-
-**Step 3: Configure RStudio (if using RStudio)**
-
-- Go to: **Tools \> Global Options \> General \> Graphics**
-- Set **Backend** to **AGG**
-- Restart R session
-
-**Note:** Positron users can skip this step since it uses ragg by
-default.
 
 ## Quick Start
 
@@ -139,6 +108,40 @@ show_insper_palette()
 - `show_insper_palette()`: Visualize available color palettes.
 - `insper_*()`: Specialized plotting functions.
 
+## Using ragg and Insper Fonts (Recommended)
+
+For the best results with `insperplot`, we recommend installing the
+**Inter** typography font from Google Fonts.
+
+**Step 1: Install Insper Fonts**
+
+`insperplot` uses fonts based on Insper’s official template. We include
+EB Garamond and Playfair Display as fallbacks for Georgia, though
+Georgia is typically pre-installed in most systems.
+
+- **Georgia** (serif, primary for titles) - typically pre-installed
+- **Inter** (sans-serif, for body text) - Google Font
+- \[Optional\] **EB Garamond** & **Playfair Display** (serif, title
+  fallbacks).
+
+To use these fonts, visit [Google Fonts](https://fonts.google.com) and
+download and install “Inter”, “EB Garamond”, and “Playfair Display”.
+
+**Step 2: Install ragg Graphics Device**
+
+``` r
+install.packages("ragg")
+```
+
+**Step 3: Configure RStudio (if using RStudio)**
+
+- Go to: **Tools \> Global Options \> General \> Graphics**
+- Set **Backend** to **AGG**
+- Restart R session
+
+**Note:** Positron users can skip this step since it uses ragg by
+default.
+
 ## Documentation
 
 For detailed documentation and examples, visit the [package
@@ -153,5 +156,5 @@ MIT © Vinicius Oike
 **This is not an official Insper product.** This package is developed
 independently and is not endorsed, supported, or maintained by Insper
 Instituto de Ensino e Pesquisa. For official Insper communications and
-materials, please refer to [Insper’s official
-website](https://www.insper.edu.br/).
+materials, please refer to [Insper’s
+GitHub](https://github.com/Insper/).

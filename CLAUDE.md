@@ -6,13 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **insperplot** is an R package that extends ggplot2 with Insper Instituto de Ensino e Pesquisa's visual identity. It provides custom themes, color palettes, scales, and specialized plotting functions for academic and institutional use.
 
-**Key Info:**
-- Version: 1.3.3 (stable lifecycle)
-- License: MIT
-- Minimum R version: 4.1.0
-- Main dependencies: ggplot2 (≥3.4.0), rlang (≥1.0.0), scales (≥1.2.0), cli
-- Testing: testthat 3rd edition with comprehensive test coverage
-
 ## Common Development Commands
 
 ### Testing
@@ -65,60 +58,21 @@ This package follows **modern R development best practices** (2025 standards):
 
 ### Key R Files Structure
 
-**Theme System (`R/theme_insper.R`)**:
-- `theme_insper()`: Main theme with flexible grid/border/alignment options
-- `theme_insper_minimal()`, `theme_insper_presentation()`, `theme_insper_print()`: Theme variants
-- `detect_font()`: Internal font fallback chain (Georgia → EB Garamond → Playfair Display → serif)
-- Font detection uses `systemfonts` package to check local installation
-
-**Color System (`R/utils.R`, `R/insper_palette.R`, `R/palette-utils.R`)**:
-- `show_insper_colors()`: Base color extraction (NOT `insper_col()` - removed in v1.0.0)
-- `insper_pal()`: Palette generator with discrete/continuous support
-- Palettes organized by type: sequential (reds, oranges, teals, grays), diverging (red_teal, diverging), qualitative (main, bright, contrast)
-- IMPORTANT: Old palette names like `reds_seq` deprecated → use `reds` (warnings until v1.0.0)
-
-**Scales (`R/scales.R`)**:
-- `scale_color_insper_d()` / `scale_fill_insper_d()`: Discrete scales
-- `scale_color_insper_c()` / `scale_fill_insper_c()`: Continuous scales
-- CRITICAL: Old `scale_color_insper()` removed in v1.0.0 - must use `_d` or `_c` suffix
-
-**Plotting Functions (`R/plots.R`)**:
-- 9 high-level plotting functions: barplot, scatterplot, timeseries, area, boxplot, violin, heatmap, histogram, density
-- All follow pattern: accept data + aesthetics, apply `theme_insper()`, return ggplot object
-- NO title/subtitle/caption parameters (removed in v0.7.0) - users must use `+ labs()` instead
-- NO orientation flip parameters (removed in v0.7.0) - users swap x/y or use `+ coord_flip()`
-- NOTE: `insper_lollipop()` intentionally NOT implemented - lollipop charts can be created with standard ggplot2 code or `insper_barplot()` with custom geoms
-
-**Utilities (`R/utils.R`)**:
-- Font setup: `setup_insper_fonts()` (interactive wizard), `check_insper_fonts()`, `import_insper_fonts()` (showtext fallback)
-- Graphics: `use_ragg_device()` (ragg setup helper), `save_insper_plot()` (auto-detects ragg)
-- Brazilian formatters: `format_brl()`, `format_percent_br()`, `format_num_br()`
-
-**Data (`R/data.R`, `data/`):**
-- 4 datasets: `macro_series` (Brazilian economic indicators), `rec_buslines`/`rec_passengers` (Recife public transport), `spo_metro` (São Paulo metro ridership)
-- All datasets documented with complete metadata, sources, and usage examples
-
-### Font Handling Architecture (Critical)
-
-**Modern Approach (Recommended):**
-1. Users install fonts locally (Georgia, Inter, EB Garamond, Playfair Display)
-2. Install `ragg` package
-3. Set RStudio backend to AGG
-4. Fonts work automatically via `systemfonts` - no per-session loading
-
-**Fallback Approach:**
-- `import_insper_fonts()` uses `showtext` + `sysfonts` to load fonts from Google Fonts
-- Sets `options(insperplot.fonts_loaded = TRUE)` to track state
-- Theme functions check this option to enable/disable font detection
-
-**Why This Matters:**
-- Package moved away from showtext in v0.4.0 due to DPI conflicts
-- hrbrthemes (inspiration package) was removed from CRAN for extrafont issues
-- Current approach eliminates these problems entirely
+- `R/theme_insper.R` — `theme_insper()` and internal `detect_font()` (theme variants live here, not a separate file)
+- `R/plot-<name>.R` — one file per exported plot function (`plot-area.R`, `plot-barplot.R`, `plot-boxplot.R`, `plot-density.R`, `plot-heatmap.R`, `plot-histogram.R`, `plot-scatterplot.R`, `plot-timeseries.R`, `plot-violin.R`). Add new plots as a new file in this pattern.
+- `R/palette-utils.R` — exported `insper_palette()`, `show_insper_palettes()`, and internal `get_insper_colors()`, `palette_metadata()`
+- `R/insper_palette.R` — internal `insper_pal()` helper used by scales
+- `R/scales.R` — `scale_color_insper_{c,d}()` / `scale_fill_insper_{c,d}()` (+ `colour` aliases)
+- `R/utils.R` — `save_insper_plot()`, `format_num_br()`, `import_insper_fonts()`, `setup_insper_fonts()`, plus internal helpers: `detect_aesthetic_type()`, `warn_palette_ignored()`, `calculate_luminance()`, `get_contrast_text_color()`, `has_insper_fonts()`, `is_valid_color()`
+- `R/data.R` — dataset documentation; data lives in `data/` and `R/sysdata.rda`
+- `R/zzz.R` — `.onAttach()` startup message only (no font auto-import)
+- `R/globals.R` — `utils::globalVariables()` declarations
 
 ## Development Guidelines
 
-### Code Style (FROM claude/coding_guidelines.md)
+> Full coding standards are documented in [`claude/coding_guidelines.md`](claude/coding_guidelines.md) and [`claude/modern-error-handling-in-r.md`](claude/modern-error-handling-in-r.md). The rules below are the package-critical highlights; consult those files for complete guidance.
+
+### Code Style (see `claude/coding_guidelines.md`)
 1. **Always use native pipe `|>`** - NEVER use `%>%`
 2. **Use modern dplyr patterns**: `.by` for grouping (not `group_by() |> ... |> ungroup()`)
 3. **Use rlang correctly**:
@@ -128,6 +82,16 @@ This package follows **modern R development best practices** (2025 standards):
 4. **Use cli package for messages**: `cli::cli_abort()`, `cli::cli_warn()`, `cli::cli_alert_*()`
 5. **Snake_case for everything** except S3 methods
 6. **Type-stable outputs**: prefer `map_dbl()` over `sapply()`
+7. **Join syntax**: use `join_by()` not `c("a" = "b")` character vectors
+8. **Pipe chains**: max 5–7 steps; break longer chains into named intermediate objects
+
+### Error Handling (see `claude/modern-error-handling-in-r.md`)
+- **Default**: use `rlang::try_fetch()` instead of `tryCatch()` — preserves call stack for `rlang::last_trace()`
+- **Error chaining**: wrap low-level errors with `rlang::abort(..., parent = cnd)` to attach context without losing the original trace
+- **Mapping**: use `purrr::possibly()` (skip failures, return default) or `purrr::safely()` (keep both result and error) when iterating over vectors
+- **Cleanup**: keep `on.exit()` or `tryCatch(..., finally = ...)` for resource cleanup — `try_fetch()` has no `finally`
+- **Warnings without stopping**: keep `withCallingHandlers()` to record warnings while letting execution continue
+- **Avoid**: `try()` + `inherits(result, "try-error")`, nested `tryCatch`, and `paste("Context:", e$message)` for wrapping
 
 ### Testing Requirements
 - All new functions must have tests in `tests/testthat/test-*.R`
@@ -139,16 +103,9 @@ This package follows **modern R development best practices** (2025 standards):
 ### Documentation Requirements
 - All exported functions must have roxygen2 documentation
 - Include `@family` tag (themes, colors, scales, plots, utilities)
-- Include `@examples` with `\dontrun{}` if needed
+- Include `@examples` with all exported functions. If examples have dependencies, like custom fonts, use `@examplesIf has_insper_fonts()` to avoid errors. If examples might break things use `\dontrun{}` to avoid errors (e.g. `setup_insper_fonts()`).
 - Use `@param` with `<[data-masked]>` for rlang functions
 - Include `@seealso` cross-references
-
-### Breaking Change Protocol (Critical)
-This package follows a deliberate API evolution:
-- v0.7.0: Removed orientation/label parameters from plot functions
-- v0.8.0: Renamed scale functions, deprecated `insper_col()`
-- v0.9.0: Simplified palette names
-- v1.0.0+: Removed deprecated functions, achieved stable API
 
 **When making breaking changes:**
 1. Deprecate in one release (show warnings, update NEWS.md)
@@ -178,7 +135,7 @@ Rscript data-raw/create_logo.R
 
 ### Color Palette Definition
 ```bash
-# Color palettes defined in data-raw/create_palettes.R
+# Color palettes defined in data-raw/create_colors_and_palettes.R
 # Creates R/sysdata.rda with insper_colors list
 # Updates should maintain backward compatibility with old names
 ```
@@ -186,23 +143,23 @@ Rscript data-raw/create_logo.R
 ## Common Workflows
 
 ### Adding a New Color Palette
-1. Edit `data-raw/create_palettes.R` to add palette definition
-2. Run `Rscript data-raw/create_palettes.R` to regenerate `R/sysdata.rda`
-3. Update `insper_pal()` documentation with new palette name
+1. Edit `data-raw/create_colors_and_palettes.R` to add palette definition
+2. Run `Rscript data-raw/create_colors_and_palettes.R` to regenerate `R/sysdata.rda`
+3. Update `insper_palette()` documentation with new palette name
 4. Add tests in `tests/testthat/test-colors.R`
-5. Update `show_insper_palette()` to support new palette (if special handling needed)
+5. Update `show_insper_palettes()` to support new palette (if special handling needed)
 
 ### Adding a New Plot Function
-1. Create function in `R/plots.R` following existing patterns
+1. Create a new file `R/plot-<name>.R` (one plot function per file — see existing `plot-barplot.R`, `plot-scatterplot.R`, etc.)
 2. Use `rlang::enquo()` + `rlang::quo_is_null()` for optional aesthetics
 3. Apply `theme_insper()` as final layer
 4. Add roxygen2 documentation with `@family plots`
-5. Add tests in `tests/testthat/test-plots.R`
+5. Add tests in `tests/testthat/test-plots.R` (and `test-smart-detection.R` if the function uses `detect_aesthetic_type()`)
 6. Add visual regression tests in `tests/testthat/test-visual.R`
 7. Update `_pkgdown.yml` to include in "Plot Functions" section
 
 ### Adding a New Theme Variant
-1. Create function in `R/theme_variants.R` or `R/theme_insper.R`
+1. Add the function in `R/theme_insper.R` (theme variants live alongside the base theme — there is no separate `theme_variants.R`)
 2. Build on `theme_insper()` using `%+replace%` operator
 3. Follow font detection pattern with `detect_font()`
 4. Add comprehensive parameter validation
@@ -235,9 +192,17 @@ Rscript data-raw/create_logo.R
 - Consider adding English alternatives when appropriate
 
 ### Package Load Behavior (R/zzz.R)
-- `.onLoad()` attempts to load fonts automatically via `import_insper_fonts()`
-- Fails silently if showtext/sysfonts unavailable
-- This provides best UX for users with showtext installed
+- `.onAttach()` prints a startup message pointing users at `setup_insper_fonts()` / `import_insper_fonts()`
+- Fonts are NOT auto-imported on load — users must call the setup functions explicitly each session
+
+### Smart Aesthetic Detection (R/utils.R)
+- Plot functions that accept a `color`/`fill` argument call `detect_aesthetic_type()` to distinguish a mapped variable from a constant color string
+- When a user passes a constant color but also a palette, `warn_palette_ignored()` emits a `cli::cli_warn()` so the palette isn't silently dropped
+- Use these helpers in any new plot function that takes optional color aesthetics
+
+### Contrast-Aware Text on Bars (R/utils.R)
+- `calculate_luminance()` + `get_contrast_text_color()` pick white or dark text per-bar based on fill luminance
+- Used by `insper_barplot()` for stacked/filled variants; reuse for any plot that overlays text labels on colored shapes
 
 ## pkgdown Website Structure
 
@@ -250,29 +215,3 @@ The package website (_pkgdown.yml) organizes functions into categories:
 - **Data**: Package datasets
 
 Website uses Insper colors in theme (primary: #E4002B, secondary: #009491).
-
-## Recent Major Changes (v1.3.x)
-
-**v1.3.3 (Latest):**
-- Fixed parameter naming in `insper_density()`: `bandwidth` → `bw` for ggplot2 consistency
-- Comprehensive test coverage for all plot functions (100% coverage milestone)
-- Added tests for `insper_density()` and `insper_histogram()`
-
-**v1.3.2:**
-- Added `get_palette_colors()` function for direct palette color extraction
-- Improved palette utilities
-
-**Earlier Breaking Changes (v0.9.0 - v1.0.0):**
-- Removed `scale_color_insper()` / `scale_fill_insper()` - use `_d` or `_c` suffix
-- Removed `insper_col()` - use `show_insper_colors()`
-- Simplified palette names: `reds_seq` → `reds`, `diverging_red_teal` → `red_teal`, etc.
-- All deprecated functions removed; API now stable
-
-## Future Considerations
-
-Based on git log and current state:
-1. Consider CRAN submission after v1.0.0 (when API stabilized)
-2. May need to expand theme variants for specific use cases (poster, slides variations)
-3. Consider adding more Brazilian economic/social datasets
-4. Monitor ggplot2 evolution for coord_flip() full deprecation
-5. Watch for ragg/systemfonts becoming standard (may simplify font setup)

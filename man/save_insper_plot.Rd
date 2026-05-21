@@ -7,10 +7,12 @@
 save_insper_plot(
   plot,
   filename,
-  width = height * 1.618,
-  height = 4.3,
+  asp_ratio = 1.618,
+  width = height * asp_ratio,
+  height = 8,
   dpi = 300,
   device = NULL,
+  unit = "cm",
   ...
 )
 }
@@ -36,17 +38,15 @@ Enhanced ggsave with institutional defaults and ragg device support
 }
 \details{
 This function automatically uses the ragg device for PNG output when available,
-which provides better font rendering and eliminates DPI issues. To set up ragg,
-see \code{\link{use_ragg_device}}.
+which provides better font rendering and eliminates DPI issues. Install the
+\pkg{ragg} package and set the RStudio backend to AGG for best results.
 }
 \seealso{
-\code{\link[ggplot2]{ggsave}}, \code{\link{use_ragg_device}}
+\code{\link[ggplot2]{ggsave}}
 
 Other utilities: 
-\code{\link{check_insper_fonts}()},
 \code{\link{format_num_br}()},
 \code{\link{import_insper_fonts}()},
-\code{\link{setup_insper_fonts}()},
-\code{\link{use_ragg_device}()}
+\code{\link{setup_insper_fonts}()}
 }
 \concept{utilities}

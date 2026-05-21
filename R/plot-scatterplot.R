@@ -138,7 +138,9 @@ insper_scatterplot <- function(
     # Check if shape supports fill before adding fill aesthetic
     dots <- list(...)
     user_shape <- dots$shape
-    supports_fill <- !is.null(user_shape) && is.numeric(user_shape) && user_shape %in% 21:25
+    supports_fill <- !is.null(user_shape) &&
+      is.numeric(user_shape) &&
+      user_shape %in% 21:25
 
     if (fill_type$type == "static_color" && supports_fill) {
       geom_params$fill <- fill_type$value
@@ -147,7 +149,11 @@ insper_scatterplot <- function(
     p <- p +
       do.call(
         ggplot2::geom_point,
-        c(list(mapping = ggplot2::aes(color = {{ color }})), geom_params, list(...))
+        c(
+          list(mapping = ggplot2::aes(color = {{ color }})),
+          geom_params,
+          list(...)
+        )
       )
 
     # Add appropriate color scale
@@ -200,7 +206,9 @@ insper_scatterplot <- function(
     # Only add fill if user provided it AND either:
     # 1. Shape supports fill (21-25), OR
     # 2. No shape specified (default shape 19 doesn't support fill, so skip)
-    supports_fill <- !is.null(user_shape) && is.numeric(user_shape) && user_shape %in% 21:25
+    supports_fill <- !is.null(user_shape) &&
+      is.numeric(user_shape) &&
+      user_shape %in% 21:25
 
     if (fill_type$type == "static_color" && supports_fill) {
       geom_params$fill <- fill_type$value

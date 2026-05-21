@@ -3,9 +3,10 @@ library(ggplot2)
 library(patchwork)
 
 library(showtext)
-font_add_google("EB Garamond", "garamond")
-showtext_opts(dpi = 300)
-showtext_auto()
+# font_add_google("EB Garamond", "garamond")
+font_add("Georgia", regular = "Georgia.ttf")
+# showtext_opts(dpi = 300)
+# showtext_auto()
 
 insper_red <- "#E4002B"
 insper_teal <- "#009491"
@@ -54,7 +55,11 @@ p_line <- ggplot(line_data, aes(x, y)) +
   theme_subplot() +
   theme(
     plot.margin = margin(0, 0, 0, 0),
-    axis.line = element_line(color = "white", linewidth = 0.8)
+    axis.line = element_line(
+      color = "white",
+      linewidth = 0.8,
+      lineend = "square"
+    )
   )
 
 p_bar <- ggplot(bar_data, aes(x, y)) +
@@ -73,14 +78,14 @@ sticker(
   subplot = subplot,
   # Package name
   package = "insperplot",
-  p_size = 9,
+  p_size = 22,
   p_color = "black",
   p_x = 1,
-  p_y = 0.7,
-  p_family = "garamond",
+  p_y = 1.35,
+  p_family = "Georgia",
   # Subplot positioning
-  s_x = 1,
-  s_y = 1.2,
+  s_x = 0.95,
+  s_y = 0.85,
   s_width = 1.7,
   s_height = 1 / 1.1,
   # Hex styling
