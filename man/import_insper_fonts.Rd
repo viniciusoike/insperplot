@@ -2,66 +2,49 @@
 % Please edit documentation in R/utils.R
 \name{import_insper_fonts}
 \alias{import_insper_fonts}
-\title{Import Insper Fonts from Google Fonts}
+\title{Download Insper Fonts from Google Fonts}
 \usage{
-import_insper_fonts(enable = FALSE, verbose = TRUE)
+import_insper_fonts(dir = "~/fonts", verbose = TRUE)
 }
 \arguments{
-\item{enable}{Logical. If TRUE, automatically enables showtext for
-rendering. If FALSE (default, recommended), fonts are registered but you must call
-\code{showtext::showtext_auto()} manually. **Warning**: Enabling showtext can cause
-DPI conflicts - consider using local font installation with ragg device instead.}
+\item{dir}{Directory to save fonts. Default \code{"~/fonts"} saves fonts
+permanently. Use \code{tempdir()} for session-only use.}
 
-\item{verbose}{Logical. If TRUE (default), prints status messages about font
-loading.}
+\item{verbose}{Logical. If TRUE (default), prints status messages.}
 }
 \value{
-Invisibly returns TRUE if fonts loaded successfully, FALSE otherwise.
+Invisibly returns a named logical vector: TRUE for each font that was
+  downloaded, FALSE for fonts already installed (skipped).
 }
 \description{
-Loads Insper's recommended fonts (Inter, EB Garamond, and Playfair Display)
-from Google Fonts using the showtext package. This allows using custom fonts
-without installing them locally on your system.
+Downloads Insper's recommended fonts (Inter, EB Garamond, and Playfair
+Display) from Google Fonts. Fonts are saved locally, making them permanently
+available across R sessions via the systemfonts registry.
 }
 \details{
-This function provides an alternative to installing fonts locally on your
-system. It uses the \pkg{showtext} package to load fonts directly from
-Google Fonts each R session.
+Only missing fonts are downloaded. Uses
+\code{\link[systemfonts]{get_from_google_fonts}}, which integrates natively
+with the ragg rendering pipeline — no DPI conflicts, no per-session loading.
 
-**Two ways to use Insper fonts:**
-
-1. **Local Installation (permanent)**: Download and install fonts from
-   \url{https://fonts.google.com} on your system. Use
-   \code{\link{check_insper_fonts}()} to verify installation.
-
-2. **Remote Loading (per-session)**: Use this function to load fonts from
-   Google Fonts for the current session only. Fonts must be loaded each
-   time you start R.
-
-The package attempts to load fonts automatically when loaded via
-\code{library(insperplot)}. If automatic loading fails, call this function
-manually.
+After downloading, restart R so new fonts are picked up by the font registry.
+Use \code{\link{setup_insper_fonts}} to verify the result.
 }
 \examples{
 \dontrun{
-# Load Insper fonts from Google Fonts
+# Download missing Insper fonts (saved permanently to ~/fonts)
 import_insper_fonts()
 
-# Now create plots with custom fonts
-library(ggplot2)
-ggplot(mtcars, aes(wt, mpg)) +
-  geom_point() +
-  theme_insper()
+# Session-only download
+import_insper_fonts(dir = tempdir())
 }
 }
 \seealso{
-\code{\link{check_insper_fonts}}
+\code{\link{setup_insper_fonts}},
+  \code{\link[systemfonts]{get_from_google_fonts}}
 
 Other utilities: 
-\code{\link{check_insper_fonts}()},
 \code{\link{format_num_br}()},
 \code{\link{save_insper_plot}()},
-\code{\link{setup_insper_fonts}()},
-\code{\link{use_ragg_device}()}
+\code{\link{setup_insper_fonts}()}
 }
 \concept{utilities}

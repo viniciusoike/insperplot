@@ -2,66 +2,45 @@
 % Please edit documentation in R/utils.R
 \name{setup_insper_fonts}
 \alias{setup_insper_fonts}
-\title{Interactive Setup Wizard for Insper Fonts and Graphics}
+\title{Check Insper Font and Graphics Setup}
 \usage{
-setup_insper_fonts(check_only = FALSE)
+setup_insper_fonts(verbose = TRUE)
 }
 \arguments{
-\item{check_only}{Logical. If TRUE, only checks current setup without providing
-interactive guidance. Default is FALSE.}
+\item{verbose}{Logical. If TRUE (default), prints a detailed status report.
+Use FALSE to check status silently via the return value.}
 }
 \value{
-Invisibly returns a list with setup status:
-  \itemize{
-    \item fonts_installed: Are Insper fonts installed locally?
-    \item ragg_installed: Is ragg package installed?
-    \item setup_complete: Is setup complete and optimal?
-  }
+Invisibly returns a named logical vector indicating which fonts are
+  available: Georgia, Inter, EB Garamond, and Playfair Display.
 }
 \description{
-Interactive guide to set up insperplot with optimal font and graphics device
-configuration. This function checks your system and provides step-by-step
-instructions for the best setup.
+Checks whether recommended Insper fonts are available and reports the status
+of the ragg graphics device. Use \code{\link{import_insper_fonts}} to
+download any missing fonts.
 }
 \details{
-This function provides an interactive wizard that:
-\enumerate{
-  \item Checks if Insper fonts (EB Garamond, Barlow) are installed locally
-  \item Checks if ragg package is installed
-  \item Provides tailored setup instructions based on your system
-  \item Guides you to the optimal configuration
-}
-
-**Recommended Setup (Best Performance):**
-\enumerate{
-  \item Install Insper fonts locally from Google Fonts
-  \item Install ragg package
-  \item Set RStudio graphics backend to AGG
-}
-
-This setup provides:
+Recommended fonts based on Insper's official visual identity:
 \itemize{
-  \item No DPI conflicts
-  \item No per-session font loading
-  \item Best rendering quality
-  \item Optimal performance
+  \item \strong{Georgia}: System serif font for titles (usually pre-installed)
+  \item \strong{Inter}: Sans-serif font for body text (Google Font)
+  \item \strong{EB Garamond}: Serif font, title fallback (Google Font)
+  \item \strong{Playfair Display}: Serif font, title alternative (Google Font)
 }
+
+If any Google Fonts are missing, run \code{import_insper_fonts()} to
+download them. For best rendering quality, install the \pkg{ragg} package and
+set the RStudio graphics backend to AGG.
 }
 \examples{
-# Run interactive setup wizard
 setup_insper_fonts()
-
-# Check current setup status
-setup_insper_fonts(check_only = TRUE)
 }
 \seealso{
-\code{\link{check_insper_fonts}}, \code{\link{use_ragg_device}}
+\code{\link{import_insper_fonts}}
 
 Other utilities: 
-\code{\link{check_insper_fonts}()},
 \code{\link{format_num_br}()},
 \code{\link{import_insper_fonts}()},
-\code{\link{save_insper_plot}()},
-\code{\link{use_ragg_device}()}
+\code{\link{save_insper_plot}()}
 }
 \concept{utilities}

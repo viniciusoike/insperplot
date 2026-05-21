@@ -6,13 +6,9 @@
 #' and skips the test if they're not available. This prevents font-related
 #' test failures in CI environments or systems without the fonts installed.
 skip_if_no_fonts <- function() {
-  # Suppress verbose output when checking fonts
-  font_status <- check_insper_fonts(verbose = FALSE)
+  font_status <- setup_insper_fonts(verbose = FALSE)
 
-  # Check if both fonts are available
-  fonts_available <- all(font_status)
-
-  if (!fonts_available) {
+  if (!all(font_status)) {
     testthat::skip("Insper fonts not available (Georgia, Inter, EB Garamond, or Playfair Display missing)")
   }
 }
