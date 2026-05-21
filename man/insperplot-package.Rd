@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Extends ggplot2 with Insper's identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use. This is not an official Insper product.
+Extends ggplot2 with Insper's identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
 
 This package extends ggplot2 with Insper Instituto de Ensino e Pesquisa
 visual identity, providing custom themes, color palettes, and specialized
@@ -29,10 +29,8 @@ Pesquisa.
 
 **Colors:**
 \itemize{
-  \item \code{\link{get_insper_colors}} - Extract individual Insper brand colors
-  \item \code{\link{show_insper_colors}} - Visualize Insper brand colors
-  \item \code{\link{show_insper_palette}} - Visualize color palettes
-  \item \code{\link{list_palettes}} - List available color palettes
+  \item \code{\link{insper_palette}} - Get a palette as a character vector (prints a swatch)
+  \item \code{\link{show_insper_palettes}} - Show an overview of all palettes
 }
 
 **Scales:**
@@ -68,7 +66,7 @@ The package includes 15 pre-defined palettes:
   \item **categorical_ito, categorical_tab, categorical_set** - Colorblind-safe categorical options
 }
 
-Use \code{\link{list_palettes}()} to see all available palettes with detailed information.
+Use \code{\link{show_insper_palettes}()} to see all available palettes.
 }
 
 \section{Getting Started}{
@@ -103,17 +101,17 @@ This package follows modern R development best practices:
 }
 
 \examples{
-# View available colors
-get_insper_colors()
+# View available palettes
+show_insper_palettes()
 
-# Show color palettes
-show_insper_palette("reds")
+# Get colors from a palette
+insper_palette("reds", n = 3)
 
 \dontrun{
 # Create a simple plot (requires fonts to be set up)
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point(color = get_insper_colors("reds1")) +
+  geom_point(color = insper_palette("reds", n = 1)) +
   theme_insper()
 }
 }
@@ -137,7 +135,7 @@ Useful links:
 }
 }
 \author{
-\strong{Maintainer}: Vinicius Reginatto \email{viniciusor@insper.edu.br}
+\strong{Maintainer}: Vinicius Reginatto \email{viniciusor@insper.edu.br} [copyright holder]
 
 }
 \keyword{internal}

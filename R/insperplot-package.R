@@ -22,10 +22,8 @@
 #'
 #' **Colors:**
 #' \itemize{
-#'   \item \code{\link{get_insper_colors}} - Extract individual Insper brand colors
-#'   \item \code{\link{show_insper_colors}} - Visualize Insper brand colors
-#'   \item \code{\link{show_insper_palette}} - Visualize color palettes
-#'   \item \code{\link{list_palettes}} - List available color palettes
+#'   \item \code{\link{insper_palette}} - Get a palette as a character vector (prints a swatch)
+#'   \item \code{\link{show_insper_palettes}} - Show an overview of all palettes
 #' }
 #'
 #' **Scales:**
@@ -59,7 +57,7 @@
 #'   \item **categorical_ito, categorical_tab, categorical_set** - Colorblind-safe categorical options
 #' }
 #'
-#' Use \code{\link{list_palettes}()} to see all available palettes with detailed information.
+#' Use \code{\link{show_insper_palettes}()} to see all available palettes.
 #'
 #' @section Getting Started:
 #' \preformatted{
@@ -100,17 +98,17 @@
 #' }
 #'
 #' @examples
-#' # View available colors
-#' get_insper_colors()
+#' # View available palettes
+#' show_insper_palettes()
 #'
-#' # Show color palettes
-#' show_insper_palette("reds")
+#' # Get colors from a palette
+#' insper_palette("reds", n = 3)
 #'
 #' \dontrun{
 #' # Create a simple plot (requires fonts to be set up)
 #' library(ggplot2)
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
-#'   geom_point(color = get_insper_colors("reds1")) +
+#'   geom_point(color = insper_palette("reds", n = 1)) +
 #'   theme_insper()
 #' }
 #' @name insperplot-package
