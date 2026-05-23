@@ -5,7 +5,7 @@ Version: 0.1.0
 Date: 2025-10-29
 Authors@R: c(
     person(
-      "Vinicius", "Reginatto",
+      "Vinicius", "Oike",
       email = "viniciusor@insper.edu.br",
       role = c("aut", "cre", "cph")
     )
