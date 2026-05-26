@@ -24,7 +24,7 @@ available across R sessions via the systemfonts registry.
 \details{
 Only missing fonts are downloaded. Uses
 \code{\link[systemfonts]{get_from_google_fonts}}, which integrates natively
-with the ragg rendering pipeline — no DPI conflicts, no per-session loading.
+with the ragg rendering pipeline -- no DPI conflicts, no per-session loading.
 
 After downloading, restart R so new fonts are picked up by the font registry.
 Use \code{\link{setup_insper_fonts}} to verify the result.
@@ -44,6 +44,7 @@ import_insper_fonts(dir = tempdir())
 
 Other utilities: 
 \code{\link{format_num_br}()},
+\code{\link{has_insper_fonts}()},
 \code{\link{save_insper_plot}()},
 \code{\link{setup_insper_fonts}()}
 }

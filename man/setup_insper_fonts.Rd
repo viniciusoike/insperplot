@@ -20,26 +20,33 @@ of the ragg graphics device. Use \code{\link{import_insper_fonts}} to
 download any missing fonts.
 }
 \details{
-Recommended fonts based on Insper's official visual identity:
+\strong{Required fonts} (needed for correct rendering):
 \itemize{
   \item \strong{Georgia}: System serif font for titles (usually pre-installed)
   \item \strong{Inter}: Sans-serif font for body text (Google Font)
-  \item \strong{EB Garamond}: Serif font, title fallback (Google Font)
-  \item \strong{Playfair Display}: Serif font, title alternative (Google Font)
 }
 
-If any Google Fonts are missing, run \code{import_insper_fonts()} to
-download them. For best rendering quality, install the \pkg{ragg} package and
-set the RStudio graphics backend to AGG.
+\strong{Optional fallback fonts} (only used when Georgia is unavailable):
+\itemize{
+  \item \strong{EB Garamond}: Serif title fallback (Google Font)
+  \item \strong{Playfair Display}: Serif title alternative (Google Font)
+}
+
+Run \code{import_insper_fonts()} to download any missing fonts. For best
+rendering quality, install the \pkg{ragg} package and set the RStudio
+graphics backend to AGG.
 }
 \examples{
+\dontrun{
 setup_insper_fonts()
+}
 }
 \seealso{
 \code{\link{import_insper_fonts}}
 
 Other utilities: 
 \code{\link{format_num_br}()},
+\code{\link{has_insper_fonts}()},
 \code{\link{import_insper_fonts}()},
 \code{\link{save_insper_plot}()}
 }

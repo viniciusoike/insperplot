@@ -32,7 +32,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl))) +
   scale_color_insper_d()
 }
 \seealso{
-\code{\link{insper_pal}}, \code{\link{theme_insper}}, \code{\link{scale_color_insper_c}}
+\code{\link{theme_insper}}, \code{\link{scale_color_insper_c}}
 
 Other scales: 
 \code{\link{scale_color_insper_c}()}

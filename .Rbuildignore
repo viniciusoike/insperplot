@@ -18,3 +18,5 @@
 ^suggestions\.R$
 ^doc$
 ^Meta$
+^dev$
+^figure$

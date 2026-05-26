@@ -7,6 +7,10 @@
 #' @param width Plot width in inches
 #' @param height Plot height in inches
 #' @param dpi Resolution
+#' @param asp_ratio Aspect ratio (width / height). Default is the golden ratio (1.618).
+#'   Used only when \code{width} is not supplied directly.
+#' @param unit Units for \code{width} and \code{height}. Default \code{"cm"}.
+#'   Passed to \code{\link[ggplot2]{ggsave}}.
 #' @param device Graphics device to use. If NULL (default), automatically uses
 #'   ragg::agg_png() for PNG files when ragg is installed, otherwise falls back
 #'   to ggplot2 defaults. You can override by passing a device function.
@@ -145,7 +149,7 @@ format_num_br <- function(
 #' @details
 #' Only missing fonts are downloaded. Uses
 #' \code{\link[systemfonts]{get_from_google_fonts}}, which integrates natively
-#' with the ragg rendering pipeline — no DPI conflicts, no per-session loading.
+#' with the ragg rendering pipeline -- no DPI conflicts, no per-session loading.
 #'
 #' After downloading, restart R so new fonts are picked up by the font registry.
 #' Use \code{\link{setup_insper_fonts}} to verify the result.
@@ -153,6 +157,7 @@ format_num_br <- function(
 #' @family utilities
 #' @seealso \code{\link{setup_insper_fonts}},
 #'   \code{\link[systemfonts]{get_from_google_fonts}}
+#' @importFrom stats setNames
 #' @export
 #' @examples
 #' \dontrun{
@@ -318,7 +323,9 @@ setup_insper_fonts <- function(verbose = TRUE) {
   cli::cli_text("")
 
   if (core_ok) {
-    cli::cli_alert_success("Core fonts available — plots will render correctly.")
+    cli::cli_alert_success(
+      "Core fonts available \u2014 plots will render correctly."
+    )
     if (!font_status["EB Garamond"] || !font_status["Playfair Display"]) {
       cli::cli_alert_info(
         "Optional fallback fonts can be downloaded with {.code import_insper_fonts()}"
@@ -326,7 +333,7 @@ setup_insper_fonts <- function(verbose = TRUE) {
     }
   } else {
     cli::cli_alert_warning(
-      "Core fonts missing — run {.code import_insper_fonts()} to download."
+      "Core fonts missing \u2014 run {.code import_insper_fonts()} to download."
     )
   }
 
@@ -511,9 +518,16 @@ warn_palette_ignored <- function(aesthetic_type, palette, param_name) {
   }
 }
 
-#' @return Logical. TRUE if at least one primary Insper font is available, FALSE otherwise
+#' Check Whether Insper Fonts Are Available
+#'
+#' Returns \code{TRUE} when the session is interactive and at least one primary
+#' Insper font (Georgia or Inter) is registered in the system font catalogue.
+#' Intended for use with \code{@examplesIf} in package documentation.
+#'
+#' @return Logical scalar.
+#' @family utilities
 #' @keywords internal
-#' @noRd
+#' @export
 has_insper_fonts <- function() {
   # Only run examples in interactive sessions
   # (fonts may be detected but not work with CMD check's graphics device)

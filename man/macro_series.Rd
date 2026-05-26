@@ -18,8 +18,6 @@ A data frame with 560 rows and 6 variables:
     Measures monthly industrial production, base 2012 = 100}
   \item{oil}{Produção de petróleo bruto (Crude oil production). Monthly crude
     oil production in thousands of barrels per day}
-  \item{pms}{PMS - Pesquisa Mensal de Serviços (Monthly Services Survey).
-    Monthly services sector activity index, base 2014 = 100}
 }
 }
 \source{
@@ -42,7 +40,6 @@ Brazilian Central Bank's Time Series Management System (SGS).
 **Series codes used:**
 \itemize{
   \item IPCA: 433
-  \item PMS: 21637
   \item IPI: 21859
   \item Oil production: 1389
   \item IBC-Br (seasonally adjusted): 24364

@@ -18,7 +18,7 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='0.00' y='0.00' width='720.00' height='576.00' style='stroke-width: 1.16; stroke: #FEFEFE; fill: #FEFEFE;' />
+<rect x='0.00' y='0.00' width='720.00' height='576.00' style='stroke-width: 1.16; stroke: none; fill: #FEFEFE;' />
 </g>
 <defs>
   <clipPath id='cpNDIuOTZ8NzA1LjA2fDI4Ljc0fDUzOS45Mw=='>
@@ -26,7 +26,6 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpNDIuOTZ8NzA1LjA2fDI4Ljc0fDUzOS45Mw==)'>
-<rect x='42.96' y='28.74' width='662.10' height='511.19' style='stroke-width: 1.16; stroke: #FEFEFE; fill: #FEFEFE;' />
 <circle cx='243.42' cy='307.08' r='2.13' style='stroke-width: 0.77; fill: #000000;' />
 <circle cx='282.67' cy='307.08' r='2.13' style='stroke-width: 0.77; fill: #000000;' />
 <circle cx='197.25' cy='271.48' r='2.13' style='stroke-width: 0.77; fill: #000000;' />

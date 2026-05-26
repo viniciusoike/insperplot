@@ -85,7 +85,7 @@
 #'
 #' @family themes
 #' @seealso \code{\link[ggplot2]{theme_minimal}}, \code{\link[ggplot2]{theme}}, \code{\link{setup_insper_fonts}}, \code{\link{import_insper_fonts}}
-#' @importFrom ggplot2 element_blank element_line element_rect element_text unit theme theme_minimal rel margin %+replace%
+#' @importFrom ggplot2 element_blank element_line element_rect element_text unit theme theme_minimal rel margin %+replace% theme_sub_axis theme_sub_legend theme_sub_panel theme_sub_plot theme_sub_strip
 #' @export
 theme_insper <- function(
   base_size = 12,
@@ -97,12 +97,10 @@ theme_insper <- function(
   ...
 ) {
   # Input validation ----
-  # Check that grid parameter is logical (TRUE/FALSE)
   if (!is.logical(grid)) {
     cli::cli_abort("Argument `grid` must be one of `TRUE` or `FALSE`.")
   }
 
-  # Validate align parameter against allowed values
   valid_align <- c("panel", "plot")
   if (!align %in% valid_align) {
     cli::cli_abort(c(
@@ -111,7 +109,6 @@ theme_insper <- function(
     ))
   }
 
-  # Validate border parameter against allowed values
   valid_border <- c("none", "half", "closed")
   if (!any(border %in% valid_border)) {
     cli::cli_abort(
@@ -120,9 +117,6 @@ theme_insper <- function(
   }
 
   # Font detection and fallback ----
-  # Detect if custom fonts are available, fall back through chain if not
-  # Title: Georgia -> EB Garamond -> Playfair Display -> serif
-  # Body: Inter -> Arial -> sans
   font_title <- detect_font(
     font_title,
     fallback_chain = c("EB Garamond", "Playfair Display", "serif")
@@ -132,118 +126,86 @@ theme_insper <- function(
     fallback_chain = c("Arial", "sans")
   )
 
-  # Base theme configuration ----
-  # Define the core theme elements that apply regardless of options
-  theme_base <- theme(
-    # Text styling
-    text = element_text(family = font_text, size = rel(1)),
+  # Colors ----
+  off_white <- get_insper_colors("off_white")
+  black <- get_insper_colors("black")
 
-    # Background colors using Insper's off-white
-    plot.background = element_rect(
-      fill = get_insper_colors("off_white"),
-      color = get_insper_colors("off_white")
-    ),
-    panel.background = element_rect(
-      fill = get_insper_colors("off_white"),
-      color = get_insper_colors("off_white")
-    ),
+  # Conditional grid theme ----
+  grid_theme <- if (grid) {
+    theme_sub_panel(
+      grid.major = element_line(
+        linewidth = 0.35,
+        color = get_insper_colors("gray_light")
+      )
+    )
+  } else {
+    theme_sub_panel(grid.major = element_blank())
+  }
 
-    # Remove minor grid lines (always off)
-    panel.grid.minor = element_blank(),
-
-    # Plot spacing and margins
-    plot.margin = margin(10, 15, 10, 15),
-
-    # Legend configuration
-    legend.position = "top", # Position legend at top of plot
-    legend.direction = "horizontal", # Arrange legend items horizontally
-    legend.title = element_text(face = "bold"),
-
-    # Axis styling
-    # Note: axis.ticks are commented out in base theme, applied conditionally based on border
-    axis.text = element_text(size = rel(0.8), color = "gray10"),
-    axis.title = element_text(
-      size = rel(1),
-      color = get_insper_colors("black")
-    ),
-
-    # Title and subtitle styling
-    plot.title = element_text(
-      size = rel(1.4), # 40% larger than base size
-      family = font_title, # Use title font
-      color = get_insper_colors("black"),
-      hjust = 0, # Left-align title
-      margin = margin(b = 5)
-    ),
-    plot.subtitle = element_text(
-      size = rel(0.8), # 10% smaller than base size
-      family = font_text, # Use title font
-      color = get_insper_colors("gray_meddark"),
-      hjust = 0, # Left-align subtitle
-      margin = margin(t = 3, b = 5)
-    ),
-    # Caption styling (bottom right)
-    plot.caption = element_text(
-      size = rel(0.5),
-      color = "gray40",
-      hjust = 0,
-      margin = margin(t = 3)
-    ),
-
-    # Facet strip styling
-    # strip.background is commented out - uses default
-    strip.text = element_text(size = rel(1), face = "bold"),
-
-    plot.title.position = align,
-    plot.caption.position = align,
-    # Mark theme as complete (replaces all elements from base theme)
-    complete = TRUE
-  )
-
-  # Conditional grid configuration ----
-  # Add or remove major grid lines based on grid parameter
-  if (grid) {
-    theme_base <- theme_base +
-      theme(
-        panel.grid.major = element_line(
-          linewidth = 0.35, # Thin lines
-          color = get_insper_colors("gray_light") # Light gray color
-        )
+  # Conditional border theme ----
+  border_theme <- if (border == "half") {
+    theme_sub_axis(
+      line = element_line(),
+      ticks = element_line(color = get_insper_colors("gray_dark")),
+      ticks.length = unit(7, "pt")
+    )
+  } else if (border == "closed") {
+    theme_sub_panel(border = element_rect(color = black, fill = NA)) +
+      theme_sub_axis(
+        ticks = element_line(color = get_insper_colors("gray_dark")),
+        ticks.length = unit(7, "pt")
       )
   } else {
-    theme_base <- theme_base + theme(panel.grid.major = element_blank())
+    theme()
   }
 
-  # Conditional border configuration ----
-  # Apply different border styles based on border parameter
-  if (border == "half") {
-    # Show axis lines with ticks but no full border
-    theme_base <- theme_base +
-      theme(
-        axis.line = element_line(), # Add axis lines
-        axis.ticks = element_line(color = get_insper_colors("gray_dark")),
-        axis.ticks.length = unit(7, "pt") # 7 point tick length
-      )
-  }
+  # Build full theme ----
+  full_theme <- theme(
+    text = element_text(family = font_text, size = rel(1)),
+    complete = TRUE
+  ) +
+    theme_sub_panel(grid.minor = element_blank()) +
+    theme_sub_plot(
+      margin = margin(10, 15, 10, 15),
+      title = element_text(
+        size = rel(1.4),
+        family = font_title,
+        color = black,
+        hjust = 0,
+        margin = margin(b = 5)
+      ),
+      subtitle = element_text(
+        size = rel(0.8),
+        family = font_text,
+        color = get_insper_colors("gray_meddark"),
+        hjust = 0,
+        margin = margin(t = 3, b = 5)
+      ),
+      caption = element_text(
+        size = rel(0.5),
+        color = "gray40",
+        hjust = 0,
+        margin = margin(t = 3)
+      ),
+      title.position = align,
+      caption.position = align
+    ) +
+    theme_sub_legend(
+      position = "top",
+      direction = "horizontal",
+      title = element_text(face = "bold")
+    ) +
+    theme_sub_axis(
+      text = element_text(size = rel(0.8), color = "gray10"),
+      title = element_text(size = rel(1), color = black)
+    ) +
+    theme_sub_strip(text = element_text(size = rel(1), face = "bold")) +
+    grid_theme +
+    border_theme
 
-  if (border == "closed") {
-    # Show complete rectangular border around plot area
-    theme_base <- theme_base +
-      theme(
-        panel.border = element_rect(
-          color = get_insper_colors("black"),
-          fill = NA
-        ),
-        axis.ticks = element_line(color = get_insper_colors("gray_dark")),
-        axis.ticks.length = unit(7, "pt") # 7 point tick length
-      )
-  }
-
-  # Return combined theme ----
-  # Start with theme_minimal as base, then replace with custom elements
-  # The %+replace% operator replaces matching elements rather than adding to them
-  theme_minimal(base_size = base_size, ...) %+replace%
-    theme_base
+  # Return final theme ----
+  theme_minimal(base_size = base_size, paper = off_white, ...) %+replace%
+    full_theme
 }
 
 
@@ -258,19 +220,25 @@ detect_font <- function(font_name, fallback_chain = "sans") {
 
   tryCatch(
     {
-      available_fonts <- systemfonts::system_fonts()$family
+      available_fonts <- unique(systemfonts::system_fonts()$family)
 
-      if (any(grepl(font_name, available_fonts, ignore.case = TRUE))) {
-        return(font_name)
+      # Returns exact match, or first grepl match (handles variants like "Inter 18pt")
+      resolve_font <- function(name) {
+        if (name %in% available_fonts) return(name)
+        matches <- available_fonts[grepl(name, available_fonts, ignore.case = TRUE)]
+        if (length(matches) > 0) return(matches[1])
+        NULL
       }
+
+      resolved <- resolve_font(font_name)
+      if (!is.null(resolved)) return(resolved)
 
       for (fallback_font in fallback_chain) {
         if (fallback_font %in% c("serif", "sans", "mono")) {
           return(fallback_font)
         }
-        if (any(grepl(fallback_font, available_fonts, ignore.case = TRUE))) {
-          return(fallback_font)
-        }
+        resolved <- resolve_font(fallback_font)
+        if (!is.null(resolved)) return(resolved)
       }
     },
     error = function(e) {

@@ -137,7 +137,7 @@ insper_palette <- function(palette = "main", n = NULL, reverse = FALSE) {
   if (!is.null(n)) {
     if (n > length(colors)) {
       cli::cli_warn(
-        "Palette {.val {palette}} has {length(colors)} colors but {n} requested — recycling."
+        "Palette {.val {palette}} has {length(colors)} colors but {n} requested \u2014 recycling."
       )
       colors <- rep(colors, length.out = n)
     } else {

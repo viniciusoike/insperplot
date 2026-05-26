@@ -32,7 +32,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = hp)) +
   scale_color_insper_c(palette = "teals")
 }
 \seealso{
-\code{\link{insper_pal}}, \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
+\code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 
 Other scales: 
 \code{\link{scale_color_insper_d}()}

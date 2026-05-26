@@ -21,22 +21,21 @@ Depends:
     R (>= 4.1.0)
 Imports:
     cli,
-    ggplot2 (>= 3.4.0),
+    ggplot2 (>= 4.0.0),
     rlang (>= 1.0.0),
     scales (>= 1.2.0)
 Suggests:
-    forcats,
     systemfonts,
     ragg,
-    showtext,
-    sysfonts,
-    tidyr,
     testthat (>= 3.0.0),
     vdiffr (>= 1.0.0),
     withr,
     knitr,
     rmarkdown,
-    pkgdown
+    pkgdown,
+    RcppRoll,
+    lubridate,
+    dplyr
 URL: https://viniciusoike.github.io/insperplot/, https://github.com/viniciusoike/insperplot
 BugReports: https://github.com/viniciusoike/insperplot/issues
 Config/testthat/edition: 3

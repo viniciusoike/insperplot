@@ -5,7 +5,7 @@
 #' @param ... Additional arguments passed to ggplot2::discrete_scale()
 #' @return ggplot2 scale object
 #' @family scales
-#' @seealso \code{\link{insper_pal}}, \code{\link{theme_insper}}, \code{\link{scale_color_insper_c}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_c}}
 #' @importFrom ggplot2 discrete_scale
 #' @importFrom scales manual_pal
 #' @export
@@ -44,7 +44,7 @@ scale_fill_insper_d <- function(palette = "main", reverse = FALSE, ...) {
 #' @param ... Additional arguments passed to ggplot2::scale_color_gradientn()
 #' @return ggplot2 scale object
 #' @family scales
-#' @seealso \code{\link{insper_pal}}, \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
+#' @seealso \code{\link{theme_insper}}, \code{\link{scale_color_insper_d}}
 #' @importFrom ggplot2 scale_color_gradientn
 #' @export
 #' @examples

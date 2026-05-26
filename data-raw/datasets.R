@@ -102,7 +102,7 @@ spo_metro <- read_csv("data-raw/metro_sp_line_4_stations.csv")
 # Note: This dataset contains only positive values, making it ideal for area plots
 
 fossil_fuel <- read_csv(
-  "data-raw/global-fossil-fuel-consumption/global-fossil-fuel-consumption.csv",
+  "data-raw/global-fossil-fuel-consumption.csv",
   show_col_types = FALSE
 )
 
@@ -134,29 +134,32 @@ fossil_fuel$fuel <- factor(
 #   1389: Crude oil production
 #   24364: IBC-Br (seasonally adjusted) - Economic Activity Index
 
-update <- FALSE
+update <- TRUE
 
 if (update) {
   macro_series <- rbcb::get_series(
     c(
       "ipca" = 433,
-      "pms" = 21637,
       "ipi" = 21859,
       "oil" = 1389,
       "ibcbr_dessaz" = 24364
-    )
+    ),
+    start_date = "2003-01-01"
   )
 
   # Merge all series into single data frame by date
-  macro_series <- purrr::reduce(macro_series, full_join, by = "date")
+  macro_series <- purrr::reduce(macro_series, inner_join, by = "date")
+  macro_series <- arrange(macro_series, date)
+
+  macro_series_long <- macro_series |>
+    tidyr::pivot_longer(
+      cols = -date,
+      names_to = "name_series",
+      values_to = "value"
+    ) |>
+    dplyr::arrange(date)
 }
 
-macro_series_long <- macro_series |>
-  tidyr::pivot_longer(
-    cols = -date,
-    names_to = "name_series",
-    values_to = "value"
-  )
 
 # Save Datasets ---------------------------------------------------------------
 
@@ -165,7 +168,13 @@ usethis::use_data(
   rec_passengers,
   spo_metro,
   fossil_fuel,
-  macro_series,
-  macro_series_long,
   overwrite = TRUE
 )
+
+if (update) {
+  usethis::use_data(
+    macro_series,
+    macro_series_long,
+    overwrite = TRUE
+  )
+}

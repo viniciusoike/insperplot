@@ -14,17 +14,14 @@ knitr::opts_chunk$set(
   fig.width = 7,
   fig.asp = 0.618,
   fig.align = "center",
-  out.width = "90%",
-  dpi = 300,
   warning = FALSE,
-  message = FALSE,
-  dev = "ragg_png"
+  message = FALSE
 )
 ```
 
 ## Introduction
 
-**insperplot** extends ggplot2 with Insper's visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
+**insperplot** extends ggplot2 with [Insper](https://www.insper.edu.br/en/)'s visual identity, providing custom themes, color palettes, and specialized plotting functions for academic and institutional use.
 
 ### Installation
 
@@ -36,14 +33,14 @@ remotes::install_github("viniciusoike/insperplot")
 ```{r setup}
 library(insperplot)
 library(ggplot2)
-library(ragg)
+library(dplyr)
 ```
 
 ### Font Setup (Optional but Recommended)
 
 insperplot uses fonts based on Insper's official template: **Georgia** (primary for titles), **Inter** and **Arial** (for body text). **EB Garamond** and **Playfair Display** are used as fallbacks for titles. While optional, installing these fonts significantly enhances plot aesthetics.
 
-Note: while "GT Ultra Fine Bold" is one of the official fonts, it is not available for free and thus is not included in the package.
+Note: "GT Ultra Fine Bold" is one of the official Insper fonts, but it is not freely available and is not included in the package.
 
 ```{r eval=FALSE}
 # Check font status
@@ -60,139 +57,191 @@ import_insper_fonts()
 3. Install on your system
 4. Restart R/RStudio
 
-Note: Georgia is typically pre-installed on most systems. GT Ultra Fine is a proprietary font and not available for free. If fonts are unavailable, plots will use system defaults.
+Georgia is typically pre-installed on most systems. If fonts are unavailable, plots will use system defaults.
 
 ## Basic Usage: theme_insper()
 
-The foundation of insperplot is `theme_insper()`, which applies Insper's visual identity to any plot.
+The foundation of insperplot is `theme_insper()`, which applies Insper's visual identity to any ggplot2 plot. Simply add it to any ggplot2 chart to get a clean, branded appearance with Insper's typography and colors.
 
-```{r theme-insper-basic}
+```{r theme-basic}
 ggplot(mtcars, aes(mpg, wt)) +
   geom_point() +
   labs(
     title = "Basic Theme",
     subtitle = "Using theme_insper()",
-    caption = "Fonte: mtcars"
+    caption = "Source: mtcars"
   ) +
   theme_insper()
 ```
 
-This function supports some quick customization options demonstrated below.
+### Customizing the Theme
 
-```{r}
-ggplot(mtcars, aes(mpg, wt)) +
-  geom_point() +
+`theme_insper()` supports several arguments for quick customization:
+
+- `font_title`: Font for titles. Default is `"Georgia"`.
+- `font_text`: Font for body text. Default is `"Inter"`.
+- `grid`: Grid lines. Default is `TRUE`.
+- `border`: Border style. Options are `"none"` (default), `"half"`, or `"closed"`.
+- `align`: Title, subtitle, and caption alignment. Default is `"panel"`.
+
+The following examples use `macro_series`, a dataset bundled with insperplot. It contains monthly Brazilian macroeconomic indicators — including inflation (IPCA), industrial production (IPI), and economic activity (IBC-Br) — sourced from the [Brazilian Central Bank](https://www3.bcb.gov.br/sgspub/). See `?macro_series` for details.
+
+Here we plot the IBC-Br index (a monthly GDP proxy) with a `"half"` border and a sans-serif title font:
+
+```{r theme-border-half}
+ggplot(macro_series, aes(date, ibcbr_dessaz)) +
+  geom_line(lwd = 0.7) +
   labs(
-    title = "Basic Theme",
-    subtitle = "Using theme_insper()",
-    caption = "Fonte: mtcars"
+    title = "Economic Activity Index",
+    subtitle = "IBC-Br, seasonally adjusted (base 2002 = 100)",
+    x = NULL,
+    y = "IBC-Br",
+    caption = "Source: Banco Central do Brasil"
   ) +
-  theme_insper(font_title = "Inter", border = "closed")
+  theme_insper(font_title = "Inter", border = "half")
 ```
 
-The main arguments of `theme_insper()` are:
+### Fine-Tuning with theme_sub_*()
 
-- `font_title`: Font for titles. Default is "Georgia".
-- `font_text`: Font for body text. Default is "Inter 18pt".
-- `grid`: Grid lines. Default is `TRUE`.
-- `border`: Border style. Default is "open" (no border).
-- `align`: Overall title, subtitle, and caption alignment. Default is "panel" (same as `ggplot2` default).
+For more granular control, ggplot2 4.0+ provides `theme_sub_*()` helper functions that target specific theme components. Add them after `theme_insper()` to override individual elements without resetting the whole theme.
 
-To change any particular aspect of `theme_insper` add a `theme()` call.
+In the example below, we add axis ticks and lines to the x-axis with `theme_sub_axis_x()`, and change the panel background with `theme_sub_panel()`:
 
-```{r}
-ggplot(mtcars, aes(mpg, wt)) +
-  geom_point() +
+```{r theme-sub-override}
+ggplot(macro_series, aes(date, ibcbr_dessaz)) +
+  geom_line(lwd = 0.7) +
+  labs(
+    title = "Economic Activity Index",
+    x = NULL,
+    y = "IBC-Br",
+    caption = "Source: Banco Central do Brasil"
+  ) +
   theme_insper() +
-  theme(axis.text = element_text(color = "red"))
+  theme_sub_axis_x(
+    ticks = element_line(color = "gray20", linewidth = 0.25),
+    line = element_line(color = "gray20", linewidth = 0.5)
+  ) +
+  theme_sub_panel(
+    background = element_rect(fill = "#f3f3f3", color = NA)
+  )
 ```
 
 ## Working with Colors
 
-The colors used in insperplot are based on Insper's [brandkit](https://github.com/Insper/Cores-Marca-Insper).
+The colors used in insperplot are based on Insper's [brandkit](https://github.com/Insper/Cores-Marca-Insper). Use `insper_palette()` to preview a specific palette and `show_insper_palettes()` to see all available palettes at a glance:
 
-```{r palette-viz, fig.height=4}
-# Show specific palette
+```{r palettes-overview, fig.height=4}
 insper_palette("reds")
 
-# Show default "main" palette
 show_insper_palettes()
 ```
 
 ### Using Colors in ggplot2
 
-The package provides scale functions for seamlessly integrating Insper colors into ggplot2 plots.
+The package provides `scale_color_insper_*()` and `scale_fill_insper_*()` functions for integrating Insper colors into ggplot2 plots. Use the `_d` variants for discrete (categorical) data and `_c` for continuous (numeric) data.
 
 #### Discrete Scales
 
-For categorical variables, use `scale_color_insper_d()` or `scale_fill_insper_d()`:
+For categorical variables, use `scale_color_insper_d()` or `scale_fill_insper_d()`.
 
-```{r scale-discrete-color}
-# Discrete color scale
-ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
-  geom_point(size = 3) +
-  scale_color_insper_d(palette = "main") +
-  theme_insper() +
-  labs(title = "Discrete Color Scale")
-```
+The examples below use `fossil_fuel`, a dataset bundled with insperplot. It tracks global primary energy consumption (in TWh) by fuel type (coal, oil, and gas) from 1800 to the present, sourced from [Our World in Data](https://ourworldindata.org/grapher/global-fossil-fuel-consumption). See `?fossil_fuel` for details.
+
+First, a stacked area chart of consumption since 1960 using `scale_fill_insper_d()`:
 
 ```{r scale-discrete-fill}
-# Discrete fill scale with barplot
-ggplot(mtcars, aes(x = factor(cyl), fill = factor(gear))) +
-  geom_bar(position = "dodge") +
+recent_fuel <- subset(fossil_fuel, year >= 1960)
+
+ggplot(recent_fuel, aes(year, consumption, fill = fuel)) +
+  geom_area() +
   scale_fill_insper_d(palette = "bright") +
+  scale_x_continuous(expand = expansion(mult = c(0))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  theme_insper(border = "half")
+```
+
+The same data shown as a line chart with `scale_color_insper_d()`:
+
+```{r scale-discrete-color}
+ggplot(fossil_fuel, aes(year, consumption, color = fuel)) +
+  geom_line() +
+  scale_color_insper_d(palette = "bright") +
   theme_insper() +
-  labs(title = "Discrete Fill Scale", x = "Cylinders", fill = "Gears")
+  labs(
+    title = "Global Fossil Fuel Consumption",
+    x = NULL,
+    y = "Consumption (TWh)",
+    color = "Fuel",
+    caption = "Source: Our World in Data (CC BY 4.0)"
+  )
 ```
 
 #### Continuous Scales
 
-For numerical variables, use `scale_color_insper_c()` or `scale_fill_insper_c()`:
+For numeric variables, use `scale_color_insper_c()` or `scale_fill_insper_c()`. These create smooth color gradients from any Insper palette.
 
-```{r scale-continuous}
-# Continuous color scale
-ggplot(mtcars, aes(x = wt, y = mpg, color = hp)) +
-  geom_point(size = 3) +
-  scale_color_insper_c(palette = "reds") +
+The heatmap below shows 12-month rolling inflation (IPCA) across years and months using the `"reds"` palette. We compute the rolling product from the `macro_series` dataset using `lubridate` (for date parts) and `RcppRoll` (for the rolling window):
+
+```{r scale-continuous-fill}
+#| fig-width: 8
+#| fig-height: 9
+macro_calendar <- macro_series |>
+  mutate(
+    year = lubridate::year(date),
+    month = lubridate::month(date),
+    ipca12m = RcppRoll::roll_prodr(1 + ipca / 100, n = 12) - 1,
+    ipca12m = ipca12m * 100
+  ) |>
+  filter(between(year, 2004, 2024))
+
+ggplot(macro_calendar, aes(month, year, fill = ipca12m)) +
+  geom_tile(color = "white", lwd = 0.1) +
+  scale_x_continuous(
+    breaks = 1:12,
+    labels = month.abb,
+    position = "top",
+    expand = expansion(c(0))
+  ) +
+  scale_y_continuous(breaks = 2004:2024, expand = expansion(c(0))) +
+  scale_fill_insper_c(
+    name = "IPCA (YoY, %)",
+    palette = "reds"
+  ) +
+  labs(x = NULL, y = NULL) +
   theme_insper() +
-  labs(title = "Continuous Color Scale", color = "Horsepower")
+  theme_sub_legend(
+    title = element_text(family = "Georgia", size = 12),
+    title.position = "top",
+    key.width = unit(4, "lines"),
+    position = "top"
+  )
 ```
 
-### Using Colors in Base R
+## Convenience Plot Functions
 
-While insperplot was designed for ggplot2, Insper colors can also be used in base R plots:
+Beyond the theme and scales, insperplot provides high-level plotting functions that combine common geom + scale + theme patterns into a single call. Each function returns a standard ggplot object, so you can still add layers, labs, or further customization with `+`.
 
-```{r base-r-plots-1}
-# Simple scatter plot with Insper colors
-plot(
-  mtcars$mpg,
-  mtcars$wt,
-  col = get_insper_colors("reds1"),
-  pch = 19,
-  cex = 1.5,
-  main = "Base R Plot with Insper Colors",
-  xlab = "MPG",
-  ylab = "Weight"
-)
-```
+### Time Series
 
-```{r base-r-plots-2}
-# Barplot with multiple Insper colors
-barplot(
-  table(mtcars$cyl),
-  col = get_insper_colors("reds1", "oranges1", "teals1"),
-  main = "Cylinders Distribution",
-  xlab = "Number of Cylinders",
-  ylab = "Count"
-)
+`insper_timeseries()` creates line plots optimized for temporal data. It handles `Date` and `POSIXct` axes automatically and supports multiple series via the `color` argument.
+
+```{r plot-timeseries}
+recent_macro <- subset(macro_series, date >= as.Date("2015-01-01"))
+
+insper_timeseries(recent_macro, x = date, y = ipca) +
+  labs(
+    title = "Brazilian Inflation (IPCA)",
+    subtitle = "Monthly rate, 2015–present",
+    x = NULL,
+    y = "IPCA (%)",
+    caption = "Source: Banco Central do Brasil"
+  )
 ```
 
 ## Saving Plots
 
-For best results when saving plots, use `ggsave()` with the ragg device to ensure proper font rendering:
+For best results when saving plots, use `ggsave()` with the [ragg](https://ragg.r-lib.org/) device to ensure proper font rendering:
 
-```{r eval=FALSE}
-# Save plot with optimal settings
+```{r save-ggsave, eval=FALSE}
 p <- ggplot(mtcars, aes(wt, mpg)) +
   geom_point() +
   theme_insper()
@@ -206,3 +255,36 @@ ggsave(
   device = ragg::agg_png
 )
 ```
+
+Alternatively, `save_insper_plot()` wraps `ggsave()` with sensible defaults for Insper-branded output: dimensions in centimeters, a golden-ratio aspect ratio, and automatic ragg device selection for PNG files when the package is installed.
+
+```{r save-insper, eval=FALSE}
+save_insper_plot(p, "my_plot.png")
+
+# Custom dimensions (in cm by default)
+save_insper_plot(p, "my_plot.png", width = 16, height = 10)
+```
+
+## Available Functions
+
+In addition to `insper_timeseries()` shown above, insperplot includes convenience functions for other common chart types:
+
+| Function | Chart type |
+|---|---|
+| `insper_timeseries()` | Line plots for temporal data |
+| `insper_barplot()` | Vertical and horizontal bar charts |
+| `insper_scatterplot()` | Scatter plots |
+| `insper_area()` | Area charts |
+| `insper_boxplot()` | Box plots |
+| `insper_violin()` | Violin plots |
+| `insper_histogram()` | Histograms |
+| `insper_density()` | Density plots |
+| `insper_heatmap()` | Heatmaps |
+
+All functions return ggplot objects, apply `theme_insper()` by default, and accept a `palette` argument for Insper color palettes. See their help pages (e.g. `?insper_barplot`) for full documentation.
+
+## Learn More
+
+- [Package website](https://viniciusoike.github.io/insperplot/) — full function reference and additional articles
+- [GitHub repository](https://github.com/viniciusoike/insperplot) — source code, issues, and contributing
+- [Insper brand colors](https://github.com/Insper/Cores-Marca-Insper) — the color system this package is built on

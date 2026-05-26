@@ -21,6 +21,9 @@ save_insper_plot(
 
 \item{filename}{File name}
 
+\item{asp_ratio}{Aspect ratio (width / height). Default is the golden ratio (1.618).
+Used only when \code{width} is not supplied directly.}
+
 \item{width}{Plot width in inches}
 
 \item{height}{Plot height in inches}
@@ -30,6 +33,9 @@ save_insper_plot(
 \item{device}{Graphics device to use. If NULL (default), automatically uses
 ragg::agg_png() for PNG files when ragg is installed, otherwise falls back
 to ggplot2 defaults. You can override by passing a device function.}
+
+\item{unit}{Units for \code{width} and \code{height}. Default \code{"cm"}.
+Passed to \code{\link[ggplot2]{ggsave}}.}
 
 \item{...}{Additional arguments passed to ggsave}
 }
@@ -46,6 +52,7 @@ which provides better font rendering and eliminates DPI issues. Install the
 
 Other utilities: 
 \code{\link{format_num_br}()},
+\code{\link{has_insper_fonts}()},
 \code{\link{import_insper_fonts}()},
 \code{\link{setup_insper_fonts}()}
 }

@@ -37,6 +37,7 @@ format_num_br(0.1234, percent = TRUE, digits = 2)
 }
 \seealso{
 Other utilities: 
+\code{\link{has_insper_fonts}()},
 \code{\link{import_insper_fonts}()},
 \code{\link{save_insper_plot}()},
 \code{\link{setup_insper_fonts}()}

@@ -18,7 +18,7 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='0.00' y='0.00' width='720.00' height='576.00' style='stroke-width: 1.16; stroke: #FEFEFE; fill: #FEFEFE;' />
+<rect x='0.00' y='0.00' width='720.00' height='576.00' style='stroke-width: 1.16; stroke: none; fill: #FEFEFE;' />
 </g>
 <defs>
   <clipPath id='cpNTAuMjl8NzA1LjA2fDY5LjkzfDUzOS45Mw=='>
@@ -26,7 +26,6 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpNTAuMjl8NzA1LjA2fDY5LjkzfDUzOS45Mw==)'>
-<rect x='50.29' y='69.93' width='654.76' height='470.00' style='stroke-width: 1.16; stroke: #FEFEFE; fill: #FEFEFE;' />
 <polyline points='50.29,523.97 705.06,523.97 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
 <polyline points='50.29,435.02 705.06,435.02 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
 <polyline points='50.29,346.07 705.06,346.07 ' style='stroke-width: 0.75; stroke: #E6E7E8; stroke-linecap: butt;' />
