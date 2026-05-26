@@ -36,7 +36,7 @@ Suggests:
     RcppRoll,
     lubridate,
     dplyr
-URL: https://viniciusoike.github.io/insperplot/, https://github.com/viniciusoike/insperplot
-BugReports: https://github.com/viniciusoike/insperplot/issues
+URL: https://portalcidados.github.io/insperplot/, https://github.com/portalcidados/insperplot
+BugReports: https://github.com/portalcidados/insperplot/issues
 Config/testthat/edition: 3
 VignetteBuilder: knitr

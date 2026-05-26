@@ -93,8 +93,8 @@
 #' @seealso
 #' Useful links:
 #' \itemize{
-#'   \item Report bugs at \url{https://github.com/viniciusoike/insperplot/issues}
-#'   \item Package website at \url{https://viniciusoike.github.io/insperplot/}
+#'   \item Report bugs at \url{https://github.com/portalcidados/insperplot/issues}
+#'   \item Package website at \url{https://portalcidados.github.io/insperplot/}
 #' }
 #'
 #' @examples

@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/viniciusoike/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusoike/insperplot/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/portalcidados/insperplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/portalcidados/insperplot/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
@@ -23,7 +23,7 @@ You can install the development version of insperplot from GitHub:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("viniciusoike/insperplot")
+remotes::install_github("portalcidados/insperplot")
 ```
 
 ## Quick Start
@@ -145,7 +145,7 @@ default.
 ## Documentation
 
 For detailed documentation and examples, visit the [package
-website](https://viniciusoike.github.io/insperplot/).
+website](https://portalcidados.github.io/insperplot/).
 
 ## License
 

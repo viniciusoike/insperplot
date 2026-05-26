@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 ```{r eval=FALSE}
 # Install from GitHub
-remotes::install_github("viniciusoike/insperplot")
+remotes::install_github("portalcidados/insperplot")
 ```
 
 ```{r setup}
@@ -285,6 +285,6 @@ All functions return ggplot objects, apply `theme_insper()` by default, and acce
 
 ## Learn More
 
-- [Package website](https://viniciusoike.github.io/insperplot/) — full function reference and additional articles
-- [GitHub repository](https://github.com/viniciusoike/insperplot) — source code, issues, and contributing
+- [Package website](https://portalcidados.github.io/insperplot/) — full function reference and additional articles
+- [GitHub repository](https://github.com/portalcidados/insperplot) — source code, issues, and contributing
 - [Insper brand colors](https://github.com/Insper/Cores-Marca-Insper) — the color system this package is built on

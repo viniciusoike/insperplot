@@ -122,16 +122,16 @@ For official Insper communications and materials, please visit:
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://viniciusoike.github.io/insperplot/}
-  \item \url{https://github.com/viniciusoike/insperplot}
-  \item Report bugs at \url{https://github.com/viniciusoike/insperplot/issues}
+  \item \url{https://portalcidados.github.io/insperplot/}
+  \item \url{https://github.com/portalcidados/insperplot}
+  \item Report bugs at \url{https://github.com/portalcidados/insperplot/issues}
 }
 
 
 Useful links:
 \itemize{
-  \item Report bugs at \url{https://github.com/viniciusoike/insperplot/issues}
-  \item Package website at \url{https://viniciusoike.github.io/insperplot/}
+  \item Report bugs at \url{https://github.com/portalcidados/insperplot/issues}
+  \item Package website at \url{https://portalcidados.github.io/insperplot/}
 }
 }
 \author{

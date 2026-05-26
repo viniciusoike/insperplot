@@ -1,4 +1,4 @@
-url: https://viniciusoike.github.io/insperplot/
+url: https://portalcidados.github.io/insperplot/
 template:
   bootstrap: 5
   bootswatch: flatly
@@ -34,7 +34,7 @@ navbar:
       href: news/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://github.com/viniciusoike/insperplot
+      href: https://github.com/portalcidados/insperplot
 
 reference:
 - title: Themes
