@@ -149,12 +149,4 @@ website](https://portalcidados.github.io/insperplot/).
 
 ## License
 
-MIT © Vinicius Oike
-
-## Disclaimer
-
-**This is not an official Insper product.** This package is developed
-independently and is not endorsed, supported, or maintained by Insper
-Instituto de Ensino e Pesquisa. For official Insper communications and
-materials, please refer to [Insper’s
-GitHub](https://github.com/Insper/).
+MIT ©
